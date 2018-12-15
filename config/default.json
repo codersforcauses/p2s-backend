@@ -30,5 +30,5 @@
       "passwordField": "password"
     }
   },
-  "mongodb": ""
+  "mongodb": "mongodb://localhost:27017/p2s"
 }
