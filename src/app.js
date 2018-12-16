@@ -20,8 +20,7 @@ const authentication = require('./authentication');
 
 const mongoose = require('./mongoose');
 
-const conf = configuration();
-const app = express(feathers().configure(conf));
+const app = express(feathers());
 
 // Load app configuration
 app.configure(configuration());
@@ -57,4 +56,4 @@ app.hooks(appHooks);
 
 module.exports = app;
 
-console.log(app.get('secret'));
+console.log(process.env.SECRET);
