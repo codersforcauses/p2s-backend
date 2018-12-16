@@ -111,3 +111,9 @@ $RECYCLE.BIN/
 lib/
 data/
 package-lock.json
+
+# local env files
+.env
+.ENV
+.env.local
+.env.*.local
