@@ -7,7 +7,7 @@
     "max": 50
   },
   "authentication": {
-    "secret": "SECRET",
+    "secret": "JWT_SECRET",
     "strategies": [
       "jwt",
       "local"
