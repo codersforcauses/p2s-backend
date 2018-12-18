@@ -117,5 +117,3 @@ package-lock.json
 .ENV
 .env.local
 .env.*.local
-# just to be safe
-env 
