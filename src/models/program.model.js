@@ -1,4 +1,4 @@
-// admin-model.js - A mongoose model
+// program-model.js - A mongoose model
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
@@ -8,15 +8,19 @@ module.exports = (app) => {
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
   const { ObjectId } = mongoose.Schema.Types;
-  const admin = new Schema({
-    user: {
-      type: ObjectId,
-      ref: 'users',
+  const program = new Schema({
+    name: {
+      type: String,
       required: true,
     },
+    sessions: [{
+      session: ObjectId,
+      ref: 'session',
+      required: true,
+    }],
   }, {
     timestamps: true,
   });
 
-  return mongooseClient.model('admin', admin);
+  return mongooseClient.model('program', program);
 };

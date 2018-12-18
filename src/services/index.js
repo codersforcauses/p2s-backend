@@ -1,13 +1,14 @@
 const users = require('./users/users.service.js');
 const admin = require('./admin/admin.service.js');
-const person = require('./coach/coach.service.js');
-const person = require('./manager/manager.service.js');
-const person = require('./report/report.service.js');
-const person = require('./student/student.service.js');
-const person = require('./region/region.service.js');
-const person = require('./school/school.service.js');
-const person = require('./sessions/sessions.service.js');
-const person = require('./program/program.service.js');
+const coach = require('./coach/coach.service.js');
+const manager = require('./manager/manager.service.js');
+const report = require('./report/report.service.js');
+const student = require('./student/student.service.js');
+const region = require('./region/region.service.js');
+const school = require('./school/school.service.js');
+const session = require('./session/session.service.js');
+const program = require('./program/program.service.js');
+const activity = require('./activity/activity.service.js');
 
 
 module.exports = (app) => {
@@ -19,6 +20,7 @@ module.exports = (app) => {
   app.configure(student);
   app.configure(region);
   app.configure(school);
-  app.configure(sessions);
+  app.configure(session);
   app.configure(program);
+  app.configure(activity);
 };

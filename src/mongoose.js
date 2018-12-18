@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 module.exports = (app) => {
   mongoose.connect(app.get('mongodb'), { useNewUrlParser: true });
   mongoose.Promise = global.Promise;
