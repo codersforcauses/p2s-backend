@@ -1,3 +1,9 @@
+const { decrypt } = require('dotenvcrypt');
+
+decrypt(process.env.ENV_KEY);
+
+require('dotenv').config(); // this will read the generated .env
+
 const path = require('path');
 const favicon = require('serve-favicon');
 const compress = require('compression');
@@ -55,5 +61,3 @@ app.use(express.errorHandler({ logger }));
 app.hooks(appHooks);
 
 module.exports = app;
-
-console.log(process.env.SECRET);
