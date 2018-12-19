@@ -23,9 +23,8 @@ module.exports = (app) => {
       medClearance: {
         type: Boolean,
         require: true,
-        default: false,
+        default: false, // TODO link to file server
       },
-      required: true,
     },
     manager: {
       type: ObjectId,

@@ -26,11 +26,10 @@ module.exports = (app) => {
         type: String,
         required: true,
       },
-      emergencynum: {
+      emergencyNum: {
         type: String,
         required: true,
       },
-      required: true,
     },
     gender: {
       type: String,

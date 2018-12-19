@@ -29,6 +29,7 @@ module.exports = (app) => {
       state: {
         type: String,
         enum: ['WA', 'NSW', 'ACT', 'VIC', 'QLD', 'SA', 'TAS', 'NT'],
+        default: 'WA',
         required: true,
       },
     },

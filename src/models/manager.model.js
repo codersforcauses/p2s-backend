@@ -16,7 +16,7 @@ module.exports = (app) => {
     }],
     user: {
       type: ObjectId,
-      ref: 'ref',
+      ref: 'users',
       required: true,
     },
   }, {

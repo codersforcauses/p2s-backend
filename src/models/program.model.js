@@ -14,7 +14,7 @@ module.exports = (app) => {
       required: true,
     },
     sessions: [{
-      session: ObjectId,
+      type: ObjectId,
       ref: 'session',
       required: true,
     }],
