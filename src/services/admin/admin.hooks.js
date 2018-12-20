@@ -21,24 +21,20 @@ module.exports = {
     all: [],
     find: [
       async (context) => {
-        const promises = context.result.data.map((element) => {
-          return context.app.service('users').get(element.user)
-            .then((user) => {
-              delete user._id;
-              return {
-                ...element,
-                ...user,
-              };
-            });
-        });
+        const promises = context.result.data.map(element => context.app.service('users').get(element.user)
+          .then((user) => {
+            delete user._id;
+            return {
+              ...element,
+              ...user,
+            };
+          }));
         const results = await Promise.all(promises);
         context.result.data = results;
         return context;
       },
     ],
-    get: [
-      context => console.log(context.data),
-    ],
+    get: [],
     create: [
       context => context.app.service('users')
         .patch(context.data.user, { admin: context.result._id })
@@ -56,6 +52,6 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
-  }
+    remove: [],
+  },
 };
