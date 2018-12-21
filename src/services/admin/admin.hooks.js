@@ -1,17 +1,13 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
+const { usercreate, userfind } = require('../../hooks/userhooks');
+
 
 module.exports = {
   before: {
     all: [authenticate('jwt')],
     find: [],
     get: [],
-    create: [
-      context => context.app.service('users').create(context.data)
-        .then((user) => {
-          context.data.user = user._id;
-          return context;
-        }),
-    ],
+    create: [usercreate()],
     update: [],
     patch: [],
     remove: [],
@@ -19,27 +15,9 @@ module.exports = {
 
   after: {
     all: [],
-    find: [
-      async (context) => {
-        const promises = context.result.data.map(element => context.app.service('users').get(element.user)
-          .then((user) => {
-            delete user._id;
-            return {
-              ...element,
-              ...user,
-            };
-          }));
-        const results = await Promise.all(promises);
-        context.result.data = results;
-        return context;
-      },
-    ],
+    find: [userfind()],
     get: [],
-    create: [
-      context => context.app.service('users')
-        .patch(context.data.user, { admin: context.result._id })
-        .then(() => context),
-    ],
+    create: [usercreate()],
     update: [],
     patch: [],
     remove: [],
