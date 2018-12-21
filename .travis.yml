@@ -1,9 +1,9 @@
 dist: xenial
 sudo: true
-# branches:
-#   only:
-#     - master
-#     - dev
+branches:
+  only:
+    - master
+    - dev
 services: mongodb
 language: node_js
 nodejs:
