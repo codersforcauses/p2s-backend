@@ -1,0 +1,16 @@
+dist: xenial
+sudo: true
+branches:
+  only:
+    - master
+    - dev
+services: mongodb
+language: node_js
+nodejs:
+  - "lts/*"
+cache:
+  npm: true
+  directories:
+    - ~/.cache
+notifications:
+  email: false
