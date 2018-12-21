@@ -40,7 +40,7 @@
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "dotenvcrypt": "^1.0.1",
-    "feathers-mongoose": "^6.3.0",
+    "feathers-mongoose": "^7.0.0",
     "helmet": "^3.15.0",
     "mongodb-core": "^3.1.6",
     "mongoose": "^5.4.0",

@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.com/codersforcauses/p2s-backend.svg?branch=master)](https://travis-ci.com/codersforcauses/p2s-backend)
-
+[![Build Status](https://travis-ci.com/codersforcauses/p2s-backend.svg?branch=master)](https://travis-ci.com/codersforcauses/p2s-backend) &emsp;
 [![Maintainability](https://api.codeclimate.com/v1/badges/4aa460872f0cf4404d2e/maintainability)](https://codeclimate.com/github/codersforcauses/p2s-backend/maintainability)
 
 # P2S Backend
