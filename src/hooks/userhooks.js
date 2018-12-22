@@ -7,6 +7,7 @@ module.exports = {
   /**
    * Hook that enforces the user relation when creating a Student, Manager, Coach, or Admin
    * Creates a user that is linked to this document
+   * @param {Object} options Options object for hook
    * @param {Object} context Incoming context from service
    */
   // eslint-disable-next-line no-unused-vars
@@ -36,6 +37,7 @@ module.exports = {
   },
   /**
    * Links user data with admin, manager, student or coach data
+   * @param {Object} options Options object for hook
    * @param {Object} context User id to be matched with relevant data
    */
   // eslint-disable-next-line no-unused-vars
@@ -57,7 +59,9 @@ module.exports = {
   },
   /**
    * Blocks endpoint from being used by users, and can only be called by the server
-   * @param { String } options.message displayed error message
+   * @param {Object} options Options object for hook
+   * @param { String } options.message Displayed error message
+   * @param {Object} context Context object passed from server
    */
   userblock: ({ message }) => (context) => {
     if (context.params.provider) {
