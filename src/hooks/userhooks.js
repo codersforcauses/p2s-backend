@@ -12,16 +12,22 @@ module.exports = {
   // eslint-disable-next-line no-unused-vars
   usercreate: (options = {}) => (context) => {
     if (context.type === 'before') {
-      return context.app.service('users').create(context.data)
+      return context.app
+        .service('users')
+        .create(context.data)
         .then((user) => {
           context.data.user = user._id;
           return context;
         })
-        .catch(() => { throw new errors.Conflict('User already exists'); });
-    } if (context.type === 'after') {
+        .catch(() => {
+          throw new errors.Conflict('User already exists');
+        });
+    }
+    if (context.type === 'after') {
       const data = {};
       data[context.path] = context.result._id;
-      return context.app.service('users')
+      return context.app
+        .service('users')
         .patch(context.data.user, data)
         .then(() => context)
         .catch(console.error);
@@ -34,7 +40,9 @@ module.exports = {
    */
   // eslint-disable-next-line no-unused-vars
   userfind: (options = {}) => async (context) => {
-    const promises = context.result.data.map(element => context.app.service('users').get(element.user)
+    const promises = context.result.data.map(element => context.app
+      .service('users')
+      .get(element.user)
       .then((user) => {
         delete user._id;
         return {
@@ -46,5 +54,14 @@ module.exports = {
     const results = await Promise.all(promises);
     context.result.data = results;
     return context;
+  },
+  /**
+   * Blocks endpoint from being used by users, and can only be called by the server
+   * @param { String } options.message displayed error message
+   */
+  userblock: ({ message }) => (context) => {
+    if (context.params.provider) {
+      throw new errors.MethodNotAllowed(message);
+    }
   },
 };
