@@ -1,12 +1,19 @@
 /* eslint-disable no-param-reassign */
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
-const { Forbidden } = require('@feathersjs/errors');
+const { Forbidden, Unprocessable } = require('@feathersjs/errors');
 
-// eslint-disable-next-line no-unused-vars
+/**
+ * Limits access to an endpoint based off a users permissions
+ * @param {Object} options Options passed in from previous hooks
+ * @param {[String]} options.roles Define which roles can access this route.
+ * Should be in the form ['admin', 'manager', 'coach']
+ */
 module.exports = (options = {}) => Promise.resolve((context) => {
   if (context.type !== 'before') {
-    return Promise.reject(new Error('The feathers-permissions hook should only be used as a \'before\' hook.'));
+    throw new Unprocessable(
+      'The feathers-permissions hook should only be used as a \'before\' hook.',
+    );
   }
   const { user } = context.params;
 
@@ -26,23 +33,16 @@ module.exports = (options = {}) => Promise.resolve((context) => {
   if (user.manager) {
     permissions.push('manager:*');
   }
-  if (user.admin) {
+  if (user.coach) {
     permissions.push('coach:*');
   }
 
   const { method } = context;
 
-  const requiredPermissions = [
-    '*',
-    `*:${method}`,
-  ];
+  const requiredPermissions = ['*', `*:${method}`];
 
   options.roles.forEach((role) => {
-    requiredPermissions.push(
-      `${role}`,
-      `${role}:*`,
-      `${role}:${method}`,
-    );
+    requiredPermissions.push(`${role}`, `${role}:*`, `${role}:${method}`);
   });
 
   const permitted = permissions.some(permission => requiredPermissions.includes(permission));
