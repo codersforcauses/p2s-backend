@@ -1,10 +1,10 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { usercreate, userfind } = require('../../hooks/userhooks');
-
+const permission = require('../../hooks/permission');
 
 module.exports = {
   before: {
-    all: [authenticate('jwt')],
+    all: [authenticate('jwt'), permission({ roles: ['admin'] })],
     find: [],
     get: [],
     create: [usercreate()],
