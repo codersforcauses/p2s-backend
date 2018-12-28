@@ -1,18 +1,23 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 
-const {
-  hashPassword, protect,
-} = require('@feathersjs/authentication-local').hooks;
+const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
+
+const { userblock } = require('../../hooks/userhooks');
 
 module.exports = {
   before: {
-    all: [],
-    find: [authenticate('jwt')],
-    get: [authenticate('jwt')],
-    create: [hashPassword()],
-    update: [hashPassword(), authenticate('jwt')],
-    patch: [hashPassword(), authenticate('jwt')],
-    remove: [authenticate('jwt')],
+    all: [authenticate('jwt')],
+    find: [],
+    get: [],
+    create: [
+      userblock({
+        message: 'Users must be created though admin, manager, coach, or student by the server',
+      }),
+      hashPassword(),
+    ],
+    update: [hashPassword()],
+    patch: [hashPassword()],
+    remove: [],
   },
 
   after: {

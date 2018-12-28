@@ -2,8 +2,6 @@ const { decrypt } = require('dotenvcrypt');
 
 decrypt(process.env.ENV_KEY);
 
-require('dotenv').config(); // this will read the generated .env
-
 const path = require('path');
 const favicon = require('serve-favicon');
 const compress = require('compression');
