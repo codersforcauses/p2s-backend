@@ -21,6 +21,15 @@ module.exports = (app) => {
           required: true,
         },
       ],
+      school: {
+        type: ObjectId,
+        required: true,
+      },
+      students: [
+        {
+          type: ObjectId,
+        },
+      ],
     },
     {
       timestamps: true,
