@@ -10,16 +10,53 @@ module.exports = (app) => {
   const { ObjectId } = mongoose.Schema.Types;
   const students = new Schema(
     {
+      name: {
+        first: {
+          type: String,
+          required: true,
+        },
+        last: {
+          type: String,
+          required: true,
+        },
+      },
+      DOB: {
+        type: Date,
+        required: true,
+      },
+      gender: {
+        type: String,
+        enum: ['Male', 'Female', 'Other'],
+        required: true,
+      },
+      ethnicity: {
+        type: String,
+        required: true, // TODO add ethnicity options
+      },
+      schoolYear: {
+        type: Number,
+        required: true,
+      },
       consent: {
         type: Boolean,
         required: true,
         default: false,
+      },
+      emergencyNumber: {
+        type: Number,
+        required: true,
       },
       school: {
         type: ObjectId,
         ref: 'schools',
         required: true,
       },
+      reports: [
+        {
+          type: ObjectId,
+          ref: 'reports',
+        },
+      ],
     },
     {
       timestamps: true,
