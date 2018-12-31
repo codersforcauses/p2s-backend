@@ -13,10 +13,10 @@ module.exports = (app) => {
   };
 
   // Initialize our service with any options it requires
-  app.use('/school', createService(options));
+  app.use('/schools', createService(options));
 
   // Get our initialized service so that we can register hooks
-  const service = app.service('school');
+  const service = app.service('schools');
 
   service.hooks(hooks);
 };
