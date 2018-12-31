@@ -9,7 +9,7 @@ const { Forbidden, Unprocessable } = require('@feathersjs/errors');
  * @param {[String]} options.roles Define which roles can access this route.
  * Should be in the form ['admin', 'manager', 'coach']
  */
-module.exports = (options = {}) => Promise.resolve((context) => {
+module.exports = (options = {}) => (context) => {
   if (context.type !== 'before') {
     throw new Unprocessable(
       'The feathers-permissions hook should only be used as a \'before\' hook.',
@@ -54,4 +54,4 @@ module.exports = (options = {}) => Promise.resolve((context) => {
   }
 
   return context;
-});
+};
