@@ -11,7 +11,7 @@ module.exports = {
     create: [permission({ roles: ['admin', 'manager'] }), usercreate()],
     update: [permission({ roles: ['coach'] })],
     patch: [permission({ roles: ['coach'] })],
-    remove: [permission({ roles: ['admin', 'coach'] })],
+    remove: [permission({ roles: ['admin', 'manager'] })],
   },
 
   after: {
