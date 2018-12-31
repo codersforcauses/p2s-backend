@@ -1,16 +1,17 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { protect } = require('@feathersjs/authentication-local').hooks;
 const { usercreate, userfind, userget } = require('../../hooks/userhooks');
+const permission = require('../../hooks/permission');
 
 module.exports = {
   before: {
     all: [authenticate('jwt')],
     find: [],
     get: [],
-    create: [usercreate()],
-    update: [],
-    patch: [],
-    remove: [],
+    create: [permission({ roles: ['admin', 'manager'] }), usercreate()],
+    update: [permission({ roles: ['admin', 'manager'] })],
+    patch: [permission({ roles: ['admin', 'manager'] })],
+    remove: [permission({ roles: ['admin', 'manager'] })],
   },
 
   after: {
