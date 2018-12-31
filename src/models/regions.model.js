@@ -14,10 +14,24 @@ module.exports = (app) => {
         type: String,
         required: true,
       },
+      users: [
+        {
+          type: ObjectId,
+          ref: 'users',
+          required: true,
+        },
+      ],
       schools: [
         {
           type: ObjectId,
-          ref: 'school',
+          ref: 'schools',
+          required: true,
+        },
+      ],
+      programs: [
+        {
+          type: ObjectId,
+          ref: 'programs',
           required: true,
         },
       ],
