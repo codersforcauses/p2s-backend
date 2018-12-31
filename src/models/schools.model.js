@@ -45,6 +45,13 @@ module.exports = (app) => {
           required: true,
         },
       ],
+      programs: [
+        {
+          type: ObjectId,
+          ref: 'programs',
+          required: true,
+        },
+      ],
     },
     {
       timestamps: true,

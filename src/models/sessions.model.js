@@ -47,6 +47,13 @@ module.exports = (app) => {
           },
         },
       ],
+      type: {
+        type: String,
+        enum: ['Rugby', 'Classroom', 'Rugby/Classroom', 'Employability', 'Tournament', 'Induction'],
+      },
+      location: {
+        type: String,
+      },
     },
     {
       timestamps: true,
