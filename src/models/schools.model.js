@@ -14,6 +14,10 @@ module.exports = (app) => {
         type: String,
         required: true,
       },
+      phoneNumber: {
+        type: Number,
+        required: true,
+      },
       address: {
         street: {
           type: String,
