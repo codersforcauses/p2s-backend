@@ -8,7 +8,7 @@ module.exports = {
     get: [],
     create: [permission({ roles: ['coach', 'manager'] })],
     update: [permission({ roles: ['coach', 'manager'] })],
-    patch: [permission({ roles: ['coach'] })],
+    patch: [permission({ roles: ['coach', 'manager'] })],
     remove: [permission({ roles: ['coach', 'manager'] })],
   },
 
