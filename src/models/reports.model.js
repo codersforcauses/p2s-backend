@@ -26,6 +26,9 @@ module.exports = (app) => {
           required: true,
         },
       ],
+      notes: {
+        type: String,
+      },
     },
     {
       timestamps: true,
