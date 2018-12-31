@@ -42,7 +42,7 @@ $ feathers generate hook                  # Generate a new Hook
 $ feathers help                           # Show all commands
 ```
 ## Database structure
-![Database Schema](https://cdn.discordapp.com/attachments/519088761942966272/529221971934969867/erdplus-diagram.png)
+![Database Schema](https://cdn.discordapp.com/attachments/519088761942966272/529246506771939348/P2SSchemaERD.png)
 
 ## Help
 
