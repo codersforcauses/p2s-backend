@@ -11,7 +11,7 @@ module.exports = {
     get: [],
     create: [
       userblock({
-        message: 'Users must be created though admin, manager, coach, or student by the server',
+        message: 'Users must be created though admin, manager, coach, or students by the server',
       }),
       hashPassword(),
     ],

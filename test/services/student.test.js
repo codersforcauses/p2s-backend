@@ -1,8 +1,8 @@
 const app = require('../../src/app');
 
-describe('\'student\' service', () => {
+describe('\'students\' service', () => {
   it('registered the service', () => {
-    const service = app.service('student');
+    const service = app.service('students');
     expect(service).toBeTruthy();
   });
 });

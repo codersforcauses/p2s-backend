@@ -20,7 +20,7 @@ function userpopulate(element, context) {
 
 module.exports = {
   /**
-   * Links user data with admin, manager, student or coach data
+   * Links user data with admin, manager, students or coach data
    * @param {Object} options Options object for hook
    * @param {Object} context Incoming context from service
    */
@@ -35,7 +35,7 @@ module.exports = {
     throw new errors.GeneralError('This hook must be an \'after\'');
   },
   /**
-   * Links user data with admin, manager, student or coach data from a get request
+   * Links user data with admin, manager, students or coach data from a get request
    * @param {Object} context Incoming context from service
    */
   userget: () => async (context) => {
@@ -47,7 +47,7 @@ module.exports = {
     throw new errors.GeneralError('This hook must be an \'after\'');
   },
   /**
-   * Hook that enforces the user relation when creating a Student, Manager, Coach, or Admin
+   * Hook that enforces the user relation when creating a students, Manager, Coach, or Admin
    * Creates a user that is linked to this document
    * @param {Object} options Options object for hook
    * @param {Object} context Incoming context from service

@@ -2,8 +2,8 @@
 const createService = require('feathers-mongoose');
 const logger = require('../..//logger.js');
 
-const createModel = require('../../models/admin.model');
-const hooks = require('./admin.hooks');
+const createModel = require('../../models/users.model');
+const hooks = require('./admins.hooks');
 
 module.exports = (app) => {
   const Model = createModel(app);

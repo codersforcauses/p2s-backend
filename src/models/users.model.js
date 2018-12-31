@@ -50,10 +50,6 @@ module.exports = (app) => {
         required: true,
         default: false,
       },
-      student: {
-        type: ObjectId,
-        ref: 'student',
-      },
       coach: {
         is: {
           type: Boolean,
