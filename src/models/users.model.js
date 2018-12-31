@@ -19,18 +19,22 @@ module.exports = (app) => {
         type: String,
       },
       name: {
+        first: {
+          type: String,
+          required: true,
+        },
+        last: {
+          type: String,
+          required: true,
+        },
+      },
+      mobile: {
         type: String,
         required: true,
       },
-      contact: {
-        mobile: {
-          type: String,
-          required: true,
-        },
-        emergencyNum: {
-          type: String,
-          required: true,
-        },
+      emergencyNum: {
+        type: String,
+        required: true,
       },
       gender: {
         type: String,
@@ -50,46 +54,34 @@ module.exports = (app) => {
         required: true,
         default: false,
       },
+      region: {
+        type: ObjectId,
+        ref: 'regions',
+      },
       coach: {
         is: {
           type: Boolean,
-          default: false,
         },
         qualifications: {
           policeClearance: {
             type: Boolean,
-            require: true,
-            default: false,
           },
           WWC: {
             type: Boolean,
-            require: true,
-            default: false,
           },
           medClearance: {
-            type: Boolean,
-            require: true,
-            default: false, // TODO link to file server
+            type: Boolean, // TODO link to file server
           },
         },
       },
       manager: {
         is: {
           type: Boolean,
-          default: false,
         },
-        coaches: [
-          {
-            type: ObjectId,
-            required: true,
-            ref: 'users',
-          },
-        ],
       },
       admin: {
         is: {
           type: Boolean,
-          default: false,
         },
       },
     },
