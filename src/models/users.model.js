@@ -61,6 +61,7 @@ module.exports = (app) => {
       coach: {
         is: {
           type: Boolean,
+          default: false,
         },
         qualifications: {
           policeClearance: {
@@ -77,11 +78,13 @@ module.exports = (app) => {
       manager: {
         is: {
           type: Boolean,
+          default: false,
         },
       },
       admin: {
         is: {
           type: Boolean,
+          default: false,
         },
       },
     },
