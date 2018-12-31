@@ -41,7 +41,8 @@ $ feathers generate service               # Generate a new Service
 $ feathers generate hook                  # Generate a new Hook
 $ feathers help                           # Show all commands
 ```
-
+## Database structure
+![Database Schema](https://cdn.discordapp.com/attachments/519088761942966272/524141712793141258/Capture.PNG)
 ## Help
 
 For more information on all the things you can do with Feathers visit [docs.feathersjs.com](http://docs.feathersjs.com).
