@@ -14,26 +14,23 @@ module.exports = (app) => {
         type: Date,
         required: true,
       },
-      school: {
-        type: ObjectId,
-        ref: 'schools',
-      },
-      coaches: [
+      students: [
         {
           type: ObjectId,
-          ref: 'coaches',
-          required: true,
+          ref: 'students',
         },
       ],
-      program: {
-        type: ObjectId,
-        ref: 'programs',
-        required: true,
-      },
       reports: [
         {
           type: ObjectId,
           ref: 'reports',
+          required: true,
+        },
+      ],
+      feedback: [
+        {
+          type: ObjectId,
+          ref: 'feedback',
           required: true,
         },
       ],
