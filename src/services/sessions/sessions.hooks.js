@@ -1,24 +1,18 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 
-const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
-
 module.exports = {
   before: {
     all: [authenticate('jwt')],
     find: [],
     get: [],
-    create: [hashPassword()],
-    update: [hashPassword()],
-    patch: [hashPassword()],
+    create: [],
+    update: [],
+    patch: [],
     remove: [],
   },
 
   after: {
-    all: [
-      // Make sure the password field is never sent to the client
-      // Always must be the last hook
-      protect('password'),
-    ],
+    all: [],
     find: [],
     get: [],
     create: [],
