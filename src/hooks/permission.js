@@ -41,6 +41,10 @@ module.exports = (options = {}) => (context) => {
 
   const requiredPermissions = ['*', `*:${method}`];
 
+  if (!Array.isArray(options.roles)) {
+    options.roles = [options.roles];
+  }
+
   options.roles.forEach((role) => {
     requiredPermissions.push(`${role}`, `${role}:*`, `${role}:${method}`);
   });

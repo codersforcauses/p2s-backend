@@ -2,9 +2,11 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
 
+const permission = require('../../hooks/permission');
+
 module.exports = {
   before: {
-    all: [authenticate('jwt')],
+    all: [authenticate('jwt'), permission({ roles: ['admin'] })],
     find: [],
     get: [],
     create: [hashPassword()],
