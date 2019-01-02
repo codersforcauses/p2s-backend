@@ -3,7 +3,8 @@ const createService = require('feathers-mongoose');
 const logger = require('../..//logger.js');
 
 const createModel = require('../../models/users.model');
-const hooks = require('./users.hooks');
+const userHooks = require('./users.hooks');
+const adminHooks = require('./admin.hooks');
 
 module.exports = (app) => {
   const Model = createModel(app);
@@ -16,14 +17,16 @@ module.exports = (app) => {
 
   // Initialize our service with any options it requires
   app.use('/users', createService(options));
-
   // Get our initialized service so that we can register hooks
-  const service = app.service('users');
+  const userService = app.service('users');
+  userService.hooks(userHooks);
 
-  service.hooks(hooks);
+  app.use('/admin', createService(options));
+  const adminService = app.service('admin');
+  adminService.hooks(adminHooks);
 
   if (process.env.NODE_ENV !== 'production') {
-    service
+    userService
       .create({
         email: 'super@admin.god',
         password: 'Qwerty123',
