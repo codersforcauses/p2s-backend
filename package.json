@@ -39,6 +39,7 @@
     "compression": "^1.7.3",
     "cors": "^2.8.5",
     "dotenvcrypt": "^1.1.1",
+    "feathers-hooks-common": "^4.19.6",
     "feathers-mongoose": "^7.1.1",
     "helmet": "^3.15.0",
     "mongodb-core": "^3.1.9",
