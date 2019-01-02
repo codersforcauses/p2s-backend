@@ -5,6 +5,7 @@ const logger = require('../..//logger.js');
 const createModel = require('../../models/users.model');
 const userHooks = require('./users.hooks');
 const adminHooks = require('./admin.hooks');
+const coachHooks = require('./coach.hooks');
 
 module.exports = (app) => {
   const Model = createModel(app);
@@ -24,6 +25,10 @@ module.exports = (app) => {
   app.use('/admin', createService(options));
   const adminService = app.service('admin');
   adminService.hooks(adminHooks);
+
+  app.use('/coach', createService(options));
+  const coachService = app.service('coach');
+  coachService.hooks(coachHooks);
 
   if (process.env.NODE_ENV !== 'production') {
     userService

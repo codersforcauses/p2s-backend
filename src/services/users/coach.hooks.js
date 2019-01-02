@@ -1,0 +1,41 @@
+const { authenticate } = require('@feathersjs/authentication').hooks;
+const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
+const { discardQuery } = require('feathers-hooks-common');
+
+const permission = require('../../hooks/permission');
+
+module.exports = {
+  before: {
+    all: [authenticate('jwt'), discardQuery('admin', 'manager')],
+    find: [permission({ roles: ['admin', 'manager', 'coach'] })],
+    get: [permission({ roles: ['admin', 'manager', 'coach'] })],
+    create: [permission({ roles: ['admin', 'manager'] }), hashPassword()],
+    update: [permission({ roles: ['admin', 'manager'] }), hashPassword()],
+    patch: [permission({ roles: ['admin', 'manager'] }), hashPassword()],
+    remove: [permission({ roles: ['admin', 'manager'] })],
+  },
+
+  after: {
+    all: [
+      // Make sure the password field is never sent to the client
+      // Always must be the last hook
+      protect('password'),
+    ],
+    find: [],
+    get: [],
+    create: [],
+    update: [],
+    patch: [],
+    remove: [],
+  },
+
+  error: {
+    all: [],
+    find: [],
+    get: [],
+    create: [],
+    update: [],
+    patch: [],
+    remove: [],
+  },
+};
