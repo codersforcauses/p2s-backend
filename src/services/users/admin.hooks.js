@@ -1,6 +1,6 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
-const { discardQuery } = require('feathers-hooks-common');
+const { discardQuery, alterItems } = require('feathers-hooks-common');
 
 const permission = require('../../hooks/permission');
 
@@ -21,12 +21,9 @@ module.exports = {
     get: [],
     create: [
       hashPassword(),
-      (context) => {
-        const data = context.data || {};
-        data.admin = { is: true };
-        context.data = data;
-        return context;
-      },
+      alterItems((rec) => {
+        rec.admin = { is: true };
+      }),
     ],
     update: [hashPassword()],
     patch: [hashPassword()],
