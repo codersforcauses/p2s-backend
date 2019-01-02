@@ -11,7 +11,7 @@ module.exports = {
       permission({ roles: 'admin' }),
       discardQuery('manager', 'coach', 'admin'),
       (context) => {
-        const { query } = context.params;
+        const query = context.params.query || {};
         query.admin = { is: true };
         context.params.query = query;
         return context;
@@ -19,7 +19,15 @@ module.exports = {
     ],
     find: [],
     get: [],
-    create: [hashPassword()],
+    create: [
+      hashPassword(),
+      (context) => {
+        const data = context.data || {};
+        data.admin = { is: true };
+        context.data = data;
+        return context;
+      },
+    ],
     update: [hashPassword()],
     patch: [hashPassword()],
     remove: [],
