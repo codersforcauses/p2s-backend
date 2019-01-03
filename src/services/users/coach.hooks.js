@@ -3,10 +3,15 @@ const { hashPassword, protect } = require('@feathersjs/authentication-local').ho
 const { discardQuery, alterItems } = require('feathers-hooks-common');
 
 const permission = require('../../hooks/permission');
+const { limitQuery } = require('../../hooks/userhooks');
 
 module.exports = {
   before: {
-    all: [authenticate('jwt'), discardQuery('admin', 'manager')],
+    all: [
+      authenticate('jwt'),
+      discardQuery('admin', 'manager', 'coach'),
+      limitQuery('coach'),
+    ],
     find: [permission({ roles: ['admin', 'manager', 'coach'] })],
     get: [permission({ roles: ['admin', 'manager', 'coach'] })],
     create: [
@@ -15,11 +20,8 @@ module.exports = {
       alterItems((rec) => {
         delete rec.admin;
         delete rec.manager;
-        if (rec.coach) {
-          rec.coach.is = true;
-        } else {
-          rec.coach = { is: true };
-        }
+        rec.coach = rec.coach || {};
+        rec.coach.is = true;
       }),
     ],
     update: [permission({ roles: ['admin', 'manager'] }), hashPassword()],
