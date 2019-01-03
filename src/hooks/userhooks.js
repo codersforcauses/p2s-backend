@@ -3,6 +3,11 @@
 const errors = require('@feathersjs/errors');
 
 module.exports = {
+/**
+ * Limits querys based on the role
+ * @param {String} role Role to limit all querys to
+ * @param {Object} context Context object passed from server
+ */
   limitQuery: role => (context) => {
     const query = context.params.query || {};
 
