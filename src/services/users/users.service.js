@@ -5,6 +5,7 @@ const createModel = require('../../models/users.model');
 
 const userHooks = require('./users.hooks');
 const adminHooks = require('./admin.hooks');
+const managerHooks = require('./manager.hooks');
 const coachHooks = require('./coach.hooks');
 
 module.exports = (app) => {
@@ -25,6 +26,10 @@ module.exports = (app) => {
   app.use('/admin', createService(options));
   const adminService = app.service('admin');
   adminService.hooks(adminHooks);
+
+  app.use('/manager', createService(options));
+  const managerService = app.service('manager');
+  managerService.hooks(managerHooks);
 
   app.use('/coach', createService(options));
   const coachService = app.service('coach');
