@@ -20,11 +20,8 @@ module.exports = {
       alterItems((rec) => {
         delete rec.admin;
         delete rec.manager;
-        if (rec.coach) {
-          rec.coach.is = true;
-        } else {
-          rec.coach = { is: true };
-        }
+        rec.coach = rec.coach || {};
+        rec.coach.is = true;
       }),
     ],
     update: [permission({ roles: ['admin', 'manager'] }), hashPassword()],
