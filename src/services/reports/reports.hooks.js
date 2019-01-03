@@ -6,7 +6,7 @@ module.exports = {
     all: [authenticate('jwt')],
     find: [],
     get: [],
-    create: [permission({ roles: ['admin', 'manager'] })],
+    create: [permission({ roles: ['admin', 'manager', 'coach'] })],
     update: [permission({ roles: ['admin', 'manager', 'coach'] })],
     patch: [permission({ roles: ['admin', 'manager', 'coach'] })],
     remove: [permission({ roles: ['admin', 'manager'] })],
