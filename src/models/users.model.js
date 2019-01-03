@@ -73,6 +73,12 @@ module.exports = (app) => {
           medClearance: {
             type: Boolean, // TODO link to file server
           },
+          feedback: [
+            {
+              type: ObjectId,
+              ref: 'feedback',
+            },
+          ],
         },
       },
       manager: {
