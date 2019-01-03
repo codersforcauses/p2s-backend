@@ -1,17 +1,26 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
-
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
+const { discardQuery, alterItems } = require('feathers-hooks-common');
 
-const { disallow } = require('feathers-hooks-common');
-
+const { limitQuery } = require('../../hooks/userhooks');
 const permission = require('../../hooks/permission');
 
 module.exports = {
   before: {
-    all: [authenticate('jwt'), permission({ roles: 'admin' })],
+    all: [
+      authenticate('jwt'),
+      permission({ roles: 'admin' }),
+      discardQuery('manager', 'coach', 'admin'),
+      limitQuery('admin'),
+    ],
     find: [],
     get: [],
-    create: [disallow('external'), hashPassword()],
+    create: [
+      hashPassword(),
+      alterItems((rec) => {
+        rec.admin = { is: true };
+      }),
+    ],
     update: [hashPassword()],
     patch: [hashPassword()],
     remove: [],
