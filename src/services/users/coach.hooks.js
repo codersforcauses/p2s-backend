@@ -2,6 +2,7 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
 const { discardQuery, alterItems } = require('feathers-hooks-common');
 
+const { iff } = require('feathers-hooks-common');
 const permission = require('../../hooks/permission');
 const { limitQuery } = require('../../hooks/userhooks');
 
@@ -23,6 +24,10 @@ module.exports = {
         rec.coach = rec.coach || {};
         rec.coach.is = true;
       }),
+      iff(context => context.params.user.manager.is,
+        alterItems((rec, context) => {
+          rec.region = context.params.user.region;
+        })),
     ],
     update: [permission({ roles: ['admin', 'manager'] }), hashPassword()],
     patch: [permission({ roles: ['admin', 'manager'] }), hashPassword()],
