@@ -27,13 +27,13 @@ module.exports = (options = {}) => (context) => {
 
   const permissions = [];
 
-  if (user.admin) {
+  if (user.admin.is) {
     permissions.push('admin:*');
   }
-  if (user.manager) {
+  if (user.manager.is) {
     permissions.push('manager:*');
   }
-  if (user.coach) {
+  if (user.coach.is) {
     permissions.push('coach:*');
   }
 
