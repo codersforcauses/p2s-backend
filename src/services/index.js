@@ -9,6 +9,8 @@ const sessions = require('./sessions/sessions.service.js');
 const programs = require('./programs/programs.service.js');
 const activities = require('./activities/activities.service.js');
 const feedback = require('./feedback/feedback.service.js');
+const mailer = require('./mailer/mailer.service.js');
+const authmanagement = require('./authmanagement/authmanagement.service.js');
 
 const logger = require('../logger.js');
 
@@ -22,6 +24,8 @@ module.exports = (app) => {
   app.configure(programs);
   app.configure(activities);
   app.configure(feedback);
+  app.configure(mailer);
+  app.configure(authmanagement);
 
   if (process.env.NODE_ENV !== 'production') {
     app
