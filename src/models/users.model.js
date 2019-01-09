@@ -93,6 +93,12 @@ module.exports = (app) => {
           default: false,
         },
       },
+      isVerified: { type: Boolean },
+      verifyToken: { type: String },
+      verifyExpires: { type: Date },
+      verifyChanges: { type: Object },
+      resetToken: { type: String },
+      resetExpires: { type: Date },
     },
     {
       timestamps: true,

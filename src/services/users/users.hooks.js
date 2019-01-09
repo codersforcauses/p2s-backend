@@ -3,7 +3,6 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
 
 const {
-  disallow,
   iff,
   isProvider,
   preventChanges,
@@ -21,7 +20,7 @@ module.exports = {
     all: [authenticate('jwt'), permission({ roles: 'admin' })],
     find: [],
     get: [],
-    create: [disallow('external'), hashPassword(), verifyHooks.addVerification()],
+    create: [hashPassword(), verifyHooks.addVerification()],
     update: [hashPassword()],
     patch: [
       iff(
