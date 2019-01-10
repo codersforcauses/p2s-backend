@@ -1,9 +1,16 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
-const { discardQuery, alterItems } = require('feathers-hooks-common');
-
+const {
+  discardQuery,
+  alterItems,
+  iff,
+  isProvider,
+  preventChanges,
+} = require('feathers-hooks-common');
+const verifyHooks = require('feathers-authentication-management').hooks;
 const permission = require('../../hooks/permission');
 const { limitQuery } = require('../../hooks/userhooks');
+const accountService = require('../authmanagement/notifier');
 
 module.exports = {
   before: {
@@ -17,6 +24,7 @@ module.exports = {
     get: [],
     create: [
       hashPassword(),
+      verifyHooks.addVerification(),
       alterItems((rec) => {
         delete rec.admin;
         delete rec.coach;
@@ -25,7 +33,23 @@ module.exports = {
       }),
     ],
     update: [hashPassword()],
-    patch: [hashPassword()],
+    patch: [
+      iff(
+        isProvider('external'),
+        preventChanges(
+          'email',
+          'isVerified',
+          'verifyToken',
+          'verifyShortToken',
+          'verifyExpires',
+          'verifyChanges',
+          'resetToken',
+          'resetShortToken',
+          'resetExpires',
+        ),
+      ),
+      hashPassword(),
+    ],
     remove: [],
   },
 
@@ -37,7 +61,12 @@ module.exports = {
     ],
     find: [],
     get: [],
-    create: [],
+    create: [
+      (context) => {
+        accountService(context.app).notifier('resendVerifySignup', context.result);
+      },
+      verifyHooks.removeVerification(),
+    ],
     update: [],
     patch: [],
     remove: [],
