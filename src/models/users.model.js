@@ -54,10 +54,12 @@ module.exports = (app) => {
         required: true,
         default: false,
       },
-      region: {
-        type: ObjectId,
-        ref: 'regions',
-      },
+      region: [
+        {
+          type: ObjectId,
+          ref: 'regions',
+        },
+      ],
       coach: {
         is: {
           type: Boolean,
