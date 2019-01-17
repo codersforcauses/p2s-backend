@@ -54,8 +54,7 @@ module.exports = (app) => {
         required: true,
         default: false,
       },
-      region:
-        {
+      region: {
           type: ObjectId,
           ref: 'regions',
         },
