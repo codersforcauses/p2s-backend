@@ -57,7 +57,7 @@ module.exports = (app) => {
       region: {
         type: ObjectId,
         ref: 'regions',
-        },
+      },
       coach: {
         is: {
           type: Boolean,
