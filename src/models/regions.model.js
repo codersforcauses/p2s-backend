@@ -13,7 +13,6 @@ module.exports = (app) => {
       name: {
         type: String,
         required: true,
-        unique: true,
       },
       users: [
         {
