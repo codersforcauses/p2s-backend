@@ -55,8 +55,8 @@ module.exports = (app) => {
         default: false,
       },
       region: {
-          type: ObjectId,
-          ref: 'regions',
+        type: ObjectId,
+        ref: 'regions',
         },
       coach: {
         is: {
