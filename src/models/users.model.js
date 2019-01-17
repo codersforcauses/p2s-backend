@@ -37,7 +37,7 @@ module.exports = (app) => {
           type: String,
           required: true,
         },
-        mobile: {
+        phoneNumber: {
           type: String,
           required: true,
         },
