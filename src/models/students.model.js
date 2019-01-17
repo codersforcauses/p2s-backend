@@ -42,9 +42,15 @@ module.exports = (app) => {
         required: true,
         default: false,
       },
-      emergencyNumber: {
-        type: Number,
-        required: true,
+      emergencyContact: {
+        name: {
+          type: String,
+          required: true,
+        },
+        phoneNumber: {
+          type: String,
+          required: true,
+        },
       },
       school: {
         type: ObjectId,
