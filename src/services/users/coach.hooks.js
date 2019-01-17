@@ -28,6 +28,10 @@ module.exports = {
         iff(context => context.params.user.region,
           alterItems((rec, context) => {
             rec.region = context.params.user.region;
+            // Multi region support
+            // rec.region = rec.region.filter(
+            //  recRegion => context.params.user.region.includes(recRegion),
+            // );
           }))
           .else(() => {
             throw new Forbidden('Manager must have a region');
