@@ -3,6 +3,7 @@
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 
 module.exports = (app) => {
   const mongooseClient = app.get('mongooseClient');
@@ -98,6 +99,7 @@ module.exports = (app) => {
       timestamps: true,
     },
   );
+  users.plugin(uniqueValidator);
 
   return mongooseClient.model('users', users);
 };

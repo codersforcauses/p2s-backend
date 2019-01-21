@@ -3,6 +3,7 @@
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 
 module.exports = (app) => {
   const mongooseClient = app.get('mongooseClient');
@@ -13,6 +14,7 @@ module.exports = (app) => {
       name: {
         type: String,
         required: true,
+        unique: true,
       },
       phoneNumber: {
         type: Number,
@@ -57,6 +59,7 @@ module.exports = (app) => {
       timestamps: true,
     },
   );
+  schools.plugin(uniqueValidator);
 
   return mongooseClient.model('schools', schools);
 };
