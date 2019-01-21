@@ -31,34 +31,27 @@ module.exports = (app) => {
       },
       mobile: {
         type: String,
-        required: true,
       },
       emergencyContact: {
         name: {
           type: String,
-          required: true,
         },
         phoneNumber: {
           type: String,
-          required: true,
         },
       },
       gender: {
         type: String,
         enum: ['Male', 'Female', 'Other'],
-        required: true,
       },
       ethnicity: {
-        type: String,
-        required: true, // TODO add ethnicity options
+        type: String, // TODO add ethnicity options
       },
       DOB: {
         type: Date,
-        required: true,
       },
       darktheme: {
         type: Boolean,
-        required: true,
         default: false,
       },
       region: {
