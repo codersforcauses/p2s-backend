@@ -19,6 +19,7 @@ module.exports = {
       hashPassword(),
       alterItems((rec) => {
         rec.admin = { is: true };
+        delete rec.manager;
       }),
     ],
     update: [hashPassword()],

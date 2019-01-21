@@ -19,7 +19,6 @@ module.exports = {
       hashPassword(),
       alterItems((rec) => {
         delete rec.admin;
-        delete rec.coach;
         rec.manager = rec.manager || {};
         rec.manager.is = true;
       }),
