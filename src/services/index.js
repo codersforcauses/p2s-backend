@@ -34,7 +34,10 @@ module.exports = (app) => {
           last: 'GOD',
         },
         mobile: '0000000000',
-        emergencyNum: '0000000000',
+        emergencyContact: {
+          name: 'The Universe',
+          phoneNumber: '0000000000',
+        },
         gender: 'Other',
         ethnicity: 'Other',
         DOB: '01.01.1901',
@@ -44,7 +47,7 @@ module.exports = (app) => {
         logger.info('GOD is gucci');
       })
       .catch((err) => {
-        if (err.code === 409) {
+        if (err.code === 400) {
           logger.info('GOD is good');
         } else {
           throw error.BadRequest('GOD is dead\n'.concat(err));
