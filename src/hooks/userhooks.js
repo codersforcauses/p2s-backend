@@ -1,5 +1,6 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
+const error = require('@feathersjs/errors');
 
 module.exports = {
 /**
@@ -14,5 +15,17 @@ module.exports = {
 
     context.params.query = query;
     return context;
+  },
+  /**
+  * Returns true if the user is the owner of the field they're patching
+  * @param {Object} context Context object passed from server
+  */
+  isOwner: () => (context) => {
+    if (context.method === 'create') {
+      throw new error.GeneralError('isOwner should not be used in a create hook.');
+    }
+    const { user } = context.params;
+    console.log(user);
+    console.log(context.data);
   },
 };
