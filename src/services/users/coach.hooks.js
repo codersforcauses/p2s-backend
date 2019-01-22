@@ -1,10 +1,11 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
-const { iff, discardQuery, alterItems } = require('feathers-hooks-common');
+const {
+  iff, discardQuery, alterItems, keepQuery, isProvider,
+} = require('feathers-hooks-common');
 const { Forbidden } = require('@feathersjs/errors');
-
 const permission = require('../../hooks/permission');
-const { limitQuery } = require('../../hooks/userhooks');
+const { limitQuery, isOwner } = require('../../hooks/userhooks');
 
 module.exports = {
   before: {
@@ -33,9 +34,33 @@ module.exports = {
             throw new Forbidden('Manager must have a region');
           })),
     ],
-    update: [permission({ roles: ['admin', 'manager'] }), hashPassword()],
-    patch: [permission({ roles: ['admin', 'manager'] }), hashPassword()],
-    remove: [permission({ roles: ['admin', 'manager'] })],
+    update: [hashPassword(), permission({ roles: ['admin', 'coach'] })],
+    patch: [
+      hashPassword(),
+      permission({ roles: ['admin', 'coach'] }),
+      iff(isProvider('external'),
+        iff(!isOwner(),
+          iff(context => context.prarams.users.admin.is,
+            keepQuery(
+              'region',
+              'manager',
+              'admin',
+              'coach',
+            )).else(
+            iff(context => context.prarams.users.manager.is,
+              keepQuery(
+                'coach.qualifications',
+              )),
+          )).else( // If owner of records
+          alterItems((rec) => {
+            delete rec.region;
+            delete rec.coach;
+            delete rec.manager;
+            delete rec.admin;
+          }),
+        )),
+    ],
+    remove: [permission({ roles: ['admin'] })],
   },
 
   after: {

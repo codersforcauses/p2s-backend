@@ -25,12 +25,6 @@ module.exports = {
       throw new error.GeneralError('isOwner should not be used in a create hook.');
     }
     const { user } = context.params;
-    if (context.id === 'undefined') {
-      return false;
-    }
-    if (user._id === context.id) {
-      return true;
-    }
-    return false;
+    return context.id === user._id.toString();
   },
 };
