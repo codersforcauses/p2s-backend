@@ -11,10 +11,7 @@ module.exports = {
     all: [authenticate('jwt'), permission({ roles: 'admin' })],
     find: [],
     get: [],
-    create: [
-      hashPassword(),
-      disallow('external'),
-    ],
+    create: [hashPassword(), disallow('external')],
     update: [hashPassword()],
     patch: [hashPassword()],
     remove: [],
