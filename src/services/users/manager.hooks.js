@@ -49,6 +49,7 @@ module.exports = {
         ),
       ),
       hashPassword(),
+      authenticate('jwt'),
     ],
     remove: [],
   },
