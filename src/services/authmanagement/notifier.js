@@ -45,12 +45,12 @@ module.exports = (app) => {
 
       case 'resetPwd':
         tokenLink = getLink('reset', user.resetToken);
-        email = getEmail(user, 'Your password was reset', tokenLink);
+        email = getEmail(user, 'Your password was reset', 'Your password was reset');
         return sendEmail(email);
 
       case 'passwordChange':
         tokenLink = getLink('verifyChanges', user.verifyToken);
-        email = getEmail(user, 'Your account was changed. Please verify the changes', tokenLink);
+        email = getEmail(user, 'Your password was changed', 'Your password was changed');
         return sendEmail(email);
 
       case 'identityChange':
