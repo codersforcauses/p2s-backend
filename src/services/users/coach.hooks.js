@@ -1,7 +1,7 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
 const {
-  iff, discardQuery, alterItems, keepQuery, isProvider,
+  iff, discardQuery, alterItems, isProvider, keepQuery,
 } = require('feathers-hooks-common');
 const { Forbidden } = require('@feathersjs/errors');
 const permission = require('../../hooks/permission');
@@ -34,30 +34,79 @@ module.exports = {
             throw new Forbidden('Manager must have a region');
           })),
     ],
-    update: [hashPassword(), permission({ roles: ['admin', 'coach'] })],
+    update: [hashPassword(), permission({ roles: ['admin', 'coach'] }),
+      () => {
+        throw new Forbidden('Don\'t use update my dude');
+      },
+    ],
     patch: [
       hashPassword(),
-      permission({ roles: ['admin', 'coach'] }),
+      permission({ roles: ['admin', 'manager', 'coach'] }),
       iff(isProvider('external'),
-        iff(!isOwner(),
-          iff(context => context.prarams.users.admin.is,
+        iff(context => !context.params.user.admin.is,
+          iff(isOwner(), // Owner but not admin
+            () => {
+              console.log('not admin - is owner');
+            },
+            alterItems((rec) => {
+              delete rec.region;
+              delete rec.coach.is;
+              delete rec.coach.feedback;
+              delete rec.manager;
+              delete rec.admin;
+            }))).else(
+          () => {
+            console.log('is admin - ');
+          },
+          iff(isOwner(),
+            () => {
+              console.log('is owner');
+            }).else(
+            () => {
+              console.log('not owner');
+            },
             keepQuery(
               'region',
               'manager',
               'admin',
               'coach',
+            ),
+          ),
+        ),
+        iff(context => !context.params.user.manager.is,
+          () => {
+            console.log('not manager -');
+          },
+          iff(isOwner(),
+            () => {
+              console.log('is owner');
+            },
+            alterItems((rec) => {
+              delete rec.coach;
+            })).else(
+            () => {
+              console.log('not owner');
+            },
+            iff(context => !context.params.user.admin.is, // Not admin, manager or owner
+              () => {
+                console.log('is not admin, manager or owner');
+                throw new Forbidden('You have insufficient permissions to edit this user');
+              }),
+          )).else(
+          () => {
+            console.log('is manager -');
+          },
+          iff(!isOwner(),
+            () => {
+              console.log('not owner');
+            },
+            keepQuery(
+              'coach.qualifications',
             )).else(
-            iff(context => context.prarams.users.manager.is,
-              keepQuery(
-                'coach.qualifications',
-              )),
-          )).else( // If owner of records
-          alterItems((rec) => {
-            delete rec.region;
-            delete rec.coach;
-            delete rec.manager;
-            delete rec.admin;
-          }),
+            () => {
+              console.log('is owner');
+            },
+          ),
         )),
     ],
     remove: [permission({ roles: ['admin'] })],
