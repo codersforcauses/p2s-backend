@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const faker = require('faker');
 
 const app = require('./app');
@@ -44,8 +45,8 @@ function createUserObject(role, regionId) {
 }
 
 function createSchoolObject(region) {
-  const suffix = schoolSuffixes[faker.random.number(schoolSuffixes.length - 1)];
-  const format = schoolFormats[faker.random.number(schoolFormats.length - 1)];
+  const suffix = faker.random.arrayElement(schoolSuffixes);
+  const format = faker.random.arrayElement(schoolFormats);
 
   return {
     region: region._id,
@@ -56,6 +57,25 @@ function createSchoolObject(region) {
       suburb: region.name,
       postcode: faker.address.zipCode(),
     },
+  };
+}
+
+function createStudentObject(schoolId) {
+  const gender = ['Male', 'Female', 'Other'];
+  return {
+    name: {
+      first: faker.name.firstName(),
+      last: faker.name.lastName(),
+    },
+    DOB: faker.date.past(),
+    gender: faker.random.arrayElement(gender),
+    ethnicity: 'Ambiguous',
+    schoolYear: faker.random.number({ min: 7, max: 12 }),
+    emergencyContact: {
+      name: faker.name.findName(),
+      phoneNumber: faker.phone.phoneNumber(),
+    },
+    school: schoolId,
   };
 }
 
@@ -177,22 +197,39 @@ module.exports = async () => {
     }
   });
 
-  logger.info('Growing Staff');
+  logger.info('Growing staff');
   const allStaffPromises = Promise.all(staffPromises)
-    .finally(() => {
+    .then(() => {
       logger.info('Staff/Region plants grown');
     });
 
-  logger.info('Growing Schools');
-  const allSchoolPromises = Promise.all(schoolPromises);
+  logger.info('Growing schools');
+  const allSchoolPromises = Promise.all(schoolPromises)
+    .then(async (schools) => {
+      logger.info('School plants grown');
 
-  allSchoolPromises.then((schools) => {
-    logger.info(`TODO: create ${schools.length * studentsPerSchool} students`);
-  });
+      logger.info('Sowing student seeds');
+      const studentPromises = [];
 
-  allSchoolPromises.finally(() => {
-    logger.info('School plants grown');
-  });
+      schools.forEach((school) => {
+        for (let i = 0; i < studentsPerSchool; i += 1) {
+          const student = createStudentObject(school._id);
+
+          studentPromises.push(findAndCreate('students', student, {
+            query: {
+              name: student.name,
+              gender: student.gender,
+              school: student.school,
+              $select: ['_id', 'name'],
+            },
+          }));
+        }
+      });
+
+      logger.info('Growing students');
+      await Promise.all(studentPromises);
+      logger.info('Student plants grown');
+    });
 
   await Promise.all([allStaffPromises, allSchoolPromises]);
 

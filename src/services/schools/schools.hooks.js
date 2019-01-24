@@ -16,11 +16,11 @@ module.exports = {
           (context) => {
             context.data.region = context.params.user.region;
             return context;
-          })
-          .else(iff(context => !context.data.region,
-            () => {
-              throw new Unprocessable('School does not have a valid region');
-            }))),
+          })),
+      iff(context => !context.data.region,
+        () => {
+          throw new Unprocessable('School does not have a valid region');
+        }),
       iff(!(async (context) => {
         const region = await context.app.service('regions')
           .get(context.data.region, { query: { $select: ['_id'] } });
