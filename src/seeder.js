@@ -179,23 +179,9 @@ module.exports = async () => {
 
   logger.info('Growing Staff');
   const allStaffPromises = Promise.all(staffPromises)
-    .then((users) => {
-      logger.info('Cross-pollinating regions with staff');
-      const regionPatches = users.map(user => app.service('regions').get(user.region)
-        .then((region) => {
-          if (!region.users.some(regionID => regionID.toString() === user._id.toString())) {
-            return app.service('regions').patch(user.region, { $push: { users: user._id } });
-          }
-          return region;
-        }));
-
-      logger.info('Growing the super plants');
-      return Promise.all(regionPatches);
+    .finally(() => {
+      logger.info('Staff/Region plants grown');
     });
-
-  allStaffPromises.finally(() => {
-    logger.info('Staff/Region plants grown');
-  });
 
   logger.info('Growing Schools');
   const allSchoolPromises = Promise.all(schoolPromises);
