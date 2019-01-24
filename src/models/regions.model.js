@@ -27,6 +27,7 @@ module.exports = (app) => {
           'NSW',
           'VIC',
         ],
+        default: 'WA',
         required: true,
       },
       users: [
