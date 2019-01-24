@@ -4,52 +4,79 @@ const app = require('./app');
 
 const logger = require('./logger.js');
 
-const regionCount = 5;
-const adminCount = 2;
+const schoolSuffixes = [
+  'School',
+  'High School',
+  'College',
+  'School for Boys',
+  'School for Girls',
+  'High School for Boys',
+  'High School for Girls',
+  'College for Boys',
+  'College for Girls',
+  'College for the Gifted',
+  'School for the Gifted',
+  'High School for the Gifted',
+];
+const schoolFormats = ['{{name.lastName}} ', '{{name.firstName}} ', '{{address.county}} ', '{{address.country}} ', '{{address.city}} '];
+
+const regionCount = 10;
+const adminCount = 5;
 const managersPerRegion = 2;
 const coachsPerRegion = 10;
+const schoolsPerRegion = 5;
+const studentsPerSchool = 10;
 
 const testPass = 'a';
 
-function createUserPromise(serviceName, regionId) {
+function createUserObject(role, regionId) {
   const name = {
     first: faker.name.firstName(),
     last: faker.name.lastName(),
   };
-  const email = faker.internet.email(name.first, name.last, serviceName.concat('.fake.net'));
 
+  return {
+    name,
+    email: faker.internet.email(name.first, name.last, role.concat('.fake.net')),
+    password: testPass,
+    region: regionId,
+  };
+}
+
+function createSchoolObject(region) {
+  const suffix = schoolSuffixes[faker.random.number(schoolSuffixes.length - 1)];
+  const format = schoolFormats[faker.random.number(schoolFormats.length - 1)];
+
+  return {
+    region: region._id,
+    name: faker.fake(format.concat(suffix)),
+    phoneNumber: faker.phone.phoneNumber(),
+    address: {
+      street: faker.address.streetName(),
+      suburb: region.name,
+      postcode: faker.address.zipCode(),
+    },
+  };
+}
+
+function findAndCreate(serviceName, object, params) {
   const service = app.service(serviceName);
 
-  const promise = new Promise((resolve) => {
-    service.find({
-      query: {
-        email,
-        $select: ['_id', 'region'],
-      },
-    })
+  return new Promise((resolve) => {
+    service.find(params)
       .then((result) => {
         if (result.data.length === 0) {
-          service.create({
-            name,
-            email,
-            password: testPass,
-            region: regionId,
-          }, {
-            query: {
-              email,
-              $select: ['_id', 'region'],
-            },
-          })
+          service.create(object, params)
             .then(resolve);
         } else {
           resolve(result.data[0]);
         }
       });
   });
-  return promise;
 }
 
 module.exports = async () => {
+  console.time('Time taken');
   logger.info('Starting harvest cycle');
   logger.info('Plowing fields');
 
@@ -83,22 +110,21 @@ module.exports = async () => {
 
   for (let i = 0; i < regionCount; i += 1) {
     const name = faker.address.city();
-    regionPromises.push(app.service('regions')
-      .find({ query: { name } })
-      .then((result) => {
-        if (result.data.length === 0) {
-          return app.service('regions')
-            .create({ name });
-        }
-        return result.data[0];
-      }));
+    const region = { name };
+    regionPromises.push(findAndCreate('regions', region, { query: { name } }));
   }
 
   // Create admins
   const adminPromises = [];
 
   for (let i = 0; i < adminCount; i += 1) {
-    adminPromises.push(createUserPromise('admin'));
+    const admin = createUserObject('admin');
+    adminPromises.push(findAndCreate('admin', admin, {
+      query: {
+        email: admin.email,
+        $select: ['_id', 'region'],
+      },
+    }));
   }
   Promise.all(adminPromises);
 
@@ -108,32 +134,82 @@ module.exports = async () => {
   logger.info('Sowing manager and coach seeds');
 
   const staffPromises = [];
+  const schoolPromises = [];
 
   regions.forEach((region) => {
     for (let i = 0; i < managersPerRegion; i += 1) {
-      staffPromises.push(createUserPromise('manager', region._id));
+      const manager = createUserObject('manager', region._id);
+
+      staffPromises.push(
+        findAndCreate('manager', manager, {
+          query: {
+            email: manager.email,
+            $select: ['_id', 'region'],
+          },
+        }),
+      );
     }
 
     for (let i = 0; i < coachsPerRegion; i += 1) {
-      staffPromises.push(createUserPromise('coach', region._id));
+      const coach = createUserObject('coach', region._id);
+
+      staffPromises.push(
+        findAndCreate('coach', coach, {
+          query: {
+            email: coach.email,
+            $select: ['_id', 'region'],
+          },
+        }),
+      );
+    }
+
+    for (let i = 0; i < schoolsPerRegion; i += 1) {
+      const school = createSchoolObject(region);
+
+      schoolPromises.push(findAndCreate('schools', school, {
+        query: {
+          name: school.name,
+          $select: [
+            '_id',
+          ],
+        },
+      }));
     }
   });
 
-  logger.info('Growing staff');
-  const users = await Promise.all(staffPromises);
+  logger.info('Growing Staff');
+  const allStaffPromises = Promise.all(staffPromises)
+    .then((users) => {
+      logger.info('Cross-pollinating regions with staff');
+      const regionPatches = users.map(user => app.service('regions').get(user.region)
+        .then((region) => {
+          if (!region.users.some(regionID => regionID.toString() === user._id.toString())) {
+            return app.service('regions').patch(user.region, { $push: { users: user._id } });
+          }
+          return region;
+        }));
 
-  logger.info('Cross-pollinating regions with staff');
-  const regionPatches = users.map(user => app.service('regions').get(user.region)
-    .then((region) => {
-      const duplicate = region.users.some(regionID => regionID.toString() === user._id.toString());
-      if (!duplicate) {
-        return app.service('regions').patch(user.region, { $push: { users: user._id } });
-      }
-      return region;
-    }));
+      logger.info('Growing the super plants');
+      return Promise.all(regionPatches);
+    });
 
-  logger.info('Growing the super plants');
-  await Promise.all(regionPatches);
+  allStaffPromises.finally(() => {
+    logger.info('Staff/Region plants grown');
+  });
+
+  logger.info('Growing Schools');
+  const allSchoolPromises = Promise.all(schoolPromises);
+
+  allSchoolPromises.then((schools) => {
+    logger.info(`TODO: create ${schools.length * studentsPerSchool} students`);
+  });
+
+  allSchoolPromises.finally(() => {
+    logger.info('School plants grown');
+  });
+
+  await Promise.all([allStaffPromises, allSchoolPromises]);
 
   logger.info('Harvest complete!');
+  console.timeEnd('Time taken');
 };

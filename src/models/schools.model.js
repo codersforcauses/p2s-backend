@@ -17,7 +17,7 @@ module.exports = (app) => {
         unique: true,
       },
       phoneNumber: {
-        type: Number,
+        type: String,
         required: true,
       },
       address: {
