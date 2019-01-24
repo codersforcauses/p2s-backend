@@ -16,23 +16,25 @@ module.exports = {
   before: {
     all: [
       authenticate('jwt'),
-      permission({ roles: ['manager', 'admin'] }),
       discardQuery('manager', 'coach', 'admin'),
       limitQuery('manager'),
     ],
-    find: [],
-    get: [],
+    find: [permission({ roles: ['manager', 'admin'] })],
+    get: [permission({ roles: ['manager', 'admin'] })],
     create: [
       hashPassword(),
       verifyHooks.addVerification(),
+      permission({ roles: ['admin'] }),
       alterItems((rec) => {
         delete rec.admin;
-        delete rec.coach;
         rec.manager = rec.manager || {};
         rec.manager.is = true;
       }),
     ],
-    update: [hashPassword()],
+    update: [
+      hashPassword(),
+      permission({ roles: ['manager', 'admin'] }),
+    ],
     patch: [
       iff(
         isProvider('external'),
@@ -50,8 +52,11 @@ module.exports = {
       ),
       hashPassword(),
       authenticate('jwt'),
+      permission({ roles: ['manager', 'admin'] }),
     ],
-    remove: [],
+    remove: [
+      permission({ roles: ['admin'] }),
+    ],
   },
 
   after: {

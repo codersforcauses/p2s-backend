@@ -28,6 +28,7 @@ module.exports = {
       verifyHooks.addVerification(),
       alterItems((rec) => {
         rec.admin = { is: true };
+        delete rec.manager;
       }),
     ],
     update: [hashPassword()],

@@ -3,6 +3,7 @@
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 
 module.exports = (app) => {
   const mongooseClient = app.get('mongooseClient');
@@ -30,28 +31,27 @@ module.exports = (app) => {
       },
       mobile: {
         type: String,
-        required: true,
       },
-      emergencyNum: {
-        type: String,
-        required: true,
+      emergencyContact: {
+        name: {
+          type: String,
+        },
+        phoneNumber: {
+          type: String,
+        },
       },
       gender: {
         type: String,
         enum: ['Male', 'Female', 'Other'],
-        required: true,
       },
       ethnicity: {
-        type: String,
-        required: true, // TODO add ethnicity options
+        type: String, // TODO add ethnicity options
       },
       DOB: {
         type: Date,
-        required: true,
       },
       darktheme: {
         type: Boolean,
-        required: true,
         default: false,
       },
       region: {
@@ -73,13 +73,13 @@ module.exports = (app) => {
           medClearance: {
             type: Boolean, // TODO link to file server
           },
-          feedback: [
-            {
-              type: ObjectId,
-              ref: 'feedback',
-            },
-          ],
         },
+        feedback: [
+          {
+            type: ObjectId,
+            ref: 'feedback',
+          },
+        ],
       },
       manager: {
         is: {
@@ -104,6 +104,7 @@ module.exports = (app) => {
       timestamps: true,
     },
   );
+  users.plugin(uniqueValidator);
 
   return mongooseClient.model('users', users);
 };

@@ -6,6 +6,7 @@ const {
   iff,
   isProvider,
   preventChanges,
+  disallow,
 } = require('feathers-hooks-common');
 
 const verifyHooks = require('feathers-authentication-management').hooks;
@@ -20,7 +21,7 @@ module.exports = {
     all: [authenticate('jwt'), permission({ roles: 'admin' })],
     find: [],
     get: [],
-    create: [hashPassword(), verifyHooks.addVerification()],
+    create: [hashPassword(), disallow('external'), verifyHooks.addVerification()],
     update: [hashPassword()],
     patch: [
       iff(
