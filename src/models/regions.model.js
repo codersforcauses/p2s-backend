@@ -16,6 +16,20 @@ module.exports = (app) => {
         required: true,
         unique: true,
       },
+      state: {
+        type: String,
+        enum: [
+          'WA',
+          'SA',
+          'QLD',
+          'NT',
+          'TAS',
+          'NSW',
+          'VIC',
+        ],
+        default: 'WA',
+        required: true,
+      },
       users: [
         {
           type: ObjectId,

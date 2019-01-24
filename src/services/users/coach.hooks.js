@@ -17,8 +17,8 @@ module.exports = {
     find: [permission({ roles: ['admin', 'manager', 'coach'] })],
     get: [permission({ roles: ['admin', 'manager', 'coach'] })],
     create: [
-      permission({ roles: ['admin', 'manager'] }),
       hashPassword(),
+      permission({ roles: ['admin', 'manager'] }),
       alterItems((rec) => {
         delete rec.admin;
         delete rec.manager;
