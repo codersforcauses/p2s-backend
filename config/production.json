@@ -1,4 +1,5 @@
 {
-  "host": "p-2-s-backend-app.feathersjs.com",
-  "port": "PORT"
+  "host": "localhost",
+  "port": "PORT",
+  "mongodb": "mongodb://mongo:27017/p2srw"
 }
