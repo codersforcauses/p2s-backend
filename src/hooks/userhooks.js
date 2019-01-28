@@ -10,8 +10,7 @@ module.exports = {
   limitQuery: role => (context) => {
     const query = context.params.query || {};
 
-    query[role] = query[role] || {};
-    query[role].is = true;
+    query[`${role}.is`] = true;
 
     context.params.query = query;
     return context;

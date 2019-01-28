@@ -66,7 +66,6 @@ node_modules
 # Icon must end with two \r
 Icon
 
-
 # Thumbnails
 ._*
 
@@ -117,3 +116,7 @@ package-lock.json
 .ENV
 .env.local
 .env.*.local
+
+# public files for dist
+public/*
+!public/.gitkeep

@@ -17,7 +17,7 @@ module.exports = {
             if (context.params.user.region) {
               query.region = context.params.user.region;
             } else {
-              throw new Forbidden('You dont belong to that region');
+              throw new Forbidden('You do not belong to that region');
             }
             context.params.query = query;
             return context;

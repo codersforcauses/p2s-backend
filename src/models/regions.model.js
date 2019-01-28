@@ -3,6 +3,7 @@
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 
 module.exports = (app) => {
   const mongooseClient = app.get('mongooseClient');
@@ -12,6 +13,21 @@ module.exports = (app) => {
     {
       name: {
         type: String,
+        required: true,
+        unique: true,
+      },
+      state: {
+        type: String,
+        enum: [
+          'WA',
+          'SA',
+          'QLD',
+          'NT',
+          'TAS',
+          'NSW',
+          'VIC',
+        ],
+        default: 'WA',
         required: true,
       },
       users: [
@@ -33,6 +49,7 @@ module.exports = (app) => {
       timestamps: true,
     },
   );
+  regions.plugin(uniqueValidator);
 
   return mongooseClient.model('regions', regions);
 };
