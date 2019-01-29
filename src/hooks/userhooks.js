@@ -1,6 +1,6 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
-const error = require('@feathersjs/errors');
+const { GeneralError } = require('@feathersjs/errors');
 
 module.exports = {
 /**
@@ -22,9 +22,10 @@ module.exports = {
   */
   isOwner: () => (context) => {
     if (context.method === 'create') {
-      throw new error.GeneralError('isOwner should not be used in a create hook.');
+      throw new GeneralError('isOwner should not be used in a create hook.');
     }
     const { user } = context.params;
+    console.log(context.id, '|', user._id.toString());
     return context.id === user._id.toString();
   },
 };
