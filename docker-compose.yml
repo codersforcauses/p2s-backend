@@ -1,0 +1,19 @@
+version: "3"
+services:
+  web:
+    container_name: p2srw
+    build:
+      context: ./p2srw
+      args:
+        - envvar
+    ports:
+      - 80:80
+    links:
+      - db
+    restart: on-failure
+    tty: true
+  db:
+    container_name: mongo
+    image: mongo
+    ports:
+      - 27017:27017

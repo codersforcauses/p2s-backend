@@ -37,6 +37,7 @@
     "@feathersjs/feathers": "^3.3.0",
     "@feathersjs/socketio": "^3.2.8",
     "compression": "^1.7.3",
+    "connect-history-api-fallback": "^1.6.0",
     "cors": "^2.8.5",
     "dotenvcrypt": "^1.1.1",
     "faker": "^4.1.0",
@@ -46,7 +47,6 @@
     "mongodb-core": "^3.1.9",
     "mongoose": "^5.4.1",
     "mongoose-unique-validator": "^2.0.2",
-    "serve-favicon": "^2.5.0",
     "winston": "^3.1.0"
   },
   "devDependencies": {

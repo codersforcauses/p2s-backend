@@ -21,8 +21,8 @@ module.exports = {
     find: [permission({ roles: ['admin', 'manager', 'coach'] })],
     get: [permission({ roles: ['admin', 'manager', 'coach'] })],
     create: [
-      permission({ roles: ['admin', 'manager'] }),
       hashPassword(),
+      permission({ roles: ['admin', 'manager'] }),
       alterItems((rec) => {
         delete rec.admin;
         delete rec.manager;
@@ -39,8 +39,14 @@ module.exports = {
               throw new Forbidden('Manager must have a region');
             }))),
     ],
-    update: [permission({ roles: ['admin', 'manager'] }), hashPassword()],
-    patch: [permission({ roles: ['admin', 'manager'] }), hashPassword()],
+    update: [
+      hashPassword(),
+      permission({ roles: ['admin', 'manager'] }),
+    ],
+    patch: [
+      hashPassword(),
+      permission({ roles: ['admin', 'manager'] }),
+    ],
     remove: [permission({ roles: ['admin', 'manager'] })],
   },
 

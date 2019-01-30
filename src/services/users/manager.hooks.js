@@ -9,23 +9,31 @@ module.exports = {
   before: {
     all: [
       authenticate('jwt'),
-      permission({ roles: ['manager', 'admin'] }),
       discardQuery('manager', 'coach', 'admin'),
       limitQuery('manager'),
     ],
-    find: [],
-    get: [],
+    find: [permission({ roles: ['manager', 'admin'] })],
+    get: [permission({ roles: ['manager', 'admin'] })],
     create: [
       hashPassword(),
+      permission({ roles: ['admin'] }),
       alterItems((rec) => {
         delete rec.admin;
         rec.manager = rec.manager || {};
         rec.manager.is = true;
       }),
     ],
-    update: [hashPassword()],
-    patch: [hashPassword()],
-    remove: [],
+    update: [
+      hashPassword(),
+      permission({ roles: ['manager', 'admin'] }),
+    ],
+    patch: [
+      hashPassword(),
+      permission({ roles: ['manager', 'admin'] }),
+    ],
+    remove: [
+      permission({ roles: ['admin'] }),
+    ],
   },
 
   after: {
