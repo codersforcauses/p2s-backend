@@ -10,7 +10,7 @@ module.exports = {
     create: [
       iff(context => !context.data.school,
         () => {
-          throw new Unprocessable('School does not have a valid school');
+          throw new Unprocessable('Student does not have a valid school');
         }),
       iff(!(async (context) => {
         const school = await context.app.service('schools')

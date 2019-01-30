@@ -40,8 +40,6 @@ module.exports = (app) => {
   // eslint-disable-next-line no-unused-vars
   app.publish((data, hook) => app.channel('authenticated'));
 
-    console.log('Channeling events to authenticated users.'); // eslint-disable-line
-
   // console.log('Publishing all events to all authenticated users. See `channels.js` and https://docs.feathersjs.com/api/channels.html for more information.'); // eslint-disable-line
 
   // e.g. to publish all service events to all authenticated users use
