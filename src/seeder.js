@@ -227,7 +227,9 @@ module.exports = async () => {
       });
 
       logger.info('Growing students');
-      await Promise.all(studentPromises);
+      return Promise.all(studentPromises);
+    })
+    .then(() => {
       logger.info('Student plants grown');
     });
 
