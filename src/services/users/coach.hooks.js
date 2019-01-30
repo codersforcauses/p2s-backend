@@ -1,6 +1,11 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
-const { iff, discardQuery, alterItems } = require('feathers-hooks-common');
+const {
+  iff,
+  discardQuery,
+  alterItems,
+  isProvider,
+} = require('feathers-hooks-common');
 const { Forbidden } = require('@feathersjs/errors');
 
 const permission = require('../../hooks/permission');
@@ -24,14 +29,15 @@ module.exports = {
         rec.coach = rec.coach || {};
         rec.coach.is = true;
       }),
-      iff(context => context.params.user.manager.is,
-        iff(context => context.params.user.region,
-          alterItems((rec, context) => {
-            rec.region = context.params.user.region;
-          }))
-          .else(() => {
-            throw new Forbidden('Manager must have a region');
-          })),
+      iff(isProvider('external'),
+        iff(context => context.params.user.manager.is,
+          iff(context => context.params.user.region,
+            alterItems((rec, context) => {
+              rec.region = context.params.user.region;
+            }))
+            .else(() => {
+              throw new Forbidden('Manager must have a region');
+            }))),
     ],
     update: [
       hashPassword(),
@@ -52,7 +58,12 @@ module.exports = {
     ],
     find: [],
     get: [],
-    create: [],
+    create: [
+      iff(context => context.result.region,
+        context => context.app.service('regions')
+          .patch(context.result.region, { $push: { users: context.result._id } })
+          .then(() => context)),
+    ],
     update: [],
     patch: [],
     remove: [],

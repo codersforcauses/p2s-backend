@@ -40,6 +40,7 @@
     "connect-history-api-fallback": "^1.6.0",
     "cors": "^2.8.5",
     "dotenvcrypt": "^1.1.1",
+    "faker": "^4.1.0",
     "feathers-hooks-common": "^4.19.6",
     "feathers-mongoose": "^7.1.1",
     "helmet": "^3.15.0",
