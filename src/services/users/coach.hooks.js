@@ -51,7 +51,10 @@ module.exports = {
                 delete rec.coach;
                 delete rec.manager;
                 delete rec.admin;
-              })).else( // Is Manager
+              }),
+              () => {
+                console.log('Owner not manager or admin: Deleted region, manager, admin and coach');
+              }).else( // Is Manager
               alterItems((rec) => {
                 delete rec.region;
                 rec.coach = rec.coach || {};
@@ -60,7 +63,10 @@ module.exports = {
                 delete rec.manager;
                 delete rec.admin;
               }),
-            ))).else( // Not Owner
+            ),
+            () => {
+              console.log('Owner manager: Deleted region, manager, admin and coach.is and coach.feedback');
+            })).else( // Not Owner
           iff(context => !context.params.user.admin.is,
             iff(context => !context.params.user.manager.is,
               () => { // Is not Owner, Admin or Manager
@@ -69,7 +75,10 @@ module.exports = {
               keep(
                 'coach.qualifications',
               ),
-            )).else( // Is Admin
+            ),
+            () => {
+              console.log('Not owner is manager: Kept qualifications');
+            }).else( // Is Admin
             keep(
               'region',
               'manager',
@@ -77,93 +86,10 @@ module.exports = {
               'coach',
             ),
           ),
+          () => {
+            console.log('Not owner is admin: Kept region, manager, admin and coach');
+          },
         )),
-      // ---------- OLD CODE ---------
-      // iff(context => !context.params.user.admin.is,
-      //   () => {
-      //     console.log('not admin - ');
-      //   },
-      //   iff(isOwner(), // Owner but not admin
-      //     () => {
-      //       console.log('is owner');
-      //     },
-      //     alterItems((rec) => {
-      //       delete rec.region;
-      //       rec.coach = rec.coach || {};
-      //       delete rec.coach.is;
-      //       delete rec.coach.feedback;
-      //       delete rec.manager;
-      //       delete rec.admin;
-      //     }),
-      //     () => {
-      //       console.log('Deleted region, manager, admin and coach.is and feedback');
-      //     }).else(
-      //     () => {
-      //       console.log('not owner');
-      //     },
-      //   )).else(
-      //   () => {
-      //     console.log('is admin - ');
-      //   },
-      //   iff(isOwner(),
-      //     () => {
-      //       console.log('is owner');
-      //     }).else(
-      //     () => {
-      //       console.log('not owner');
-      //     },
-      //     keep(
-      //       'region',
-      //       'manager',
-      //       'admin',
-      //       'coach',
-      //     ),
-      //     () => {
-      //       console.log('Deleted everything besides region, manager, admin and coach');
-      //     },
-      //   ),
-      // ),
-      // iff(context => !context.params.user.manager.is,
-      //   () => {
-      //     console.log('not manager -');
-      //   },
-      //   iff(isOwner(),
-      //     () => {
-      //       console.log('is owner');
-      //     },
-      //     alterItems((rec) => {
-      //       delete rec.coach;
-      //     }),
-      //     () => {
-      //       console.log('Deleted coach');
-      //     }).else(
-      //     () => {
-      //       console.log('not owner');
-      //     },
-      //     iff(context => !context.params.user.admin.is, // Not admin, manager or owner
-      //       () => {
-      //         console.log('is not admin, manager or owner');
-      //         throw new Forbidden('You have insufficient permissions to edit this user');
-      //       }),
-      //   )).else(
-      //   () => {
-      //     console.log('is manager -');
-      //   },
-      //   iff(isOwner(),
-      //     () => {
-      //       console.log('is owner');
-      //     }).else(
-      //     () => {
-      //       console.log('not owner');
-      //     },
-      //     keep(
-      //       'coach.qualifications',
-      //     ),
-      //     () => {
-      //       console.log('Deleted everything besides coach.qualifications');
-      //     },
-      //   ),
-      // )),
     ],
     remove: [permission({ roles: ['admin'] })],
   },
