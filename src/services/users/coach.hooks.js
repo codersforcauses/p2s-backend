@@ -36,7 +36,7 @@ module.exports = {
     ],
     update: [hashPassword(), permission({ roles: ['admin', 'coach'] }),
       () => {
-        throw new Forbidden('Don\'t use update my dude');
+        throw new Forbidden('Use patch instead of update.');
       },
     ],
     patch: [
@@ -46,49 +46,56 @@ module.exports = {
         iff(isOwner(),
           iff(context => !context.params.user.admin.is,
             iff(context => !context.params.user.manager.is,
-              alterItems((rec) => {
+              alterItems((rec) => { // Issues with postman json formatting
                 delete rec.region;
+                rec.coach = rec.coach || {};
+                delete rec.coach.is;
                 delete rec.coach;
+                rec.manager = rec.manager || {};
+                delete rec.manager.is;
                 delete rec.manager;
+                rec.admin = rec.admin || {};
+                delete rec.admin.is;
                 delete rec.admin;
-              }),
-              () => {
-                console.log('Owner not manager or admin: Deleted region, manager, admin and coach');
-              }).else( // Is Manager
+                console.log(rec);
+              })).else( // Is Manager
               alterItems((rec) => {
                 delete rec.region;
                 rec.coach = rec.coach || {};
                 delete rec.coach.is;
                 delete rec.coach.feedback;
+                delete rec.coach;
+                rec.manager = rec.manager || {};
+                delete rec.manager.is;
                 delete rec.manager;
+                rec.admin = rec.admin || {};
+                delete rec.admin.is;
                 delete rec.admin;
+                console.log(rec);
               }),
-            ),
-            () => {
-              console.log('Owner manager: Deleted region, manager, admin and coach.is and coach.feedback');
-            })).else( // Not Owner
+            ))).else( // Not Owner
           iff(context => !context.params.user.admin.is,
             iff(context => !context.params.user.manager.is,
               () => { // Is not Owner, Admin or Manager
                 throw new Forbidden('You have insufficient permissions to edit this user');
               }).else( // Is Manager
               keep(
-                'coach.qualifications',
+                'coach.qualifications.policeClearance',
+                'coach.qualifications.WWC',
+                'coach.qualifications.medClearance',
               ),
-            ),
-            () => {
-              console.log('Not owner is manager: Kept qualifications');
-            }).else( // Is Admin
+            )).else( // Is Admin
             keep(
-              'region',
-              'manager',
-              'admin',
-              'coach',
+              'region.is',
+              'manager.is',
+              'admin.is',
+              'coach.is',
+              'coach.feedback',
+              'coach.qualifications.policeClearance',
+              'coach.qualifications.WWC',
+              'coach.qualifications.medClearance',
             ),
           ),
-          () => {
-            console.log('Not owner is admin: Kept region, manager, admin and coach');
-          },
         )),
     ],
     remove: [permission({ roles: ['admin'] })],
