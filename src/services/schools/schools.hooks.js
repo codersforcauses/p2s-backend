@@ -1,4 +1,7 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
+const { iff, isProvider } = require('feathers-hooks-common');
+const { Unprocessable } = require('@feathersjs/errors');
+
 const permission = require('../../hooks/permission');
 
 module.exports = {
@@ -6,7 +9,30 @@ module.exports = {
     all: [authenticate('jwt')],
     find: [],
     get: [],
-    create: [permission({ roles: ['admin', 'manager'] })],
+    create: [
+      permission({ roles: ['admin', 'manager'] }),
+      iff(isProvider('external'),
+        iff(context => !!context.params.user.region,
+          (context) => {
+            context.data.region = context.params.user.region;
+            return context;
+          })),
+      iff(context => !context.data.region,
+        () => {
+          throw new Unprocessable('School does not have a valid region');
+        }),
+      iff(!(async (context) => {
+        const region = await context.app.service('regions')
+          .get(context.data.region, { query: { $select: ['_id'] } });
+        if (region) {
+          return true;
+        }
+        return false;
+      }),
+      () => {
+        throw new Unprocessable('Region given does not exist');
+      }),
+    ],
     update: [permission({ roles: ['admin', 'coach', 'manager'] })],
     patch: [permission({ roles: ['admin', 'coach', 'manager'] })],
     remove: [permission({ roles: ['admin', 'manager'] })],
@@ -16,7 +42,11 @@ module.exports = {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [
+      context => context.app.service('regions')
+        .patch(context.data.region, { $push: { schools: context.result._id } })
+        .then(() => context),
+    ],
     update: [],
     patch: [],
     remove: [],

@@ -102,7 +102,7 @@ module.exports = (app) => {
       timestamps: true,
     },
   );
-  users.plugin(uniqueValidator);
+  users.plugin(uniqueValidator, { message: 'That {PATH} is already registered to a user.' });
 
   return mongooseClient.model('users', users);
 };

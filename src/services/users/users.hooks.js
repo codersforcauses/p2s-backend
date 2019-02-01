@@ -1,6 +1,8 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
-const { disallow } = require('feathers-hooks-common');
+
+const { disallow, iff } = require('feathers-hooks-common');
+
 const permission = require('../../hooks/permission');
 
 module.exports = {
@@ -22,7 +24,12 @@ module.exports = {
     ],
     find: [],
     get: [],
-    create: [],
+    create: [
+      iff(context => context.result.region,
+        context => context.app.service('regions')
+          .patch(context.result.region, { $push: { users: context.result._id } })
+          .then(() => context)),
+    ],
     update: [],
     patch: [],
     remove: [],
