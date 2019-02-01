@@ -86,7 +86,7 @@ module.exports = {
               ),
             )).else( // Is Admin
             keep(
-              'region.is',
+              'region',
               'manager.is',
               'admin.is',
               'coach.is',
