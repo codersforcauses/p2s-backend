@@ -31,12 +31,13 @@ app.configure(configuration());
 app.use(helmet());
 app.use(cors());
 app.use(compress());
-app.use(history());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+if (process.env.NODE_ENV === 'production') {
+  app.use(history());
+}
 // Host the public folder
 app.use('/', express.static(app.get('public')));
-
 // Set up Plugins and providers
 app.configure(express.rest());
 app.configure(socketio());
