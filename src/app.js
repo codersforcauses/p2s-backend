@@ -5,7 +5,6 @@ decrypt(process.env.ENV_KEY);
 const compress = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
-const history = require('connect-history-api-fallback');
 
 const feathers = require('@feathersjs/feathers');
 const configuration = require('@feathersjs/configuration');
