@@ -105,15 +105,15 @@ module.exports = async () => {
 
   // Create super admin
   app.service('admin')
-    .find({ query: { email: 'super@admin.god' } })
+    .find({ query: { email: 'testadmin@p2srugbyworks.com' } })
     .then((result) => {
       if (result.data.length === 0) {
         return app.service('admin').create({
-          email: 'super@admin.god',
+          email: 'testadmin@p2srugbyworks.com',
           password: 'Qwerty123',
           name: {
-            first: 'The one',
-            last: 'GOD',
+            first: 'Test',
+            last: 'Admin',
           },
           gender: 'Other',
           ethnicity: 'Other',
