@@ -5,7 +5,7 @@ decrypt(process.env.ENV_KEY);
 const compress = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
-const history = require('connect-history-api-fallback');
+// const history = require('connect-history-api-fallback');
 
 const feathers = require('@feathersjs/feathers');
 const configuration = require('@feathersjs/configuration');
@@ -31,7 +31,7 @@ app.configure(configuration());
 app.use(helmet());
 app.use(cors());
 app.use(compress());
-app.use(history());
+// app.use(history());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Host the public folder
