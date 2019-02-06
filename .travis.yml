@@ -7,9 +7,10 @@ branches:
 services: mongodb
 language: node_js
 nodejs:
+  - "11"
   - "lts/*"
 cache:
-  npm: true
+  yarn: true
   directories:
     - ~/.cache
 notifications:
