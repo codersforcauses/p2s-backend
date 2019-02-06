@@ -18,7 +18,7 @@
   },
   "engines": {
     "node": "^11.0.0",
-    "npm": ">= 3.0.0"
+    "npm": ">= 6.0.0"
   },
   "scripts": {
     "test": "npm run eslint && NODE_ENV= npm run jest",
@@ -40,7 +40,6 @@
     "connect-history-api-fallback": "^1.6.0",
     "cors": "^2.8.5",
     "dotenvcrypt": "^1.1.1",
-    "faker": "^4.1.0",
     "feathers-hooks-common": "^4.19.6",
     "feathers-mongoose": "^7.1.1",
     "helmet": "^3.15.0",
@@ -57,5 +56,8 @@
     "nodemon": "^1.18.9",
     "request": "^2.88.0",
     "request-promise": "^4.2.2"
+  },
+  "optionalDependencies": {
+    "faker": "^4.1.0"
   }
 }
