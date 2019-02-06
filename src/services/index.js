@@ -7,6 +7,7 @@ const sessions = require('./sessions/sessions.service.js');
 const programs = require('./programs/programs.service.js');
 const activities = require('./activities/activities.service.js');
 const feedback = require('./feedback/feedback.service.js');
+const stats = require('./stats/stats.service.js');
 
 module.exports = (app) => {
   app.configure(users);
@@ -18,4 +19,5 @@ module.exports = (app) => {
   app.configure(programs);
   app.configure(activities);
   app.configure(feedback);
+  app.configure(stats);
 };
