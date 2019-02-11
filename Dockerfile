@@ -1,15 +1,19 @@
-FROM node:10-alpine
+FROM node:11-alpine
 
 # make the 'p2srw' folder the current working directory
 WORKDIR /p2srw
 
-# copy both 'package.json' and 'package-lock.json' (if available)
-COPY package*.json ./
+# copy both 'package.json' and yarn.lock files
+COPY package.json .
+COPY yarn.lock .
+
+# install yarn globally
+RUN npm install yarn -g
 
 # install project dependencies
-RUN npm install --only=production
+RUN yarn install --production --ignore-optional --silent
 
-RUN npm install pm2 -g
+RUN yarn global add pm2 --silent
 
 # copy project files and folders to the current working directory (i.e. 'p2srw' folder)
 COPY . .
