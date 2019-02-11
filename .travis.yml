@@ -9,6 +9,8 @@ language: node_js
 nodejs:
   - "11"
   - "lts/*"
+before_install:
+  - yarn install --ignore-optional --silent
 cache:
   yarn: true
   directories:
