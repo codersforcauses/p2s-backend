@@ -20,6 +20,12 @@ module.exports = (app) => {
           ref: 'students',
         },
       ],
+      coaches: [
+        {
+          type: ObjectId,
+          ref: 'users',
+        },
+      ],
       reports: [
         {
           type: ObjectId,
