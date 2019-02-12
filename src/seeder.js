@@ -108,7 +108,7 @@ if (process.env.NODE_ENV !== 'production') {
     faker.seed(1337);
 
     // Create super admin
-    app.service('admin')
+    app.service('users') // In case admin tag is changed to false
       .find({ query: { email: 'testadmin@p2srugbyworks.com' } })
       .then((result) => {
         if (result.data.length === 0) {
@@ -122,9 +122,15 @@ if (process.env.NODE_ENV !== 'production') {
             gender: 'Other',
             ethnicity: 'Other',
             darktheme: true,
+            'coach.is': true,
+            'manager.is': true,
           });
         }
-        return result.data[0];
+        return app.service('users').patch(result.data[0]._id, {
+          'admin.is': true,
+          'coach.is': true,
+          'manager.is': true,
+        });
       });
 
     logger.info('Sowing region seeds');
