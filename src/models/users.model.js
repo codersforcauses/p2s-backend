@@ -80,6 +80,12 @@ module.exports = (app) => {
             ref: 'feedback',
           },
         ],
+        sessions: [
+          {
+            type: ObjectId,
+            ref: 'sessions',
+          },
+        ],
       },
       manager: {
         is: {
