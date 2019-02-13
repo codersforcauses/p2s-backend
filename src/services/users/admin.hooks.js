@@ -1,6 +1,11 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
-const { discardQuery, alterItems, iff } = require('feathers-hooks-common');
+const {
+  discardQuery,
+  alterItems,
+  iff,
+  isProvider,
+} = require('feathers-hooks-common');
 
 const { limitQuery } = require('../../hooks/userhooks');
 const permission = require('../../hooks/permission');
@@ -19,7 +24,9 @@ module.exports = {
       hashPassword(),
       alterItems((rec) => {
         rec.admin = { is: true };
-        delete rec.manager;
+        if (isProvider('external')) {
+          delete rec.manager;
+        }
       }),
     ],
     update: [hashPassword()],
