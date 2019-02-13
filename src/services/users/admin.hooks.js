@@ -22,15 +22,12 @@ module.exports = {
     get: [],
     create: [
       hashPassword(),
-      iff(isProvider('external'),
-        alterItems((rec) => {
-          rec.admin = { is: true };
+      alterItems((rec) => {
+        rec.admin = { is: true };
+        if (isProvider('external')) {
           delete rec.manager;
-        })).else(
-        alterItems((rec) => {
-          rec.admin = { is: true };
-        }),
-      ),
+        }
+      }),
     ],
     update: [hashPassword()],
     patch: [hashPassword()],
