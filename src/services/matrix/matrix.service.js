@@ -5,7 +5,6 @@ const hooks = require('./matrix.hooks');
 
 module.exports = (app) => {
   const Model = createModel(app);
-  const paginate = app.get('paginate');
 
   const options = {
     Model,
