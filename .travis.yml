@@ -7,9 +7,12 @@ branches:
 services: mongodb
 language: node_js
 nodejs:
+  - "11"
   - "lts/*"
+before_install:
+  - yarn install --ignore-optional --silent
 cache:
-  npm: true
+  yarn: true
   directories:
     - ~/.cache
 notifications:

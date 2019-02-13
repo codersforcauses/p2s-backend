@@ -8,13 +8,13 @@ const permission = require('../../hooks/permission');
 
 module.exports = {
   before: {
-    all: [authenticate('jwt'), permission({ roles: 'admin' })],
-    find: [],
-    get: [],
-    create: [hashPassword(), disallow('external')],
-    update: [hashPassword()],
-    patch: [hashPassword()],
-    remove: [],
+    all: [authenticate('jwt')],
+    find: [permission({ roles: ['admin'] })],
+    get: [permission({ roles: ['admin', 'manager', 'coach'] })],
+    create: [hashPassword(), permission({ roles: ['admin'] }), disallow('external')],
+    update: [hashPassword(), permission({ roles: ['admin'] })],
+    patch: [hashPassword(), permission({ roles: ['admin'] })],
+    remove: [permission({ roles: ['admin'] })],
   },
 
   after: {
