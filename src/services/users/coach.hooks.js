@@ -5,11 +5,13 @@ const {
   discardQuery,
   alterItems,
   isProvider,
-  keep,
 } = require('feathers-hooks-common');
+const { omit, pick } = require('lodash');
 const { Forbidden } = require('@feathersjs/errors');
 const permission = require('../../hooks/permission');
-const { limitQuery, isOwner } = require('../../hooks/userhooks');
+const { limitQuery, isOwner, matchQueryFields } = require('../../hooks/userhooks');
+
+const restrictedFields = ['coach', 'manager', 'admin', 'region', 'email'];
 
 module.exports = {
   before: {
@@ -49,57 +51,17 @@ module.exports = {
       permission({ roles: ['admin', 'manager', 'coach'] }),
       iff(isProvider('external'),
         iff(isOwner(),
-          iff(context => !context.params.user.admin.is,
-            iff(context => !context.params.user.manager.is,
-              alterItems((rec) => { // Issues with postman json formatting
-                delete rec.region;
-                rec.coach = rec.coach || {};
-                delete rec.coach.is;
-                delete rec.coach;
-                rec.manager = rec.manager || {};
-                delete rec.manager.is;
-                delete rec.manager;
-                rec.admin = rec.admin || {};
-                delete rec.admin.is;
-                delete rec.admin;
-                console.log(rec);
-              })).else( // Is Manager
-              alterItems((rec) => {
-                delete rec.region;
-                rec.coach = rec.coach || {};
-                delete rec.coach.is;
-                delete rec.coach.feedback;
-                delete rec.coach;
-                rec.manager = rec.manager || {};
-                delete rec.manager.is;
-                delete rec.manager;
-                rec.admin = rec.admin || {};
-                delete rec.admin.is;
-                delete rec.admin;
-                console.log(rec);
-              }),
-            ))).else( // Not Owner
-          iff(context => !context.params.user.admin.is,
-            iff(context => !context.params.user.manager.is,
-              () => { // Is not Owner, Admin or Manager
-                throw new Forbidden('You have insufficient permissions to edit this user');
-              }).else( // Is Manager
-              keep(
-                'coach.qualifications.policeClearance',
-                'coach.qualifications.WWC',
-                'coach.qualifications.medClearance',
-              ),
-            )).else( // Is Admin
-            keep(
-              'region',
-              'manager.is',
-              'admin.is',
-              'coach.is',
-              'coach.feedback',
-              'coach.qualifications.policeClearance',
-              'coach.qualifications.WWC',
-              'coach.qualifications.medClearance',
-            ),
+          iff(context => !context.params.user.admin.is, // Is Owner and coach/manager
+            (context) => {
+              context.data = omit(context.data, matchQueryFields(context, restrictedFields));
+            })).else(
+          iff(context => !context.params.user.admin.is, // Not Owner or Admin
+            () => {
+              throw new Forbidden('You have insufficient permissions to edit this user');
+            }).else( // Not Owner is Admin
+            (context) => {
+              context.data = pick(context.data, matchQueryFields(context, restrictedFields));
+            },
           ),
         )),
     ],
