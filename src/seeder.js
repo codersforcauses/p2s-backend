@@ -107,32 +107,6 @@ if (process.env.NODE_ENV !== 'production') {
     faker.locale = 'en_AU';
     faker.seed(1337);
 
-    // Create super admin
-    app.service('users') // In case admin tag is changed to false
-      .find({ query: { email: 'testadmin@p2srugbyworks.com' } })
-      .then((result) => {
-        if (result.data.length === 0) {
-          return app.service('admin').create({
-            email: 'testadmin@p2srugbyworks.com',
-            password: 'Qwerty123',
-            name: {
-              first: 'Test',
-              last: 'Admin',
-            },
-            gender: 'Other',
-            ethnicity: 'Other',
-            darktheme: true,
-            'coach.is': true,
-            'manager.is': true,
-          });
-        }
-        return app.service('users').patch(result.data[0]._id, {
-          'admin.is': true,
-          'coach.is': true,
-          'manager.is': true,
-        });
-      });
-
     logger.info('Sowing region seeds');
 
     // Create base regions
@@ -160,6 +134,33 @@ if (process.env.NODE_ENV !== 'production') {
 
     logger.info('Growing regions');
     const regions = await Promise.all(regionPromises);
+
+    // Create super admin
+    app.service('users') // In case admin tag is changed to false
+      .find({ query: { email: 'testadmin@p2srugbyworks.com' } })
+      .then((result) => {
+        if (result.data.length === 0) {
+          return app.service('admin').create({
+            email: 'testadmin@p2srugbyworks.com',
+            password: 'Qwerty123',
+            name: {
+              first: 'Test',
+              last: 'Admin',
+            },
+            gender: 'Other',
+            ethnicity: 'Other',
+            darktheme: true,
+            region: regions[0]._id,
+            'coach.is': true,
+            'manager.is': true,
+          });
+        }
+        return app.service('users').patch(result.data[0]._id, {
+          'admin.is': true,
+          'coach.is': true,
+          'manager.is': true,
+        });
+      });
 
     logger.info('Sowing manager and coach seeds');
 
