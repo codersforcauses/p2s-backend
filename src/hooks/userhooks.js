@@ -28,4 +28,17 @@ module.exports = {
     // console.log(context.id, '|', user._id.toString());
     return context.id === user._id.toString();
   },
+
+  /**
+  * Removes fields from context.data
+  * @param {Object} context Context object passed from server
+  */
+  matchQueryFields: (context, args) => {
+    const queryFields = Object.keys(context.data);
+    const results = queryFields.filter((field) => {
+      const numMatches = args.filter(arg => field.indexOf(arg) >= 0);
+      return numMatches.length > 0;
+    });
+    return results;
+  },
 };
