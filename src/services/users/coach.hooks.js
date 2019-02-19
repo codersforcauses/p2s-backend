@@ -1,11 +1,6 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
-const {
-  iff,
-  discardQuery,
-  alterItems,
-  isProvider,
-} = require('feathers-hooks-common');
+const { iff, discardQuery, alterItems, isProvider } = require('feathers-hooks-common');
 const { omit, pick } = require('lodash');
 const { Forbidden } = require('@feathersjs/errors');
 const permission = require('../../hooks/permission');
@@ -51,7 +46,7 @@ module.exports = {
       permission({ roles: ['admin', 'manager', 'coach'] }),
       iff(isProvider('external'),
         iff(isOwner(),
-          iff(context => !context.params.user.admin.is, // Is Owner and coach/manager
+          iff(context => !context.params.user.admin.is, // Is Owner not Admin
             (context) => {
               context.data = omit(context.data, matchQueryFields(context, restrictedFields));
             })).else(
