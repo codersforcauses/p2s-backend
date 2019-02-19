@@ -1,6 +1,11 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
-const { iff, discardQuery, alterItems, isProvider } = require('feathers-hooks-common');
+const {
+  iff,
+  discardQuery,
+  alterItems,
+  isProvider,
+} = require('feathers-hooks-common');
 const { omit, pick } = require('lodash');
 const { Forbidden } = require('@feathersjs/errors');
 const permission = require('../../hooks/permission');
