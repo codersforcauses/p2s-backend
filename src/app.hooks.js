@@ -1,4 +1,5 @@
 // Application hooks that run for every service
+const { Forbidden } = require('@feathersjs/errors');
 const log = require('./hooks/log');
 
 module.exports = {
@@ -7,7 +8,11 @@ module.exports = {
     find: [],
     get: [],
     create: [],
-    update: [],
+    update: [
+      () => {
+        throw new Forbidden('Use Patch instead of Update');
+      },
+    ],
     patch: [],
     remove: [],
   },
