@@ -41,11 +41,7 @@ module.exports = {
               throw new Forbidden('Manager must have a region');
             }))),
     ],
-    update: [hashPassword(), permission({ roles: ['admin', 'manager', 'coach'] }),
-      () => {
-        throw new Forbidden('Use patch instead of update.');
-      },
-    ],
+    update: [hashPassword()],
     patch: [
       hashPassword(),
       permission({ roles: ['admin', 'manager', 'coach'] }),

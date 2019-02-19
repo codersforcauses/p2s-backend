@@ -31,12 +31,7 @@ module.exports = {
         rec.manager.is = true;
       }),
     ],
-    update: [
-      hashPassword(), permission({ roles: ['admin', 'manager'] }),
-      () => {
-        throw new Forbidden('Use patch instead of update.');
-      },
-    ],
+    update: [hashPassword()],
     patch: [
       hashPassword(),
       permission({ roles: ['admin', 'manager'] }),
