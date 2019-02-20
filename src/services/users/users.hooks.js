@@ -1,9 +1,6 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
-
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
-
 const { disallow, iff } = require('feathers-hooks-common');
-
 const permission = require('../../hooks/permission');
 
 module.exports = {
