@@ -3,7 +3,6 @@ const { Unprocessable } = require('@feathersjs/errors');
 const { iff } = require('feathers-hooks-common');
 const permission = require('../../hooks/permission');
 
-
 module.exports = {
   before: {
     all: [authenticate('jwt')],
