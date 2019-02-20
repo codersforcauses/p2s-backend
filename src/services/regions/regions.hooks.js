@@ -1,9 +1,6 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
-
 const { iff, isProvider } = require('feathers-hooks-common');
-
 const { Forbidden } = require('@feathersjs/errors');
-
 const permission = require('../../hooks/permission');
 
 module.exports = {
@@ -25,11 +22,11 @@ module.exports = {
         ]),
       ]),
     ],
-    find: [],
-    get: [],
+    find: [permission({ roles: ['admin', 'manager'] })],
+    get: [permission({ roles: ['admin', 'manager'] })],
     create: [permission({ roles: 'admin' })],
     update: [],
-    patch: [],
+    patch: [permission({ roles: ['admin', 'manager'] })],
     remove: [permission({ roles: 'admin' })],
   },
 

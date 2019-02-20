@@ -1,5 +1,4 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
-
 const permission = require('../../hooks/permission');
 
 module.exports = {

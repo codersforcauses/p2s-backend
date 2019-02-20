@@ -1,14 +1,13 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { iff, isProvider } = require('feathers-hooks-common');
 const { Unprocessable } = require('@feathersjs/errors');
-
 const permission = require('../../hooks/permission');
 
 module.exports = {
   before: {
     all: [authenticate('jwt')],
-    find: [],
-    get: [],
+    find: [permission({ roles: ['admin', 'manager', 'coach'] })],
+    get: [permission({ roles: ['admin', 'manager', 'coach'] })],
     create: [
       permission({ roles: ['admin', 'manager'] }),
       iff(isProvider('external'),
@@ -33,7 +32,7 @@ module.exports = {
         throw new Unprocessable('Region given does not exist');
       }),
     ],
-    update: [permission({ roles: ['admin', 'coach', 'manager'] })],
+    update: [],
     patch: [permission({ roles: ['admin', 'coach', 'manager'] })],
     remove: [permission({ roles: ['admin', 'manager'] })],
   },
