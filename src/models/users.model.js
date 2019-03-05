@@ -66,18 +66,28 @@ module.exports = (app) => {
         qualifications: {
           policeClearance: {
             type: Boolean,
+            default: false,
           },
           WWC: {
             type: Boolean,
+            default: false,
           },
           medClearance: {
             type: Boolean, // TODO link to file server
+            default: false,
           },
         },
         feedback: [
           {
             type: ObjectId,
             ref: 'feedback',
+            default: '',
+          },
+        ],
+        sessions: [
+          {
+            type: ObjectId,
+            ref: 'sessions',
           },
         ],
       },
@@ -104,7 +114,7 @@ module.exports = (app) => {
       timestamps: true,
     },
   );
-  users.plugin(uniqueValidator);
+  users.plugin(uniqueValidator, { message: 'That {PATH} is already registered to a user.' });
 
   return mongooseClient.model('users', users);
 };

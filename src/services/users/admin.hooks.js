@@ -28,7 +28,9 @@ module.exports = {
       verifyHooks.addVerification(),
       alterItems((rec) => {
         rec.admin = { is: true };
-        delete rec.manager;
+        if (isProvider('external')) {
+          delete rec.manager;
+        }
       }),
     ],
     update: [hashPassword()],
@@ -66,6 +68,10 @@ module.exports = {
         accountService(context.app).notifier('resendVerifySignup', context.result);
       },
       verifyHooks.removeVerification(),
+      iff(context => context.result.region,
+        context => context.app.service('regions')
+          .patch(context.result.region, { $push: { users: context.result._id } })
+          .then(() => context)),
     ],
     update: [],
     patch: [],

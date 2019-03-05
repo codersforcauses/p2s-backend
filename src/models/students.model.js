@@ -51,11 +51,19 @@ module.exports = (app) => {
           type: String,
           required: true,
         },
+        email: {
+          type: String,
+        },
       },
       school: {
         type: ObjectId,
         ref: 'schools',
         required: true,
+      },
+      trial: {
+        type: Boolean,
+        required: true,
+        default: false,
       },
       reports: [
         {

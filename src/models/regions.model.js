@@ -49,7 +49,7 @@ module.exports = (app) => {
       timestamps: true,
     },
   );
-  regions.plugin(uniqueValidator);
+  regions.plugin(uniqueValidator, { message: 'Region \'{VALUE}\' already exists.' });
 
   return mongooseClient.model('regions', regions);
 };

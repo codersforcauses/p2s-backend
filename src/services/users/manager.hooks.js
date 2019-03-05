@@ -8,9 +8,13 @@ const {
   preventChanges,
 } = require('feathers-hooks-common');
 const verifyHooks = require('feathers-authentication-management').hooks;
+const { omit, pick } = require('lodash');
+const { Forbidden } = require('@feathersjs/errors');
 const permission = require('../../hooks/permission');
-const { limitQuery } = require('../../hooks/userhooks');
 const accountService = require('../authmanagement/notifier');
+const { limitQuery, isOwner, matchQueryFields } = require('../../hooks/userhooks');
+
+const restrictedFields = ['coach', 'manager', 'admin', 'region', 'email'];
 
 module.exports = {
   before: {
@@ -31,10 +35,7 @@ module.exports = {
         rec.manager.is = true;
       }),
     ],
-    update: [
-      hashPassword(),
-      permission({ roles: ['manager', 'admin'] }),
-    ],
+    update: [hashPassword()],
     patch: [
       iff(
         isProvider('external'),
@@ -51,8 +52,22 @@ module.exports = {
         ),
       ),
       hashPassword(),
-      authenticate('jwt'),
-      permission({ roles: ['manager', 'admin'] }),
+      permission({ roles: ['admin', 'manager'] }),
+      iff(isProvider('external'),
+        iff(isOwner(),
+          iff(context => !context.params.user.admin.is, // Is Owner and manager
+            (context) => {
+              context.data = omit(context.data, matchQueryFields(context, restrictedFields));
+            })).else(
+          iff(context => !context.params.user.admin.is, // Not Owner or Admin
+            () => {
+              throw new Forbidden('You have insufficient permissions to edit this user');
+            }).else( // Not Owner is Admin
+            (context) => {
+              context.data = pick(context.data, matchQueryFields(context, restrictedFields));
+            },
+          ),
+        )),
     ],
     remove: [
       permission({ roles: ['admin'] }),
@@ -72,6 +87,10 @@ module.exports = {
         accountService(context.app).notifier('resendVerifySignup', context.result);
       },
       verifyHooks.removeVerification(),
+      iff(context => context.result.region,
+        context => context.app.service('regions')
+          .patch(context.result.region, { $push: { users: context.result._id } })
+          .then(() => context)),
     ],
     update: [],
     patch: [],

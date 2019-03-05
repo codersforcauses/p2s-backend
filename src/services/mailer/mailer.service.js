@@ -14,9 +14,6 @@ module.exports = (app) => {
       user: '5798e0f4581785', // process.env.SMTP_USER,
       pass: 'ff38c66c7509c9', // process.env.SMTP_PASS,
     },
-    // tls: {
-    //   ciphers:'SSLv3'
-    // },
   })));
 
   // Get our initialized service so that we can register hooks and filters
