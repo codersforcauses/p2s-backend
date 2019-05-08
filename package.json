@@ -3,15 +3,35 @@
   "description": "Backend server for the p2s rugbyworks app",
   "version": "0.0.0",
   "main": "src",
+  "license": "MIT",
   "keywords": [
     "feathers"
   ],
-  "author": {
-    "name": "fezproof",
-    "email": "stevebob1997@hotmail.com"
+  "contributors": [
+    {
+      "name": "Benjamin Chidlow",
+      "url": "https://github.com/fezproof"
+    },
+    {
+      "name": "Drew Alexander",
+      "url": "https://github.com/DrewAlexander98"
+    },
+    {
+      "name": "Luke Stagoll",
+      "url": "https://github.com/LordSlothalot"
+    },
+    {
+      "name": "Jeremiah Pinto",
+      "url": "https://github.com/JeremiahPinto"
+    },
+    {
+      "name": "Ben Locke",
+      "url": "https://github.com/blocke98"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/codersforcauses/p2s-backend/issues"
   },
-  "contributors": [],
-  "bugs": {},
   "directories": {
     "lib": "src",
     "test": "test/"
