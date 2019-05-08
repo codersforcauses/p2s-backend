@@ -1,13 +1,15 @@
 .DS_Store
-.github/*
+.github/
+.git/
 test/
-test/*
 .editorconfig
+.eslintre.json
 .gitignore
 .travis.yml
 jest.config.js
 LICENSE
 README.md
+DOCKER.md
 
 npm-debug.log
 

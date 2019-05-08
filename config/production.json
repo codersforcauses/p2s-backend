@@ -1,5 +1,5 @@
 {
-  "host": "localhost",
+  "host": "HOST",
   "port": "PORT",
-  "mongodb": "mongodb://mongo:27017/p2srw"
+  "mongodb": "DB_PATH"
 }

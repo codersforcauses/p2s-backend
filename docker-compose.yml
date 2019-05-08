@@ -1,19 +1,36 @@
-version: "3"
+version: "3.7"
 services:
-  web:
-    container_name: p2srw
+  client:
+    container_name: p2srw_client
     build:
-      context: ./p2srw
+      context: ./p2s-frontend
       args:
-        - envvar
+        - host
+        - port
     ports:
       - 80:80
     links:
+      - server
+    restart: always
+    tty: true
+  server:
+    container_name: p2srw_server
+    build:
+      context: ./p2s-backend
+      args:
+        - envvar
+        - db
+        - host
+        - port
+    ports:
+      - ${PORT}:${PORT}
+    links:
       - db
-    restart: on-failure
+    restart: always
     tty: true
   db:
     container_name: mongo
     image: mongo
     ports:
       - 27017:27017
+    restart: always

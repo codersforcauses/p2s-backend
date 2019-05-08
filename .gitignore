@@ -121,3 +121,5 @@ yarn.lock
 # public files for dist
 public/*
 !public/.gitkeep
+
+matrixCreate.json

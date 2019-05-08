@@ -1,14 +1,10 @@
 FROM node:11-alpine
 
 # make the 'p2srw' folder the current working directory
-WORKDIR /p2srw
+WORKDIR /backend
 
 # copy both 'package.json' and yarn.lock files
-COPY package.json .
-COPY yarn.lock .
-
-# install yarn globally
-RUN npm install yarn -g
+COPY package.json yarn.lock ./
 
 # install project dependencies
 RUN yarn install --production --ignore-optional --silent
@@ -23,7 +19,14 @@ ENV NODE_ENV=production
 ARG envvar
 ENV ENV_KEY=${envvar}
 
-EXPOSE 80
-ENV PORT 80
+ARG db
+ENV DB_PATH=${db}
+
+ARG host
+ENV HOST=${host}
+
+ARG port
+ENV PORT=${port}
+EXPOSE ${port}
 
 CMD ["pm2-runtime","src/"]
