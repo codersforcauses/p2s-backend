@@ -17,8 +17,9 @@
     "test": "test/"
   },
   "engines": {
-    "node": "^11.0.0",
-    "npm": ">= 6.0.0"
+    "node": ">= 12.0.0",
+    "npm": ">= 6.0.0",
+    "yarn": ">= 1.0.0"
   },
   "scripts": {
     "test": "npm run eslint && NODE_ENV= npm run jest",
@@ -43,6 +44,7 @@
     "feathers-hooks-common": "^4.19.6",
     "feathers-mongoose": "^7.1.1",
     "helmet": "^3.15.0",
+    "lodash": "^4.17.11",
     "mongodb-core": "^3.1.9",
     "mongoose": "^5.4.1",
     "mongoose-unique-validator": "^2.0.2",

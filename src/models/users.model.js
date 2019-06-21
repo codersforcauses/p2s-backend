@@ -66,12 +66,15 @@ module.exports = (app) => {
         qualifications: {
           policeClearance: {
             type: Boolean,
+            default: false,
           },
           WWC: {
             type: Boolean,
+            default: false,
           },
           medClearance: {
             type: Boolean, // TODO link to file server
+            default: false,
           },
         },
         address: {
@@ -109,6 +112,7 @@ module.exports = (app) => {
           {
             type: ObjectId,
             ref: 'feedback',
+            default: '',
           },
         ],
         sessions: [

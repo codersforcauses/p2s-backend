@@ -1,9 +1,6 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
-
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
-
 const { disallow, iff } = require('feathers-hooks-common');
-
 const permission = require('../../hooks/permission');
 
 module.exports = {
@@ -12,7 +9,7 @@ module.exports = {
     find: [permission({ roles: ['admin'] })],
     get: [permission({ roles: ['admin', 'manager', 'coach'] })],
     create: [hashPassword(), permission({ roles: ['admin'] }), disallow('external')],
-    update: [hashPassword(), permission({ roles: ['admin'] })],
+    update: [hashPassword()],
     patch: [hashPassword(), permission({ roles: ['admin'] })],
     remove: [permission({ roles: ['admin'] })],
   },
