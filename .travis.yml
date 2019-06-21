@@ -7,7 +7,7 @@ branches:
 services: mongodb
 language: node_js
 nodejs:
-  - "11"
+  - "12"
   - "lts/*"
 before_install:
   - yarn install --ignore-optional --silent
