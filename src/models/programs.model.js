@@ -17,17 +17,19 @@ module.exports = (app) => {
       sessions: [
         {
           type: ObjectId,
-          ref: 'session',
+          ref: 'sessions',
           required: true,
         },
       ],
       school: {
         type: ObjectId,
+        ref: 'schools',
         required: true,
       },
       students: [
         {
           type: ObjectId,
+          ref: 'students',
         },
       ],
     },
