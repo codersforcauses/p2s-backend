@@ -7,46 +7,34 @@
 
 ## About
 
-This project uses [Feathers](http://feathersjs.com). An open source web framework for building modern real-time applications.
+This project uses a REST api built with [Feathers](http://feathersjs.com) and a [MongoDB](https://www.mongodb.com) database.
 
 ## Getting Started
 
-Getting up and running is as easy as 1, 2, 3.
+### Prerequisites 
 
-1. Make sure you have [NodeJS](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed.
-2. Install your dependencies
+* [NodeJS](https://nodejs.org/)
+* [Yarn](https://yarnpkg.com/en/) or [npm](https://www.npmjs.com/)
+* [MongoDB](https://www.mongodb.com/download-center/community)
 
-   ```
-   cd path/to/p2s-backend; npm install
-   ```
+### Installation
 
-3. Start your app
+1. Clone this repository
+2. Navigate to the folder with `cd path/to/repo`.
+3. Run `yarn` or `npm install` to install dependencies.
 
-   ```
-   npm start
-   ```
+### Running the backend
+
+1. Make sure MongoDB is running with `mongod`.
+2. Add `ENV_KEY` as an environment variable with `export ENV_KEY='secret key here'`.
+3. Run with `yarn start` or `npm start` for a production build or `yarn dev`/`npm run dev` for a development build.
 
 ## Testing
 
-Simply run `npm test` and all your tests in the `test/` directory will be run.
+Run `yarn test` or `npm test` and all your tests in the `test/` directory will be run.
 
-## Scaffolding
-
-Feathers has a powerful command line interface. Here are a few things it can do:
-
-```
-$ npm install -g @feathersjs/cli          # Install Feathers CLI
-
-$ feathers generate service               # Generate a new Service
-$ feathers generate hook                  # Generate a new Hook
-$ feathers help                           # Show all commands
-```
 ## Database structure
 ![Database Schema](https://cdn.discordapp.com/attachments/519088761942966272/529246506771939348/P2SSchemaERD.png)
-
-## Help
-
-For more information on all the things you can do with Feathers visit [docs.feathersjs.com](http://docs.feathersjs.com).
 
 ## License
 
