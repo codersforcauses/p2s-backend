@@ -29,4 +29,7 @@ ARG port
 ENV PORT=${port}
 EXPOSE ${port}
 
+# expose port 25 for smtp server
+EXPOSE 25
+
 CMD ["pm2-runtime","src/"]

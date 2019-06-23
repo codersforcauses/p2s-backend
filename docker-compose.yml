@@ -24,6 +24,7 @@ services:
         - port
     ports:
       - ${PORT}:${PORT}
+      - 25:25
     links:
       - db
     restart: always
