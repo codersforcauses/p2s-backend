@@ -27,7 +27,10 @@ module.exports = {
     get: [permission({ roles: ['admin', 'manager', 'coach'] })],
     create: [
       hashPassword(),
-      verifyHooks.addVerification(),
+      iff(
+        isProvider('external' || process.env.NODE_ENV === 'production'),
+        verifyHooks.addVerification(),
+      ),
       permission({ roles: ['admin', 'manager'] }),
       alterItems((rec) => {
         delete rec.admin;
@@ -51,6 +54,7 @@ module.exports = {
       permission({ roles: ['admin', 'manager', 'coach'] }),
       iff(isProvider('external'),
         preventChanges(
+          true,
           'email',
           'isVerified',
           'verifyToken',
@@ -88,10 +92,13 @@ module.exports = {
     find: [],
     get: [],
     create: [
-      (context) => {
-        accountService(context.app).notifier('resendVerifySignup', context.result);
-      },
-      verifyHooks.removeVerification(),
+      iff(
+        isProvider('external' || process.env.NODE_ENV === 'production'),
+        (context) => {
+          accountService(context.app).notifier('resendVerifySignup', context.result);
+        },
+        verifyHooks.removeVerification(),
+      ),
       iff(context => context.result.region,
         context => context.app.service('regions')
           .patch(context.result.region, { $push: { users: context.result._id } })

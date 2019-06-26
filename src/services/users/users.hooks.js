@@ -16,12 +16,21 @@ module.exports = {
     all: [authenticate('jwt')],
     find: [permission({ roles: ['admin'] })],
     get: [permission({ roles: ['admin', 'manager', 'coach'] })],
-    create: [hashPassword(), permission({ roles: ['admin'] }), disallow('external'), verifyHooks.addVerification()],
+    create: [
+      hashPassword(),
+      permission({ roles: ['admin'] }),
+      disallow('external'),
+      iff(
+        isProvider('external'),
+        verifyHooks.addVerification(),
+      ),
+    ],
     update: [hashPassword()],
     patch: [
       iff(
         isProvider('external'),
         preventChanges(
+          true,
           'email',
           'isVerified',
           'verifyToken',
@@ -46,10 +55,13 @@ module.exports = {
     find: [],
     get: [],
     create: [
-      (context) => {
-        accountService(context.app).notifier('resendVerifySignup', context.result);
-      },
-      verifyHooks.removeVerification(),
+      iff(
+        isProvider('external' || process.env.NODE_ENV === 'production'),
+        (context) => {
+          accountService(context.app).notifier('resendVerifySignup', context.result);
+        },
+        verifyHooks.removeVerification(),
+      ),
       iff(context => context.result.region,
         context => context.app.service('regions')
           .patch(context.result.region, { $push: { users: context.result._id } })

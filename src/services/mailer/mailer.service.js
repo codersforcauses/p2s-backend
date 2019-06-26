@@ -11,8 +11,8 @@ module.exports = (app) => {
     port: 465,
     secure: false,
     auth: {
-      user: '5798e0f4581785', // process.env.SMTP_USER,
-      pass: 'ff38c66c7509c9', // process.env.SMTP_PASS,
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
     },
   })));
 
