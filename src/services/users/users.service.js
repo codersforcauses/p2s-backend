@@ -34,4 +34,5 @@ module.exports = (app) => {
   app.use('/coach', createService(options));
   const coachService = app.service('coach');
   coachService.hooks(coachHooks);
+  return userService;
 };

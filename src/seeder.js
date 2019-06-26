@@ -153,6 +153,7 @@ if (process.env.NODE_ENV !== 'production') {
             region: regions[0]._id,
             'coach.is': true,
             'manager.is': true,
+            isVerified: true,
           });
         }
         return app.service('users').patch(result.data[0]._id, {
