@@ -8,7 +8,7 @@ module.exports = {
     find: [permission({ roles: ['admin', 'manager', 'coach'] })],
     get: [permission({ roles: ['admin', 'manager', 'coach'] })],
     create: [permission({ roles: ['admin'] })],
-    update: [disallow('external')],
+    update: [disallow()],
     patch: [permission({ roles: ['admin'] })],
     remove: [permission({ roles: ['admin'] })],
   },
