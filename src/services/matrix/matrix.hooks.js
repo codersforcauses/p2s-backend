@@ -1,4 +1,5 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
+const { disallow } = require('feathers-hooks-common');
 const permission = require('../../hooks/permission');
 
 module.exports = {
@@ -7,7 +8,7 @@ module.exports = {
     find: [permission({ roles: ['admin', 'manager', 'coach'] })],
     get: [permission({ roles: ['admin', 'manager', 'coach'] })],
     create: [permission({ roles: ['admin'] })],
-    update: [],
+    update: [disallow('external')],
     patch: [permission({ roles: ['admin'] })],
     remove: [permission({ roles: ['admin'] })],
   },
