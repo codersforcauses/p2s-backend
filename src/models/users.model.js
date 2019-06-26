@@ -103,7 +103,10 @@ module.exports = (app) => {
           default: false,
         },
       },
-      isVerified: { type: Boolean },
+      isVerified: {
+        type: Boolean,
+        default: false,
+      },
       verifyToken: { type: String },
       verifyExpires: { type: Date },
       verifyChanges: { type: Object },
