@@ -1,10 +1,7 @@
 const authentication = require('@feathersjs/authentication');
 const jwt = require('@feathersjs/authentication-jwt');
 const local = require('@feathersjs/authentication-local');
-const { iff } = require('feathers-hooks-common');
-const { NotFound, NotAuthenticated } = require('@feathersjs/errors');
-const { userService } = require('./services/users/users.hooks');
-
+const { isVerified } = require('feathers-authentication-management').hooks;
 
 module.exports = (app) => {
   const config = app.get('authentication');
@@ -19,14 +16,7 @@ module.exports = (app) => {
   // to create a new valid JWT (e.g. local or oauth2)
   app.service('authentication').hooks({
     before: {
-      create: [
-        iff(({ params }) => userService
-          .find(params.user.email)
-          .then(user => user.isVerified)
-          .catch(err => new NotFound(err, 'User Not Found')),
-        authentication.hooks.authenticate(config.strategies))
-          .else(new NotAuthenticated('User Not Verified')),
-      ],
+      create: [authentication.hooks.authenticate(config.strategies), isVerified()],
       remove: [
         authentication.hooks.authenticate('jwt'),
       ],

@@ -45,6 +45,7 @@ if (process.env.NODE_ENV !== 'production') {
       email: faker.internet.email(name.first, name.last, role.concat('.fake.net')),
       password: testPass,
       region: regionId,
+      isVerified: true,
     };
   }
 
@@ -95,7 +96,7 @@ if (process.env.NODE_ENV !== 'production') {
           } else {
             resolve(result.data[0]);
           }
-        });
+        }).catch(err => console.log(err));
     });
   }
 
@@ -161,7 +162,7 @@ if (process.env.NODE_ENV !== 'production') {
           'coach.is': true,
           'manager.is': true,
         });
-      });
+      }).catch(err => console.log(err));
 
     logger.info('Sowing manager and coach seeds');
 
@@ -213,7 +214,7 @@ if (process.env.NODE_ENV !== 'production') {
     const allStaffPromises = Promise.all(staffPromises)
       .then(() => {
         logger.info('Staff/Region plants grown');
-      });
+      }).catch(err => console.log(err));
 
     logger.info('Growing schools');
     const allSchoolPromises = Promise.all(schoolPromises)
@@ -243,7 +244,7 @@ if (process.env.NODE_ENV !== 'production') {
       })
       .then(() => {
         logger.info('Student plants grown');
-      });
+      }).catch(err => console.log(err));
 
     await Promise.all([allStaffPromises, allSchoolPromises]);
 

@@ -26,7 +26,7 @@ module.exports = {
     create: [
       hashPassword(),
       iff(
-        isProvider('external' || process.env.NODE_ENV === 'production'),
+        isProvider('external'),
         verifyHooks.addVerification(),
       ),
       alterItems((rec) => {
