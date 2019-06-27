@@ -3,7 +3,7 @@ const errors = require('@feathersjs/errors');
 
 module.exports = (app) => {
   const getLink = (type, hash) => {
-    const url = 'http://localhost:3030/'.concat(type, '?token=', hash);
+    const url = 'http://localhost:8080/'.concat(type, '/', hash);
     return url;
   };
 
@@ -29,12 +29,12 @@ module.exports = (app) => {
       let email;
       switch (type) {
       case 'resendVerifySignup': // sending the user the verification email
-        tokenLink = getLink('verify', user.verifyToken);
+        tokenLink = getLink('register', user.verifyToken);
         email = getEmail(user, 'Verify Signup', tokenLink);
         return sendEmail(email);
 
       case 'verifySignup': // confirming verification
-        tokenLink = getLink('verify', user.verifyToken);
+        tokenLink = getLink('register', user.verifyToken);
         email = getEmail(user, 'Confirm Signup', 'Thanks for verifying your email');
         return sendEmail(email);
 
