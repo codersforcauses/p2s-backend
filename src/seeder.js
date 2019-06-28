@@ -79,7 +79,7 @@ if (process.env.NODE_ENV !== 'production') {
       },
       DOB: faker.date.past(),
       gender: faker.random.arrayElement(gender),
-      ethnicity: 'Ambiguous',
+      ethnicity: faker.random.arrayElement(ethnicityList),
       schoolYear: faker.random.number({ min: 7, max: 12 }),
       emergencyContact: {
         name: faker.name.findName(),
