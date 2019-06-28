@@ -23,6 +23,10 @@ if (process.env.NODE_ENV !== 'production') {
     'School for the Gifted',
     'High School for the Gifted',
   ];
+
+  const ethnicityList = ['Dog', 'Car', 'Bear', 'Other'];
+  const gender = ['Male', 'Female', 'Other'];
+
   const schoolFormats = ['{{name.lastName}} ', '{{name.firstName}} ', '{{address.county}} ', '{{address.country}} ', '{{address.city}} '];
 
   const regionCount = 10;
@@ -46,6 +50,8 @@ if (process.env.NODE_ENV !== 'production') {
       password: testPass,
       region: regionId,
       isVerified: true,
+      gender: faker.random.arrayElement(gender),
+      ethnicity: faker.random.arrayElement(ethnicityList),
     };
   }
 
@@ -66,7 +72,6 @@ if (process.env.NODE_ENV !== 'production') {
   }
 
   function createStudentObject(schoolId) {
-    const gender = ['Male', 'Female', 'Other'];
     return {
       name: {
         first: faker.name.firstName(),
