@@ -26,13 +26,12 @@ module.exports = {
     return context.id === user._id.toString();
   },
   /**
-  * Limits the query to only effect the user
-  * matching the provided slug verify token
+  * Blocks patch requests with incorrect verify tokens
   * @param {Object} context Context object passed from server
   */
-  limitBySlug: () => async (context) => {
+  verifyRegisterToken: () => async (context) => {
     if (context.method !== 'patch') {
-      throw new GeneralError('limitBySlug should only be used in a patch hook.');
+      throw new GeneralError('verifyRegisterToken should only be used in a patch hook.');
     }
     if (!context.data.tempAuth) {
       throw new NotAuthenticated('No verify token provided.');

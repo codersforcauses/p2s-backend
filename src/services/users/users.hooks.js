@@ -7,7 +7,7 @@ const {
   disallow,
 } = require('feathers-hooks-common');
 const verifyHooks = require('feathers-authentication-management').hooks;
-const { limitBySlug } = require('../../hooks/userhooks');
+const { verifyRegisterToken } = require('../../hooks/userhooks');
 const permission = require('../../hooks/permission');
 const accountService = require('../authmanagement/notifier');
 
@@ -38,7 +38,7 @@ module.exports = {
           'resetShortToken',
           'resetExpires',
         ),
-        limitBySlug(),
+        verifyRegisterToken(),
       ),
     ],
     remove: [authenticate('jwt'), permission({ roles: ['admin'] })],
