@@ -7,28 +7,25 @@ const {
   disallow,
 } = require('feathers-hooks-common');
 const verifyHooks = require('feathers-authentication-management').hooks;
+const { limitBySlug } = require('../../hooks/userhooks');
 const permission = require('../../hooks/permission');
 const accountService = require('../authmanagement/notifier');
 
 
 module.exports = {
   before: {
-    all: [authenticate('jwt')],
-    find: [permission({ roles: ['admin'] })],
-    get: [permission({ roles: ['admin', 'manager', 'coach'] })],
+    all: [],
+    find: [],
+    get: [authenticate('jwt'), permission({ roles: ['admin', 'manager', 'coach'] })],
     create: [
       hashPassword(),
-      permission({ roles: ['admin'] }),
       disallow('external'),
-      iff(
-        isProvider('external'),
-        verifyHooks.addVerification(),
-      ),
     ],
-    update: [hashPassword()],
+    update: [hashPassword()], // Disabled
     patch: [
       iff(
         isProvider('external'),
+        hashPassword(),
         preventChanges(
           true,
           'email',
@@ -41,9 +38,8 @@ module.exports = {
           'resetShortToken',
           'resetExpires',
         ),
-        hashPassword(),
+        limitBySlug(),
       ),
-      permission({ roles: ['admin'] }),
     ],
     remove: [permission({ roles: ['admin'] })],
   },
