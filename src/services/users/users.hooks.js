@@ -41,7 +41,7 @@ module.exports = {
         limitBySlug(),
       ),
     ],
-    remove: [permission({ roles: ['admin'] })],
+    remove: [authenticate('jwt'), permission({ roles: ['admin'] })],
   },
 
   after: {
