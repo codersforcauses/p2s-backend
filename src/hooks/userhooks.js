@@ -1,6 +1,4 @@
-// Use this hook to manipulate incoming or outgoing data.
-// For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
-const { GeneralError } = require('@feathersjs/errors');
+const { GeneralError, NotAuthenticated, Forbidden } = require('@feathersjs/errors');
 
 module.exports = {
 /**
@@ -27,7 +25,33 @@ module.exports = {
     const { user } = context.params;
     return context.id === user._id.toString();
   },
-
+  /**
+  * Limits the query to only effect the user
+  * matching the provided slug verify token
+  * @param {Object} context Context object passed from server
+  */
+  limitBySlug: () => async (context) => {
+    if (context.method !== 'patch') {
+      throw new GeneralError('limitBySlug should only be used in a patch hook.');
+    }
+    if (!context.data.tempAuth) {
+      throw new NotAuthenticated('No verify token provided.');
+    }
+    await context.app.services.users.find({
+      query: {
+        verifyToken: context.data.tempAuth,
+      },
+    }).then((user) => {
+      if (user.total === 1) {
+        if (context.id !== user.data[0]._id.toString()) {
+          throw new Forbidden('Verify token provided does not match queried user.');
+        }
+      } else {
+        throw new NotAuthenticated('Invalid verify token provided.');
+      }
+    });
+    return context;
+  },
   /**
   * Removes fields from context.data
   * @param {Object} context Context object passed from server
