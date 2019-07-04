@@ -2,12 +2,13 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
 const {
   iff,
+  isNot,
   isProvider,
   preventChanges,
   disallow,
 } = require('feathers-hooks-common');
 const verifyHooks = require('feathers-authentication-management').hooks;
-const { verifyRegisterToken } = require('../../hooks/userhooks');
+const { verifyRegisterToken, hasVerifyToken } = require('../../hooks/userhooks');
 const permission = require('../../hooks/permission');
 const accountService = require('../authmanagement/notifier');
 
@@ -15,7 +16,12 @@ const accountService = require('../authmanagement/notifier');
 module.exports = {
   before: {
     all: [],
-    find: [],
+    find: [
+      iff(isProvider('external'),
+        iff(isNot(hasVerifyToken()),
+          authenticate('jwt'),
+          permission({ roles: ['admin'] }))),
+    ],
     get: [authenticate('jwt'), permission({ roles: ['admin', 'manager', 'coach'] })],
     create: [
       hashPassword(),
