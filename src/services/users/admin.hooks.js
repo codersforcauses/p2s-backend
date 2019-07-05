@@ -36,7 +36,7 @@ module.exports = {
         }
       }),
     ],
-    update: [hashPassword()],
+    update: [hashPassword()], // Disabled
     patch: [
       iff(
         isProvider('external'),

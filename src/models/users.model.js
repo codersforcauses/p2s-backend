@@ -48,7 +48,7 @@ module.exports = (app) => {
         type: String, // TODO add ethnicity options
       },
       DOB: {
-        type: Date,
+        type: Date, // YYYY-MM-DDTHH:MM:SS.MMMZ
       },
       darktheme: {
         type: Boolean,

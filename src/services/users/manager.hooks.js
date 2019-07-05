@@ -38,7 +38,7 @@ module.exports = {
         rec.manager.is = true;
       }),
     ],
-    update: [hashPassword()],
+    update: [hashPassword()], // Disabled
     patch: [
       iff(
         isProvider('external'),

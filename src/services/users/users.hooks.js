@@ -2,33 +2,36 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
 const {
   iff,
+  isNot,
   isProvider,
   preventChanges,
   disallow,
 } = require('feathers-hooks-common');
 const verifyHooks = require('feathers-authentication-management').hooks;
+const { verifyRegisterToken, hasVerifyToken } = require('../../hooks/userhooks');
 const permission = require('../../hooks/permission');
 const accountService = require('../authmanagement/notifier');
 
 
 module.exports = {
   before: {
-    all: [authenticate('jwt')],
-    find: [permission({ roles: ['admin'] })],
-    get: [permission({ roles: ['admin', 'manager', 'coach'] })],
+    all: [],
+    find: [
+      iff(isProvider('external'),
+        iff(isNot(hasVerifyToken()),
+          authenticate('jwt'),
+          permission({ roles: ['admin'] }))),
+    ],
+    get: [authenticate('jwt'), permission({ roles: ['admin', 'manager', 'coach'] })],
     create: [
       hashPassword(),
-      permission({ roles: ['admin'] }),
       disallow('external'),
-      iff(
-        isProvider('external'),
-        verifyHooks.addVerification(),
-      ),
     ],
-    update: [hashPassword()],
+    update: [hashPassword()], // Disabled
     patch: [
       iff(
         isProvider('external'),
+        hashPassword(),
         preventChanges(
           true,
           'email',
@@ -41,11 +44,10 @@ module.exports = {
           'resetShortToken',
           'resetExpires',
         ),
-        hashPassword(),
+        verifyRegisterToken(),
       ),
-      permission({ roles: ['admin'] }),
     ],
-    remove: [permission({ roles: ['admin'] })],
+    remove: [authenticate('jwt'), permission({ roles: ['admin'] })],
   },
 
   after: {
