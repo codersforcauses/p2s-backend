@@ -77,37 +77,6 @@ module.exports = (app) => {
             default: false,
           },
         },
-        address: {
-          street: {
-            number: {
-              type: String,
-              required: true,
-            },
-            name: {
-              type: String,
-              required: true,
-            },
-            unitNumber: {
-              type: String,
-            },
-            suburb: {
-              type: String,
-              required: true,
-            },
-            postCode: {
-              type: String,
-              required: true,
-              minlength: 4,
-              maxlength: 4,
-            },
-            state: {
-              type: String,
-              enum: ['WA', 'NSW', 'ACT', 'VIC', 'QLD', 'SA', 'TAS', 'NT'],
-              default: 'WA',
-              required: true,
-            },
-          },
-        },
         feedback: [
           {
             type: ObjectId,
