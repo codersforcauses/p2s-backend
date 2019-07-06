@@ -48,7 +48,7 @@ module.exports = (app) => {
         type: String, // TODO add ethnicity options
       },
       DOB: {
-        type: Date,
+        type: Date, // YYYY-MM-DDTHH:MM:SS.MMMZ
       },
       darktheme: {
         type: Boolean,
@@ -103,6 +103,15 @@ module.exports = (app) => {
           default: false,
         },
       },
+      isVerified: {
+        type: Boolean,
+        default: false,
+      },
+      verifyToken: { type: String },
+      verifyExpires: { type: Date },
+      verifyChanges: { type: Object },
+      resetToken: { type: String },
+      resetExpires: { type: Date },
     },
     {
       timestamps: true,

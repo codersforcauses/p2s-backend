@@ -1,14 +1,17 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
 const {
-  iff,
   discardQuery,
   alterItems,
+  iff,
   isProvider,
+  preventChanges,
 } = require('feathers-hooks-common');
-const { omit, pick } = require('lodash');
 const { Forbidden } = require('@feathersjs/errors');
+const verifyHooks = require('feathers-authentication-management').hooks;
+const { omit, pick } = require('lodash');
 const permission = require('../../hooks/permission');
+const accountService = require('../authmanagement/notifier');
 const { limitQuery, isOwner, matchQueryFields } = require('../../hooks/userhooks');
 
 const restrictedFields = ['coach', 'manager', 'admin', 'region', 'email'];
@@ -24,6 +27,10 @@ module.exports = {
     get: [permission({ roles: ['admin', 'manager', 'coach'] })],
     create: [
       hashPassword(),
+      iff(
+        isProvider('external' || process.env.NODE_ENV === 'production'),
+        verifyHooks.addVerification(),
+      ),
       permission({ roles: ['admin', 'manager'] }),
       alterItems((rec) => {
         delete rec.admin;
@@ -41,11 +48,23 @@ module.exports = {
               throw new Forbidden('Manager must have a region');
             }))),
     ],
-    update: [hashPassword()],
+    update: [hashPassword()], // Disabled
     patch: [
       hashPassword(),
       permission({ roles: ['admin', 'manager', 'coach'] }),
       iff(isProvider('external'),
+        preventChanges(
+          true,
+          'email',
+          'isVerified',
+          'verifyToken',
+          'verifyShortToken',
+          'verifyExpires',
+          'verifyChanges',
+          'resetToken',
+          'resetShortToken',
+          'resetExpires',
+        ),
         iff(isOwner(),
           iff(context => !context.params.user.admin.is, // Is Owner not Admin
             (context) => {
@@ -73,6 +92,13 @@ module.exports = {
     find: [],
     get: [],
     create: [
+      iff(
+        isProvider('external' || process.env.NODE_ENV === 'production'),
+        (context) => {
+          accountService(context.app).notifier('resendVerifySignup', context.result);
+        },
+        verifyHooks.removeVerification(),
+      ),
       iff(context => context.result.region,
         context => context.app.service('regions')
           .patch(context.result.region, { $push: { users: context.result._id } })

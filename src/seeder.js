@@ -23,6 +23,10 @@ if (process.env.NODE_ENV !== 'production') {
     'School for the Gifted',
     'High School for the Gifted',
   ];
+
+  const ethnicityList = ['Dog', 'Car', 'Bear', 'Other'];
+  const gender = ['Male', 'Female', 'Other'];
+
   const schoolFormats = ['{{name.lastName}} ', '{{name.firstName}} ', '{{address.county}} ', '{{address.country}} ', '{{address.city}} '];
 
   const regionCount = 10;
@@ -45,6 +49,9 @@ if (process.env.NODE_ENV !== 'production') {
       email: faker.internet.email(name.first, name.last, role.concat('.fake.net')),
       password: testPass,
       region: regionId,
+      isVerified: true,
+      gender: faker.random.arrayElement(gender),
+      ethnicity: faker.random.arrayElement(ethnicityList),
     };
   }
 
@@ -65,7 +72,6 @@ if (process.env.NODE_ENV !== 'production') {
   }
 
   function createStudentObject(schoolId) {
-    const gender = ['Male', 'Female', 'Other'];
     return {
       name: {
         first: faker.name.firstName(),
@@ -73,7 +79,7 @@ if (process.env.NODE_ENV !== 'production') {
       },
       DOB: faker.date.past(),
       gender: faker.random.arrayElement(gender),
-      ethnicity: 'Ambiguous',
+      ethnicity: faker.random.arrayElement(ethnicityList),
       schoolYear: faker.random.number({ min: 7, max: 12 }),
       emergencyContact: {
         name: faker.name.findName(),
@@ -95,7 +101,7 @@ if (process.env.NODE_ENV !== 'production') {
           } else {
             resolve(result.data[0]);
           }
-        });
+        }).catch(err => console.log(err));
     });
   }
 
@@ -153,6 +159,7 @@ if (process.env.NODE_ENV !== 'production') {
             region: regions[0]._id,
             'coach.is': true,
             'manager.is': true,
+            isVerified: true,
           });
         }
         return app.service('users').patch(result.data[0]._id, {
@@ -160,7 +167,7 @@ if (process.env.NODE_ENV !== 'production') {
           'coach.is': true,
           'manager.is': true,
         });
-      });
+      }).catch(err => console.log(err));
 
     logger.info('Sowing manager and coach seeds');
 
@@ -212,7 +219,7 @@ if (process.env.NODE_ENV !== 'production') {
     const allStaffPromises = Promise.all(staffPromises)
       .then(() => {
         logger.info('Staff/Region plants grown');
-      });
+      }).catch(err => console.log(err));
 
     logger.info('Growing schools');
     const allSchoolPromises = Promise.all(schoolPromises)
@@ -242,7 +249,7 @@ if (process.env.NODE_ENV !== 'production') {
       })
       .then(() => {
         logger.info('Student plants grown');
-      });
+      }).catch(err => console.log(err));
 
     await Promise.all([allStaffPromises, allSchoolPromises]);
 
