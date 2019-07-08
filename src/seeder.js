@@ -2,13 +2,14 @@
 /* eslint-disable global-require */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-console */
+
+
+const app = require('./app');
+
+const logger = require('./logger.js');
+
 if (process.env.NODE_ENV !== 'production') {
   const faker = require('faker');
-
-  const app = require('./app');
-
-  const logger = require('./logger.js');
-
   const schoolSuffixes = [
     'School',
     'High School',
@@ -256,4 +257,22 @@ if (process.env.NODE_ENV !== 'production') {
     logger.info('Harvest complete!');
     console.timeEnd('Time taken');
   };
+} else { // Production user
+  logger.info('Production seeding');
+  app.service('users') // Check if user database is empty
+    .find()
+    .then((result) => {
+      console.log(result);
+      if (result.data.length === 0) {
+        return app.service('admin').create({
+          email: 'p2srugbyworks@gmail.com',
+          name: {
+            first: 'Dev',
+            last: 'Admin',
+          },
+          darktheme: true,
+        });
+      }
+      return null;
+    }).catch(err => console.log(err));
 }
