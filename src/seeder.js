@@ -258,12 +258,11 @@ if (process.env.NODE_ENV !== 'production') {
     console.timeEnd('Time taken');
   };
 } else { // Production user
-  logger.info('Production seeding');
   app.service('users') // Check if user database is empty
     .find()
     .then((result) => {
-      console.log(result);
       if (result.data.length === 0) {
+        logger.info('Production seeding');
         return app.service('admin').create({
           email: 'p2srugbyworks@gmail.com',
           name: {
