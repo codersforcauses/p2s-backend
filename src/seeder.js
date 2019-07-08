@@ -10,6 +10,7 @@ const logger = require('./logger.js');
 
 if (process.env.NODE_ENV !== 'production') {
   const faker = require('faker');
+
   const schoolSuffixes = [
     'School',
     'High School',
