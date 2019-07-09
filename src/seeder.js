@@ -2,8 +2,6 @@
 /* eslint-disable global-require */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-console */
-
-
 const app = require('./app');
 
 const logger = require('./logger.js');
@@ -81,11 +79,23 @@ if (process.env.NODE_ENV !== 'production') {
       },
       DOB: faker.date.past(),
       gender: faker.random.arrayElement(gender),
-      ethnicity: faker.random.arrayElement(ethnicityList),
+      address: faker.address.streetName(),
+      culture: faker.random.arrayElement(ethnicityList),
+      birthCountry: faker.address.country(),
+      DOA: faker.date.past(),
       schoolYear: faker.random.number({ min: 7, max: 12 }),
-      emergencyContact: {
-        name: faker.name.findName(),
-        phoneNumber: faker.phone.phoneNumber(),
+      consent: true,
+      'language.englishCompetent': true,
+      contact: {
+        home: {
+          name: faker.name.findName(),
+          homeNumber: faker.phone.phoneNumber(),
+          mobileNumber: faker.phone.phoneNumber(),
+        },
+        emergency: {
+          name: faker.name.findName(),
+          mobileNumber: faker.phone.phoneNumber(),
+        },
       },
       school: schoolId,
     };
@@ -103,7 +113,7 @@ if (process.env.NODE_ENV !== 'production') {
           } else {
             resolve(result.data[0]);
           }
-        }).catch(err => console.log(err));
+        }).catch(err => logger.error(err));
     });
   }
 
@@ -134,7 +144,7 @@ if (process.env.NODE_ENV !== 'production') {
       adminPromises.push(findAndCreate('admin', admin, {
         query: {
           email: admin.email,
-          $select: ['_id', 'region'],
+          $select: ['region'],
         },
       }));
     }
@@ -197,7 +207,7 @@ if (process.env.NODE_ENV !== 'production') {
           findAndCreate('coach', coach, {
             query: {
               email: coach.email,
-              $select: ['_id', 'region'],
+              $select: ['region'],
             },
           }),
         );
