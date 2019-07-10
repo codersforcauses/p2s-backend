@@ -27,7 +27,7 @@ module.exports = {
     create: [
       hashPassword(),
       iff(
-        some(isProvider('external'), () => process.env.NODE_ENV === 'production'),
+        some(isProvider('external'), () => (process.env.NODE_ENV === 'production')),
         verifyHooks.addVerification(),
       ),
       alterItems((rec) => {
@@ -70,7 +70,7 @@ module.exports = {
     get: [],
     create: [
       iff(
-        isProvider('external' || process.env.NODE_ENV === 'production'),
+        some(isProvider('external'), () => (process.env.NODE_ENV === 'production')),
         (context) => {
           accountService(context.app).notifier('resendVerifySignup', context.result);
         },
