@@ -2,13 +2,14 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
 const {
   iff,
+  some,
   isNot,
   isProvider,
   preventChanges,
   disallow,
 } = require('feathers-hooks-common');
 const verifyHooks = require('feathers-authentication-management').hooks;
-const { verifyRegisterToken, hasVerifyToken } = require('../../hooks/userhooks');
+const { verifyRegisterToken, hasVerifyToken, hasAuthentication } = require('../../hooks/userhooks');
 const permission = require('../../hooks/permission');
 const accountService = require('../authmanagement/notifier');
 
@@ -44,7 +45,10 @@ module.exports = {
           'resetShortToken',
           'resetExpires',
         ),
-        verifyRegisterToken(),
+        iff(isNot(hasAuthentication()),
+          verifyRegisterToken()).else(
+          authenticate('jwt'),
+        ),
       ),
     ],
     remove: [authenticate('jwt'), permission({ roles: ['admin'] })],
@@ -58,7 +62,7 @@ module.exports = {
     get: [],
     create: [
       iff(
-        isProvider('external' || process.env.NODE_ENV === 'production'),
+        some(isProvider('external'), () => (process.env.NODE_ENV === 'production')),
         (context) => {
           accountService(context.app).notifier('resendVerifySignup', context.result);
         },
