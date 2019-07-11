@@ -4,11 +4,15 @@ const {
   discardQuery,
   alterItems,
   iff,
+  some,
   isProvider,
+  preventChanges,
 } = require('feathers-hooks-common');
 
+const verifyHooks = require('feathers-authentication-management').hooks;
 const { limitQuery } = require('../../hooks/userhooks');
 const permission = require('../../hooks/permission');
+const accountService = require('../authmanagement/notifier');
 
 module.exports = {
   before: {
@@ -22,6 +26,10 @@ module.exports = {
     get: [],
     create: [
       hashPassword(),
+      iff(
+        some(isProvider('external'), () => (process.env.NODE_ENV === 'production')),
+        verifyHooks.addVerification(),
+      ),
       alterItems((rec) => {
         rec.admin = { is: true };
         if (isProvider('external')) {
@@ -29,8 +37,26 @@ module.exports = {
         }
       }),
     ],
-    update: [hashPassword()],
-    patch: [hashPassword()],
+    update: [hashPassword()], // Disabled
+    patch: [
+      iff(
+        isProvider('external'),
+        preventChanges(
+          true,
+          'email',
+          'isVerified',
+          'verifyToken',
+          'verifyShortToken',
+          'verifyExpires',
+          'verifyChanges',
+          'resetToken',
+          'resetShortToken',
+          'resetExpires',
+        ),
+        hashPassword(),
+        authenticate('jwt'),
+      ),
+    ],
     remove: [],
   },
 
@@ -43,6 +69,13 @@ module.exports = {
     find: [],
     get: [],
     create: [
+      iff(
+        some(isProvider('external'), () => (process.env.NODE_ENV === 'production')),
+        (context) => {
+          accountService(context.app).notifier('resendVerifySignup', context.result);
+        },
+        verifyHooks.removeVerification(),
+      ),
       iff(context => context.result.region,
         context => context.app.service('regions')
           .patch(context.result.region, { $push: { users: context.result._id } })

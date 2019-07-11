@@ -1,5 +1,5 @@
 {
   "host": "localhost",
   "port": "PORT",
-  "mongodb": "mongodb://mongo:27017/p2srw"
+  "mongodb": "mongodb://mongo:27017/p2s"
 }
