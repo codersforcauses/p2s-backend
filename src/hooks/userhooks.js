@@ -36,6 +36,14 @@ module.exports = {
     return typeof context.params.query.verifyToken !== 'undefined';
   },
   /**
+  * Returns true if user is has authorization token
+  * @param {Object} context Context object passed from server
+  */
+  hasAuthentication: () => async (context) => {
+    const headerAuth = context.params.headers.Authorization || context.params.headers.authorization;
+    return headerAuth;
+  },
+  /**
   * Blocks patch requests with incorrect verify tokens
   * @param {Object} context Context object passed from server
   */
