@@ -36,6 +36,16 @@ module.exports = {
     return typeof context.params.query.verifyToken !== 'undefined';
   },
   /**
+  * Returns true if user is authenticated
+  * @param {Object} context Context object passed from server
+  */
+  isAuthenticated: () => async (context) => {
+    if (typeof context.params.user === 'undefined') {
+      return false;
+    }
+    return context.params.authenticated;
+  },
+  /**
   * Blocks patch requests with incorrect verify tokens
   * @param {Object} context Context object passed from server
   */
