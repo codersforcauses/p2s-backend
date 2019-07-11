@@ -25,9 +25,9 @@ if (process.env.NODE_ENV !== 'production') {
   ];
 
   const ethnicityList = ['Dog', 'Car', 'Bear', 'Other'];
-  const gender = ['Male', 'Female', 'Other'];
+  const genderList = ['Male', 'Female', 'Other'];
 
-  const schoolFormats = ['{{name.lastName}} ', '{{name.firstName}} ', '{{address.county}} ', '{{address.country}} ', '{{address.city}} '];
+  const schoolFormats = ['{{name.lastName}} ', '{{address.county}} ', '{{address.country}} ', '{{address.city}} '];
 
   const regionCount = 10;
   const adminCount = 5;
@@ -43,6 +43,8 @@ if (process.env.NODE_ENV !== 'production') {
       first: faker.name.firstName(),
       last: faker.name.lastName(),
     };
+    const ethnicity = faker.random.arrayElement(ethnicityList);
+    const gender = faker.random.arrayElement(genderList);
 
     return {
       name,
@@ -50,8 +52,8 @@ if (process.env.NODE_ENV !== 'production') {
       password: testPass,
       region: regionId,
       isVerified: true,
-      gender: faker.random.arrayElement(gender),
-      ethnicity: faker.random.arrayElement(ethnicityList),
+      ethnicity,
+      gender,
     };
   }
 
@@ -78,7 +80,7 @@ if (process.env.NODE_ENV !== 'production') {
         last: faker.name.lastName(),
       },
       DOB: faker.date.past(),
-      gender: faker.random.arrayElement(gender),
+      gender: faker.random.arrayElement(genderList),
       address: faker.address.streetName(),
       culture: faker.random.arrayElement(ethnicityList),
       birthCountry: faker.address.country(),
@@ -215,7 +217,6 @@ if (process.env.NODE_ENV !== 'production') {
 
       for (let i = 0; i < schoolsPerRegion; i += 1) {
         const school = createSchoolObject(region);
-
         schoolPromises.push(findAndCreate('schools', school, {
           query: {
             name: school.name,
