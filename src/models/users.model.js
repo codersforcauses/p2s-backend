@@ -44,7 +44,7 @@ module.exports = (app) => {
         type: String,
         enum: ['Male', 'Female', 'Other'],
       },
-      ethnicity: {
+      culture: {
         type: String, // TODO add ethnicity options
       },
       DOB: {
@@ -65,16 +65,31 @@ module.exports = (app) => {
         },
         qualifications: {
           policeClearance: {
-            type: Boolean,
-            default: false,
+            verified: {
+              type: Boolean,
+              default: false,
+            },
+            imageLink: {
+              type: String,
+            },
           },
           WWC: {
-            type: Boolean,
-            default: false,
+            verified: {
+              type: Boolean,
+              default: false,
+            },
+            imageLink: {
+              type: String,
+            },
           },
           medClearance: {
-            type: Boolean, // TODO link to file server
-            default: false,
+            verified: {
+              type: Boolean,
+              default: false,
+            },
+            imageLink: {
+              type: String,
+            },
           },
         },
         feedback: [
