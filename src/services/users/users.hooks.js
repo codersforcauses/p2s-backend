@@ -45,9 +45,9 @@ module.exports = {
           'resetShortToken',
           'resetExpires',
         ),
-        iff(isNot(hasAuthentication()),
-          verifyRegisterToken()).else(
-          authenticate('jwt'),
+        iff(hasAuthentication(),
+          authenticate('jwt')).else(
+          verifyRegisterToken(),
         ),
       ),
     ],
