@@ -46,9 +46,8 @@ module.exports = {
           'resetExpires',
         ),
         iff(hasAuthentication(),
-          authenticate('jwt')).else(
-          verifyRegisterToken(),
-        ),
+          authenticate('jwt'))
+          .else(verifyRegisterToken()),
       ),
     ],
     remove: [authenticate('jwt'), permission({ roles: ['admin'] })],
