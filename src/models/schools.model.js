@@ -42,7 +42,7 @@ module.exports = (app) => {
       },
       verified: {
         type: Boolean,
-        required: true,
+        default: false,
       },
       students: [
         {
