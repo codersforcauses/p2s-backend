@@ -7,6 +7,8 @@ const sessions = require('./sessions/sessions.service.js');
 const programs = require('./programs/programs.service.js');
 const activities = require('./activities/activities.service.js');
 const feedback = require('./feedback/feedback.service.js');
+const mailer = require('./mailer/mailer.service.js');
+const authmanagement = require('./authmanagement/authmanagement.service.js');
 const matrix = require('./matrix/matrix.service.js');
 
 module.exports = (app) => {
@@ -20,4 +22,6 @@ module.exports = (app) => {
   app.configure(activities);
   app.configure(feedback);
   app.configure(matrix);
+  app.configure(mailer);
+  app.configure(authmanagement);
 };

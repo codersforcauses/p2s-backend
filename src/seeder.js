@@ -2,12 +2,12 @@
 /* eslint-disable global-require */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-console */
+const app = require('./app');
+
+const logger = require('./logger.js');
+
 if (process.env.NODE_ENV !== 'production') {
   const faker = require('faker');
-
-  const app = require('./app');
-
-  const logger = require('./logger.js');
 
   const schoolSuffixes = [
     'School',
@@ -23,7 +23,11 @@ if (process.env.NODE_ENV !== 'production') {
     'School for the Gifted',
     'High School for the Gifted',
   ];
-  const schoolFormats = ['{{name.lastName}} ', '{{name.firstName}} ', '{{address.county}} ', '{{address.country}} ', '{{address.city}} '];
+
+  const ethnicityList = ['Dog', 'Car', 'Bear', 'Other'];
+  const genderList = ['Male', 'Female', 'Other'];
+
+  const schoolFormats = ['{{name.lastName}} ', '{{address.county}} ', '{{address.country}} ', '{{address.city}} '];
 
   const regionCount = 10;
   const adminCount = 5;
@@ -39,12 +43,17 @@ if (process.env.NODE_ENV !== 'production') {
       first: faker.name.firstName(),
       last: faker.name.lastName(),
     };
+    const ethnicity = faker.random.arrayElement(ethnicityList);
+    const gender = faker.random.arrayElement(genderList);
 
     return {
       name,
       email: faker.internet.email(name.first, name.last, role.concat('.fake.net')),
       password: testPass,
       region: regionId,
+      isVerified: true,
+      ethnicity,
+      gender,
     };
   }
 
@@ -65,19 +74,30 @@ if (process.env.NODE_ENV !== 'production') {
   }
 
   function createStudentObject(schoolId) {
-    const gender = ['Male', 'Female', 'Other'];
     return {
       name: {
         first: faker.name.firstName(),
         last: faker.name.lastName(),
       },
       DOB: faker.date.past(),
-      gender: faker.random.arrayElement(gender),
-      ethnicity: 'Ambiguous',
+      gender: faker.random.arrayElement(genderList),
+      address: faker.address.streetName(),
+      culture: faker.random.arrayElement(ethnicityList),
+      birthCountry: faker.address.country(),
+      DOA: faker.date.past(),
       schoolYear: faker.random.number({ min: 7, max: 12 }),
-      emergencyContact: {
-        name: faker.name.findName(),
-        phoneNumber: faker.phone.phoneNumber(),
+      consent: true,
+      'language.englishCompetent': true,
+      contact: {
+        home: {
+          name: faker.name.findName(),
+          homeNumber: faker.phone.phoneNumber(),
+          mobileNumber: faker.phone.phoneNumber(),
+        },
+        emergency: {
+          name: faker.name.findName(),
+          mobileNumber: faker.phone.phoneNumber(),
+        },
       },
       school: schoolId,
     };
@@ -95,7 +115,7 @@ if (process.env.NODE_ENV !== 'production') {
           } else {
             resolve(result.data[0]);
           }
-        });
+        }).catch(err => logger.error(err));
     });
   }
 
@@ -126,7 +146,7 @@ if (process.env.NODE_ENV !== 'production') {
       adminPromises.push(findAndCreate('admin', admin, {
         query: {
           email: admin.email,
-          $select: ['_id', 'region'],
+          $select: ['region'],
         },
       }));
     }
@@ -153,6 +173,7 @@ if (process.env.NODE_ENV !== 'production') {
             region: regions[0]._id,
             'coach.is': true,
             'manager.is': true,
+            isVerified: true,
           });
         }
         return app.service('users').patch(result.data[0]._id, {
@@ -160,7 +181,7 @@ if (process.env.NODE_ENV !== 'production') {
           'coach.is': true,
           'manager.is': true,
         });
-      });
+      }).catch(err => console.log(err));
 
     logger.info('Sowing manager and coach seeds');
 
@@ -188,7 +209,7 @@ if (process.env.NODE_ENV !== 'production') {
           findAndCreate('coach', coach, {
             query: {
               email: coach.email,
-              $select: ['_id', 'region'],
+              $select: ['region'],
             },
           }),
         );
@@ -196,7 +217,6 @@ if (process.env.NODE_ENV !== 'production') {
 
       for (let i = 0; i < schoolsPerRegion; i += 1) {
         const school = createSchoolObject(region);
-
         schoolPromises.push(findAndCreate('schools', school, {
           query: {
             name: school.name,
@@ -212,7 +232,7 @@ if (process.env.NODE_ENV !== 'production') {
     const allStaffPromises = Promise.all(staffPromises)
       .then(() => {
         logger.info('Staff/Region plants grown');
-      });
+      }).catch(err => console.log(err));
 
     logger.info('Growing schools');
     const allSchoolPromises = Promise.all(schoolPromises)
@@ -242,11 +262,28 @@ if (process.env.NODE_ENV !== 'production') {
       })
       .then(() => {
         logger.info('Student plants grown');
-      });
+      }).catch(err => console.log(err));
 
     await Promise.all([allStaffPromises, allSchoolPromises]);
 
     logger.info('Harvest complete!');
     console.timeEnd('Time taken');
   };
+} else { // Production user
+  app.service('users') // Check if user database is empty
+    .find()
+    .then((result) => {
+      if (result.data.length === 0) {
+        logger.info('Production seeding');
+        return app.service('admin').create({
+          email: 'p2srugbyworks@gmail.com',
+          name: {
+            first: 'Dev',
+            last: 'Admin',
+          },
+          darktheme: true,
+        });
+      }
+      return null;
+    }).catch(err => console.log(err));
 }

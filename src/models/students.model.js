@@ -29,9 +29,51 @@ module.exports = (app) => {
         enum: ['Male', 'Female', 'Other'],
         required: true,
       },
-      ethnicity: {
+      address: {
+        type: String,
+        required: true,
+      },
+      culture: {
         type: String,
         required: true, // TODO add ethnicity options
+      },
+      birthCountry: {
+        type: String,
+        required: true, // TODO add country list
+      },
+      DOA: {
+        type: Date,
+      },
+      language: {
+        englishCompetent: {
+          type: Boolean,
+          required: true,
+        },
+        nativeLanguage: {
+          type: String,
+        },
+      },
+      medical: {
+        allergies: {
+          type: String,
+        },
+        injuries: {
+          type: String,
+        },
+        condition: {
+          type: String,
+        },
+        medication: {
+          name: {
+            type: String,
+          },
+          dosage: {
+            type: String,
+          },
+          number: {
+            type: Number,
+          },
+        },
       },
       schoolYear: {
         type: Number,
@@ -42,18 +84,37 @@ module.exports = (app) => {
         required: true,
         default: false,
       },
-      emergencyContact: {
-        name: {
-          type: String,
-          required: true,
+      contact: {
+        home: {
+          name: {
+            type: String,
+            required: true,
+          },
+          homeNumber: {
+            type: String,
+            required: true,
+          },
+          mobileNumber: {
+            type: String,
+            required: true,
+          },
+          email: {
+            type: String,
+          },
         },
-        phoneNumber: {
-          type: String,
-          required: true,
+        emergency: {
+          name: {
+            type: String,
+            required: true,
+          },
+          mobileNumber: {
+            type: String,
+            required: true,
+          },
         },
-        email: {
-          type: String,
-        },
+      },
+      extraInfo: {
+        type: String,
       },
       school: {
         type: ObjectId,

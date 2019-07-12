@@ -44,11 +44,11 @@ module.exports = (app) => {
         type: String,
         enum: ['Male', 'Female', 'Other'],
       },
-      ethnicity: {
+      culture: {
         type: String, // TODO add ethnicity options
       },
       DOB: {
-        type: Date,
+        type: Date, // YYYY-MM-DDTHH:MM:SS.MMMZ
       },
       darktheme: {
         type: Boolean,
@@ -65,16 +65,31 @@ module.exports = (app) => {
         },
         qualifications: {
           policeClearance: {
-            type: Boolean,
-            default: false,
+            verified: {
+              type: Boolean,
+              default: false,
+            },
+            imageLink: {
+              type: String,
+            },
           },
           WWC: {
-            type: Boolean,
-            default: false,
+            verified: {
+              type: Boolean,
+              default: false,
+            },
+            imageLink: {
+              type: String,
+            },
           },
           medClearance: {
-            type: Boolean, // TODO link to file server
-            default: false,
+            verified: {
+              type: Boolean,
+              default: false,
+            },
+            imageLink: {
+              type: String,
+            },
           },
         },
         feedback: [
@@ -103,6 +118,15 @@ module.exports = (app) => {
           default: false,
         },
       },
+      isVerified: {
+        type: Boolean,
+        default: false,
+      },
+      verifyToken: { type: String },
+      verifyExpires: { type: Date },
+      verifyChanges: { type: Object },
+      resetToken: { type: String },
+      resetExpires: { type: Date },
     },
     {
       timestamps: true,
