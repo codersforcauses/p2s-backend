@@ -45,12 +45,12 @@
     "feathers-hooks-common": "^4.20.2",
     "feathers-mailer": "^3.0.1",
     "feathers-mongoose": "^7.3.0",
+    "googleapis": "^40.0.1",
     "helmet": "^3.15.0",
     "lodash": "^4.17.11",
     "mongodb-core": "^3.1.9",
     "mongoose": "^5.4.1",
     "mongoose-unique-validator": "^2.0.2",
-    "nodemailer-smtp-transport": "^2.7.4",
     "serve-favicon": "^2.5.0",
     "winston": "^3.1.0"
   },

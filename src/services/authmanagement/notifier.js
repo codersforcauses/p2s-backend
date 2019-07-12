@@ -16,7 +16,7 @@ module.exports = (app) => {
   };
 
   const getEmail = (user, subjectData, htmlData) => ({
-    from: process.env.SMTP_USER,
+    from: 'mailer@p2srugbyworks.com',
     to: user.email,
     subject: subjectData,
     html: htmlData,

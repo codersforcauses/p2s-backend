@@ -4,6 +4,7 @@ const {
   discardQuery,
   alterItems,
   iff,
+  some,
   isProvider,
   preventChanges,
 } = require('feathers-hooks-common');
@@ -28,7 +29,7 @@ module.exports = {
     create: [
       hashPassword(),
       iff(
-        isProvider('external' || process.env.NODE_ENV === 'production'),
+        some(isProvider('external'), () => (process.env.NODE_ENV === 'production')),
         verifyHooks.addVerification(),
       ),
       permission({ roles: ['admin'] }),
@@ -88,7 +89,7 @@ module.exports = {
     get: [],
     create: [
       iff(
-        isProvider('external' || process.env.NODE_ENV === 'production'),
+        some(isProvider('external'), () => (process.env.NODE_ENV === 'production')),
         (context) => {
           accountService(context.app).notifier('resendVerifySignup', context.result);
         },

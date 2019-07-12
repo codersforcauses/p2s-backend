@@ -40,6 +40,10 @@ module.exports = (app) => {
           required: true,
         },
       },
+      verified: {
+        type: Boolean,
+        required: true,
+      },
       students: [
         {
           type: ObjectId,

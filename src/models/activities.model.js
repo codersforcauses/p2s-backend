@@ -14,7 +14,10 @@ module.exports = (app) => {
       description: {
         type: String,
         required: true,
-      }, // TODO After file server, link images
+      },
+      imageLink: {
+        type: String,
+      },
     },
     {
       timestamps: true,
