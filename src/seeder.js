@@ -11,17 +11,29 @@ if (process.env.NODE_ENV !== 'production') {
 
   const schoolSuffixes = [
     'School',
-    'High School',
-    'College',
     'School for Boys',
     'School for Girls',
+    'School for the Gifted',
+    'School for the Ungifted',
+    'School for the Special Snowflakes',
+    'High School',
     'High School for Boys',
     'High School for Girls',
+    'High School for the Gifted',
+    'High School for the Ungifted',
+    'High School for the Special Snowflakes',
+    'College',
     'College for Boys',
     'College for Girls',
     'College for the Gifted',
-    'School for the Gifted',
-    'High School for the Gifted',
+    'College for the Ungifted',
+    'College for the Special Snowflakes',
+    'University',
+    'University for Boys',
+    'University for Girls',
+    'University for the Gifted',
+    'University for the Ungifted',
+    'University for the Special Snowflakes',
   ];
 
   const ethnicityList = ['Dog', 'Car', 'Bear', 'Other'];
@@ -196,7 +208,7 @@ if (process.env.NODE_ENV !== 'production') {
           findAndCreate('manager', manager, {
             query: {
               email: manager.email,
-              $select: ['_id', 'region'],
+              $select: ['region'],
             },
           }),
         );
@@ -220,9 +232,7 @@ if (process.env.NODE_ENV !== 'production') {
         schoolPromises.push(findAndCreate('schools', school, {
           query: {
             name: school.name,
-            $select: [
-              '_id',
-            ],
+            $select: ['_id'],
           },
         }));
       }
@@ -251,7 +261,7 @@ if (process.env.NODE_ENV !== 'production') {
                 name: student.name,
                 gender: student.gender,
                 school: student.school,
-                $select: ['_id', 'name'],
+                $select: ['name'],
               },
             }));
           }
