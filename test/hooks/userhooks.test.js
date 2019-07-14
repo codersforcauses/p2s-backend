@@ -11,15 +11,15 @@ describe('\'userhooks\' hook', () => {
       app = feathers();
       app.use('/verifyToken', {
         async find(context) {
-          return hasVerifyToken(context);
+          return context;
         },
       });
 
-      // app.service('verifyToken').hooks({
-      //   before: {
-      //     find: hasVerifyToken(),
-      //   },
-      // });
+      app.service('verifyToken').hooks({
+        before: {
+          find: hasVerifyToken(),
+        },
+      });
     });
 
     it('Should return true for a present verifyToken', async () => {
