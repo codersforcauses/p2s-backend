@@ -1,4 +1,6 @@
 const { GeneralError, NotAuthenticated, Forbidden } = require('@feathersjs/errors');
+const { existsByDot } = require('feathers-hooks-common');
+
 
 module.exports = {
 /**
@@ -33,15 +35,15 @@ module.exports = {
     if (context.method !== 'find') {
       throw new GeneralError('verifyRegisterToken should only be used in a find hook.');
     }
-    return typeof context.params.query.verifyToken !== 'undefined';
+    return existsByDot(context, 'params.query.verifyToken');
   },
   /**
   * Returns true if user is has authorization token
   * @param {Object} context Context object passed from server
   */
   hasAuthentication: () => async (context) => {
-    const headerAuth = context.params.headers.Authorization || context.params.headers.authorization;
-    return headerAuth;
+    const authExist = existsByDot(context, 'params.headers.Authorization') || existsByDot(context, 'params.headers.authorization');
+    return authExist;
   },
   /**
   * Blocks patch requests with incorrect verify tokens
