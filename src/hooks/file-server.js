@@ -25,11 +25,11 @@ const drive = google.drive({
   auth: client,
 });
 
-const refreshToken = client => client.refreshAccessToken()
+const refreshToken = oauth => oauth.refreshAccessToken()
   .then(({ access_token }) => {
-    client.credentials.access_token = access_token;
+    oauth.credentials.access_token = access_token;
     // we update our environment variable with the right token
-    process.env.GDRIVE_TOKEN = stringify(client.credentials);
+    process.env.GDRIVE_TOKEN = stringify(oauth.credentials);
   })
   .catch(e => e);
 
