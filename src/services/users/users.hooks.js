@@ -11,6 +11,7 @@ const {
 const verifyHooks = require('feathers-authentication-management').hooks;
 const { verifyRegisterToken, hasVerifyToken, hasAuthentication } = require('../../hooks/userhooks');
 const permission = require('../../hooks/permission');
+const { createPathFromFile } = require('../../hooks/file-server');
 const accountService = require('../authmanagement/notifier');
 
 
@@ -30,6 +31,7 @@ module.exports = {
     ],
     update: [hashPassword()], // Disabled
     patch: [
+      createPathFromFile(),
       iff(
         isProvider('external'),
         hashPassword(),
