@@ -9,7 +9,7 @@ module.exports = {
  * @param {Object} context Context object passed from server
  */
   limitQuery: role => (context) => {
-    const query = context.params.query || {};
+    const query = (context.params || {}).query || {};
 
     query[`${role}.is`] = true;
 
