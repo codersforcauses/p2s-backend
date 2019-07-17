@@ -13,6 +13,8 @@ const verifyHooks = require('feathers-authentication-management').hooks;
 const { limitQuery } = require('../../hooks/userhooks');
 const permission = require('../../hooks/permission');
 const accountService = require('../authmanagement/notifier');
+const { validateSchema } = require('../../hooks/validation/validatehooks');
+const { createSchema } = require('../../hooks/validation/schema/user');
 
 module.exports = {
   before: {
@@ -25,6 +27,7 @@ module.exports = {
     find: [],
     get: [],
     create: [
+      validateSchema(createSchema),
       hashPassword(),
       iff(
         some(isProvider('external'), () => (process.env.NODE_ENV === 'production')),
