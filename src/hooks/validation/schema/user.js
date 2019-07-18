@@ -64,11 +64,32 @@ const regoSchema = Joi.object().keys({
       .required(),
     phoneNumber: Joi.string().regex(/^\+61\d{9}$/).required(),
   }).required(),
+  qualifications: Joi.object().keys({
+    policeClearance: Joi.object().keys({
+      imageLink: Joi.string(),
+    }),
+    WWC: Joi.object().keys({
+      imageLink: Joi.string(),
+    }),
+    medClearance: Joi.object().keys({
+      imageLink: Joi.string(),
+    }),
+  }),
 });
 
 const loginSchema = Joi.object().keys({
-  email: Joi.string().email({ minDomainSegments: 2 }),
-  password: Joi.string().required(),
+  strategy: Joi.string().valid('local', 'jwt').error(() => ({
+    message: 'strategyError',
+  })),
+  email: Joi.string().email({ minDomainSegments: 2 }).error(() => ({
+    message: 'emailError',
+  })),
+  password: Joi.string().error(() => ({
+    message: 'passError',
+  })),
+  accessToken: Joi.string().error(() => ({
+    message: 'accessTokenError',
+  })),
 });
 
 module.exports = { createSchema, regoSchema, loginSchema };
