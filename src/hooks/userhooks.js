@@ -1,7 +1,6 @@
 const { GeneralError, NotAuthenticated, Forbidden } = require('@feathersjs/errors');
 const { existsByDot } = require('feathers-hooks-common');
 
-
 module.exports = {
 /**
  * Limits querys based on the role
