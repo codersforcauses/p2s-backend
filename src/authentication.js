@@ -2,6 +2,9 @@ const authentication = require('@feathersjs/authentication');
 const jwt = require('@feathersjs/authentication-jwt');
 const local = require('@feathersjs/authentication-local');
 const { isVerified } = require('feathers-authentication-management').hooks;
+const { NotAuthenticated } = require('@feathersjs/errors');
+const { validateSchema } = require('./hooks/validation/validatehooks');
+const { loginSchema } = require('./hooks/validation/schema/user');
 
 module.exports = (app) => {
   const config = app.get('authentication');
@@ -16,11 +19,19 @@ module.exports = (app) => {
   // to create a new valid JWT (e.g. local or oauth2)
   app.service('authentication').hooks({
     before: {
-      // Having issues with authenticating? Try changing the order of these two hooks
-      create: [isVerified(), authentication.hooks.authenticate(config.strategies)],
+      create: [
+        validateSchema(loginSchema),
+        authentication.hooks.authenticate(config.strategies),
+        isVerified(),
+      ],
       remove: [
         authentication.hooks.authenticate('jwt'),
       ],
+    },
+    error(context) {
+      if (context.error.name === 'Error') {
+        throw new NotAuthenticated('User\'s email is not yet verified.');
+      }
     },
   });
 };
