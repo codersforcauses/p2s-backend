@@ -14,6 +14,8 @@ const { Forbidden } = require('@feathersjs/errors');
 const permission = require('../../hooks/permission');
 const accountService = require('../authmanagement/notifier');
 const { limitQuery, isOwner, matchQueryFields } = require('../../hooks/userhooks');
+const { validateSchema } = require('../../hooks/validation/validatehooks');
+const { createSchema } = require('../../hooks/validation/schema/user');
 
 const restrictedFields = ['coach', 'manager', 'admin', 'region', 'email'];
 
@@ -30,6 +32,7 @@ module.exports = {
       hashPassword(),
       iff(
         some(isProvider('external'), () => (process.env.NODE_ENV === 'production')),
+        validateSchema(createSchema),
         verifyHooks.addVerification(),
       ),
       permission({ roles: ['admin'] }),

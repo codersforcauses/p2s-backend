@@ -27,12 +27,12 @@ module.exports = {
     find: [],
     get: [],
     create: [
-      validateSchema(createSchema),
-      hashPassword(),
       iff(
         some(isProvider('external'), () => (process.env.NODE_ENV === 'production')),
+        validateSchema(createSchema),
         verifyHooks.addVerification(),
       ),
+      hashPassword(),
       alterItems((rec) => {
         rec.admin = { is: true };
         if (isProvider('external')) {
