@@ -1,4 +1,5 @@
 const { GeneralError, NotAuthenticated, Forbidden } = require('@feathersjs/errors');
+const { existsByDot } = require('feathers-hooks-common');
 
 module.exports = {
 /**
@@ -40,8 +41,8 @@ module.exports = {
   * @param {Object} context Context object passed from server
   */
   hasAuthentication: () => async (context) => {
-    const headerAuth = context.params.headers.Authorization || context.params.headers.authorization;
-    return headerAuth;
+    const authExist = existsByDot(context, 'params.headers.Authorization') || existsByDot(context, 'params.headers.authorization');
+    return authExist;
   },
   /**
   * Blocks patch requests with incorrect verify tokens
