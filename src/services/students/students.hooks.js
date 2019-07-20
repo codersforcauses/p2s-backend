@@ -2,6 +2,8 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 const { Unprocessable } = require('@feathersjs/errors');
 const { iff } = require('feathers-hooks-common');
 const permission = require('../../hooks/permission');
+const { validateSchema } = require('../../hooks/validation/validatehooks');
+const { studentSchema } = require('../../hooks/validation/schema/students');
 
 module.exports = {
   before: {
@@ -10,6 +12,7 @@ module.exports = {
     get: [permission({ roles: ['admin', 'manager', 'coach'] })],
     create: [
       permission({ roles: ['admin', 'manager', 'coach'] }),
+      validateSchema(studentSchema),
       iff(context => !context.data.school,
         () => {
           throw new Unprocessable('Student does not have a valid school');
@@ -27,7 +30,10 @@ module.exports = {
       }),
     ],
     update: [],
-    patch: [permission({ roles: ['admin', 'manager', 'coach'] })],
+    patch: [
+      permission({ roles: ['admin', 'manager', 'coach'] }),
+      validateSchema(studentSchema),
+    ],
     remove: [permission({ roles: ['admin'] })],
   },
 

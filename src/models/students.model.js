@@ -29,10 +29,6 @@ module.exports = (app) => {
         enum: ['Male', 'Female', 'Other'],
         required: true,
       },
-      address: {
-        type: String,
-        required: true,
-      },
       culture: {
         type: String,
         required: true, // TODO add ethnicity options
