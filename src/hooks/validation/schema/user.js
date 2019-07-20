@@ -32,6 +32,8 @@ const createSchema = Joi.object().keys({
 });
 
 const regoSchema = Joi.object().keys({
+  _id: Joi.string().required(),
+  tempAuth: Joi.string().required(),
   DOB: Joi.string().isoDate().required(),
   culture: Joi.string().valid(
     'African, African British',
@@ -73,6 +75,18 @@ const regoSchema = Joi.object().keys({
     }),
     medClearance: Joi.object().keys({
       imageLink: Joi.string(),
+    }),
+  }),
+  darktheme: Joi.boolean(),
+  coach: Joi.object().keys({
+    is: Joi.boolean(),
+    qual: Joi.object().keys({
+      pc_file: Joi.any().allow(null),
+      mc_file: Joi.any().allow(null),
+      wwc: Joi.object().keys({
+        file: Joi.any().allow(null),
+        number: Joi.string().allow(null),
+      }),
     }),
   }),
 });
