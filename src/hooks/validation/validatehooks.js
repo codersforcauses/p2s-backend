@@ -16,6 +16,7 @@ module.exports = {
             else if (message === 'passError') throw new BadRequest('Invalid password');
             else if (message === 'strategyError') throw new BadRequest('Invalid strategy');
             else if (message === 'accessTokenError') throw new BadRequest('Invalid access token');
+            else if (message === 'matrixError') throw new BadRequest('Invalid matrix');
             else throw new BadRequest(err);
           }
         }
