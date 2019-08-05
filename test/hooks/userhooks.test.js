@@ -95,35 +95,10 @@ describe('\'userhooks\' hook', () => {
 
       try {
         await hasVerifyToken()(contextAll);
-      } catch (error) {
-        expect(error.name).toBe('GeneralError');
-      }
-
-      try {
         await hasVerifyToken()(contextGet);
-      } catch (error) {
-        expect(error.name).toBe('GeneralError');
-      }
-
-      try {
         await hasVerifyToken()(contextCreate);
-      } catch (error) {
-        expect(error.name).toBe('GeneralError');
-      }
-
-      try {
         await hasVerifyToken()(contextUpdate);
-      } catch (error) {
-        expect(error.name).toBe('GeneralError');
-      }
-
-      try {
         await hasVerifyToken()(contextPatch);
-      } catch (error) {
-        expect(error.name).toBe('GeneralError');
-      }
-
-      try {
         await hasVerifyToken()(contextRemove);
       } catch (error) {
         expect(error.name).toBe('GeneralError');
