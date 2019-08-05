@@ -43,53 +43,34 @@ describe('\'userhooks\' hook', () => {
     });
 
     it('Should error if called from non find hook', async () => {
+      const params = {
+        query: {
+          verifyToken: '12345',
+        },
+      };
       const contextAll = {
         method: 'all',
-        params: {
-          query: {
-            verifyToken: '12345',
-          },
-        },
+        params,
       };
       const contextGet = {
         method: 'get',
-        params: {
-          query: {
-            verifyToken: '12345',
-          },
-        },
+        params,
       };
       const contextCreate = {
         method: 'create',
-        params: {
-          query: {
-            verifyToken: '12345',
-          },
-        },
+        params,
       };
       const contextUpdate = {
         method: 'update',
-        params: {
-          query: {
-            verifyToken: '12345',
-          },
-        },
+        params,
       };
       const contextPatch = {
         method: 'patch',
-        params: {
-          query: {
-            verifyToken: '12345',
-          },
-        },
+        params,
       };
       const contextRemove = {
         method: 'remove',
-        params: {
-          query: {
-            verifyToken: '12345',
-          },
-        },
+        params,
       };
       expect.assertions(6);
 
