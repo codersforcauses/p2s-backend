@@ -1,5 +1,6 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const permission = require('../../hooks/permission');
+const { genSessions } = require('../../hooks/autogen');
 
 module.exports = {
   before: {
@@ -16,7 +17,9 @@ module.exports = {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [
+      genSessions(),
+    ],
     update: [],
     patch: [],
     remove: [],
