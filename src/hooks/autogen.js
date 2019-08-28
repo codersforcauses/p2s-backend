@@ -2,9 +2,7 @@ const { BadRequest } = require('@feathersjs/errors');
 
 module.exports = {
   /**
-   * Limits querys based on the role
-   * @param {String} role Role to limit all querys to
-   * @param {Object} context Context object passed from server
+   * Autogenerates sessions
    */
   genSessions: () => (context) => {
     const { days, dates, coaches } = context.data;
@@ -41,9 +39,13 @@ module.exports = {
       for (let date = start.getTime() + (dayDifference * oneDay);
         date <= end.getTime();
         date += oneWeek) {
-        const startTime = day.start.split(':');
+        const timeRegex = /^(?<hour>[0-9]{2}):(?<minute>[0-9]{2})$/;
+        const startTime = day.start.match(timeRegex);
+        if (startTime == null) {
+          throw new BadRequest('Time should be formatted HH:MM.');
+        }
         const dateTime = new Date(date);
-        dateTime.setHours(startTime[0], startTime[1]);
+        dateTime.setHours(startTime.groups.hour, startTime.groups.minute);
         times.push(dateTime.getTime());
       }
     });
@@ -56,7 +58,6 @@ module.exports = {
         service.create({
           date,
           coaches,
-
         }),
       );
     }
