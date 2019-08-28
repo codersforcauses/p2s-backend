@@ -26,7 +26,7 @@ module.exports = {
     }
 
     const times = [];
-
+    const durations = [];
     days.forEach((day) => {
       // Compares days to start day with range of -6 to 6
       let dayDifference = (weekDays.indexOf(day.day) - startDay);
@@ -41,12 +41,17 @@ module.exports = {
         date += oneWeek) {
         const timeRegex = /^(?<hour>[0-9]{2}):(?<minute>[0-9]{2})$/;
         const startTime = day.start.match(timeRegex);
-        if (startTime == null) {
+        const endTime = day.end.match(timeRegex);
+        if (startTime === null || endTime === null) {
           throw new BadRequest('Time should be formatted HH:MM.');
         }
         const dateTime = new Date(date);
         dateTime.setHours(startTime.groups.hour, startTime.groups.minute);
         times.push(dateTime.getTime());
+        durations.push(
+          parseInt(endTime.groups.hour, 10) - parseInt(startTime.groups.hour, 10)
+          + ((parseInt(endTime.groups.minute, 10) - parseInt(startTime.groups.minute, 10)) / 60),
+        );
       }
     });
     const service = context.app.service('sessions');
@@ -57,6 +62,7 @@ module.exports = {
       sessionPromises.push(
         service.create({
           date,
+          duration: durations[i],
           coaches,
         }),
       );
