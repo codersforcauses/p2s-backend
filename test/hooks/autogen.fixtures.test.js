@@ -1,12 +1,12 @@
 const today = new Date();
 const aWhileAgo = new Date();
-aWhileAgo.setDate(aWhileAgo.getDate() - 100);
+aWhileAgo.setDate(today.getDate() - 100);
 
-export default {
+module.exports = {
   days: [new Date(), new Date(), new Date()],
   dates: {
     start: new Date(),
-    end: new Date()
+    end: new Date(),
   },
-  coaches: {}
+  coaches: {},
 };
