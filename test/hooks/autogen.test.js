@@ -7,6 +7,8 @@ const {
   smallRes,
   smallDatesNTimes,
   smallDatesNTimesRes,
+  bigDatesNTimes,
+  bigDatesNTimesRes,
   smallOutsideDates,
   smallOutsideRes,
 } = require('./autogen.fixtures');
@@ -74,5 +76,13 @@ describe('Test getDatesAndTimes', () => {
     const { days } = smallDatesNTimes;
     const datesNTimes = getDatesAndTimes(start, end, days);
     expect(datesNTimes).toEqual(smallDatesNTimesRes);
+  });
+
+  it('should return the correct dates and durations for multiple days', () => {
+    const start = new Date(bigDatesNTimes.dates.start);
+    const end = new Date(bigDatesNTimes.dates.end);
+    const { days } = bigDatesNTimes;
+    const datesNTimes = getDatesAndTimes(start, end, days);
+    expect(datesNTimes).toEqual(bigDatesNTimesRes);
   });
 });

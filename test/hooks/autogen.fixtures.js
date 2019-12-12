@@ -51,6 +51,40 @@ const smallDatesNTimesRes = [
     duration: 2.0,
   }];
 
+const bigDatesNTimes = {
+  name: 'Small Dates',
+  days: [{
+    day: 'Wednesday',
+    start: '15:00',
+    end: '17:00',
+  },
+  {
+    day: 'Friday',
+    start: '07:00',
+    end: '08:30',
+  }],
+  dates: {
+    start: '2019-12-11T00:00:00.000Z',
+    end: '2019-12-18T00:00:00.000Z',
+  },
+};
+
+// Returns as UTC formatted string
+const bigDatesNTimesRes = [
+  {
+    dates: [
+      new Date('2019-12-11T07:00:00.000Z'),
+      new Date('2019-12-18T07:00:00.000Z'),
+    ],
+    duration: 2.0,
+  },
+  {
+    dates: [
+      new Date('2019-12-12T23:00:00.000Z'),
+    ],
+    duration: 1.5,
+  }];
+
 const smallOutsideDates = {
   name: 'Small Dates',
   days: [{
@@ -98,6 +132,8 @@ module.exports = {
   smallRes,
   smallDatesNTimes,
   smallDatesNTimesRes,
+  bigDatesNTimes,
+  bigDatesNTimesRes,
   smallOutsideDates,
   smallOutsideRes,
   smallMultiDayDates,
