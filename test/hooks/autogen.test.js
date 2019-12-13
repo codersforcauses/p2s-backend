@@ -16,7 +16,7 @@ const {
   getDatesBetween,
   getDuration,
   getDatesAndTimes,
-} = require('../../src/hooks/autogen');
+} = require('../../src/hooks/autoGenSessions');
 
 describe('Test getDuration', () => {
   it('should return the correct duration', () => {

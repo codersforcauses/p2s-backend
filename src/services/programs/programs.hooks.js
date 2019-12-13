@@ -1,6 +1,6 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const permission = require('../../hooks/permission');
-const { genSessions } = require('../../hooks/autogen');
+const { genSessions } = require('../../hooks/autoGenSessions');
 
 module.exports = {
   before: {

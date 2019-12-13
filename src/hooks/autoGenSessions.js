@@ -89,89 +89,32 @@ const getDatesAndTimes = (startDate, endDate, daysAndTimes) => daysAndTimes.map(
   return { dates, duration };
 });
 
-// const generateSessionTimes = (startDate, endDate, times) => {
-
-// };
-
-// const autogen = (data) => {
-//   const { days, dates } = data;
-
-
-//   const startDate = new Date(dates.start);
-//   const endDate = new Date(dates.end);
-
-//   // // If none of the days provided match the start date return error
-//   // let startDay = -1;
-//   // days.forEach((day) => {
-//   //   if (startDate.getDay() === dayNames.indexOf(day.day)) {
-//   //     startDay = startDate.getDay();
-//   //   }
-//   // });
-//   // if (startDay === -1) {
-//   //   throw new BadRequest('Start date does not occur on any listed days.');
-//   // }
-
-
-//   const times = [];
-//   const durations = [];
-//   days.forEach((day) => {
-//     // Compares days to start day with range of -6 to 6
-//     let dayDifference = dayNames.indexOf(day.day) - startDay;
-//     // If the start day is 'After' the subsequent days in the week order
-//     // the dayDifference will be negative
-//     if (dayDifference < 0) {
-//       dayDifference += 7;
-//     }
-//     // Move forward in time to the specified day and increment by weeks
-//     for (
-//       let date = startDate.getTime() + dayDifference * oneDay;
-//       date <= endDate.getTime();
-//       date += oneWeek
-//     ) {
-//       const timeRegex = /^(?<hour>[0-9]{2}):(?<minute>[0-9]{2})$/;
-//       const startTime = day.start.match(timeRegex);
-//       const endTime = day.end.match(timeRegex);
-//       if (startTime === null || endTime === null) {
-//         throw new BadRequest('Time should be formatted HH:MM.');
-//       }
-//       const dateTime = new Date(date);
-//       dateTime.setHours(startTime.groups.hour, startTime.groups.minute);
-//       times.push(dateTime.getTime());
-//       durations.push(
-//         parseInt(endTime.groups.hour, 10)
-//         - parseInt(startTime.groups.hour, 10)
-//         + (parseInt(endTime.groups.minute, 10)
-//         - parseInt(startTime.groups.minute, 10)) / 60,
-//       );
-//     }
-//   });
-//   return { times, durations };
-// };
-
 /**
    * Autogenerates sessions
    */
 const genSessions = () => (context) => {
   const { dates, days } = context.data;
+  const { coaches } = context.data;
+  const service = context.app.service('sessions');
+  const sessionPromises = [];
+
   const startDate = new Date(dates.start);
   const endDate = new Date(dates.end);
-  getDatesAndTimes(startDate, endDate, days[0].day);
-  // const { durations, times } = autogen(context.data);
-  // const { coaches } = context.data;
-  // const service = context.app.service('sessions');
-  // const sessionPromises = [];
-  // for (let i = 0; i < times.length; i += 1) {
-  //   const date = new Date();
-  //   date.setTime(times[i]);
-  //   sessionPromises.push(
-  //     service.create({
-  //       date,
-  //       duration: durations[i],
-  //       coaches,
-  //     }),
-  //   );
-  // }
-  // Promise.all(sessionPromises);
+  const timesAndDates = getDatesAndTimes(startDate, endDate, days);
+
+  timesAndDates.forEach((dayOfWeek) => {
+    const { dates: dayDates, duration } = dayOfWeek;
+    dayDates.forEach((date) => {
+      sessionPromises.push(
+        service.create({
+          date,
+          duration,
+          coaches,
+        }),
+      );
+    });
+  });
+  Promise.all(sessionPromises);
 };
 
 module.exports = {
