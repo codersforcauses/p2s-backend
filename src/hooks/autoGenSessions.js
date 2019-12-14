@@ -12,27 +12,6 @@ const dayNames = [
   'Saturday',
 ];
 
-/* Data Object
-{
- "name": "Term2 2020",
- "school": "5d4808cae3ff8f20c3d2218b",
- "days": [{
-    "day": "Thursday",
-    "start": "15:00",
-    "end": "17:00"
- }],
- "dates": {
-    "start": "2020-06-04T00:00:00.000Z",
-    "end": "2020-07-16T00:00:00.000Z"
- },
- "coaches": [
-    {"_id": "5d48090be3ff8f20c3d221c0"},
-    {"_id": "5d4808c8e3ff8f20c3d2217a"},
-    {"_id": "5d4808c8e3ff8f20c3d2217d"}
- ]
-}
-*/
-
 // Gets the dates of a given day that falls between start and end date
 const getDatesBetween = (startDate, endDate, day) => {
   const dates = [];
