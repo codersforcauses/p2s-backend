@@ -71,7 +71,7 @@ const getDatesAndTimes = (startDate, endDate, daysAndTimes) => daysAndTimes.map(
 /**
    * Autogenerates sessions
    */
-const genSessions = () => (context) => {
+const genSessions = () => async (context) => {
   const { dates, days } = context.data;
   const { coaches } = context.data;
   const service = context.app.service('sessions');
@@ -93,7 +93,8 @@ const genSessions = () => (context) => {
       );
     });
   });
-  Promise.all(sessionPromises);
+  const sessions = await Promise.all(sessionPromises);
+  context.data.sessions = sessions.map(session => session._id);
 };
 
 module.exports = {
