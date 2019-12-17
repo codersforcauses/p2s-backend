@@ -29,7 +29,7 @@ module.exports = (app) => {
       ],
     },
     error(context) {
-      if (context.error.name === 'Error') {
+      if (context.error.stack.match('Error: \'user\' record in the database is missing a \'password\'')) {
         throw new NotAuthenticated('User\'s email is not yet verified.');
       }
     },
