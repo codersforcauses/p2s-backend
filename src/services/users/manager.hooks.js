@@ -9,8 +9,8 @@ const {
   preventChanges,
 } = require('feathers-hooks-common');
 const verifyHooks = require('feathers-authentication-management').hooks;
-const pick = require('lodash/pick');
-const omit = require('lodash/omit');
+const pick = require('lodash.pick');
+const omit = require('lodash.omit');
 const { Forbidden } = require('@feathersjs/errors');
 const permission = require('../../hooks/permission');
 const accountService = require('../authmanagement/notifier');

@@ -10,8 +10,8 @@ const {
 } = require('feathers-hooks-common');
 const { Forbidden } = require('@feathersjs/errors');
 const verifyHooks = require('feathers-authentication-management').hooks;
-const pick = require('lodash/pick');
-const omit = require('lodash/omit');
+const pick = require('lodash.pick');
+const omit = require('lodash.omit');
 const permission = require('../../hooks/permission');
 const accountService = require('../authmanagement/notifier');
 const { limitQuery, isOwner, matchQueryFields } = require('../../hooks/userhooks');
