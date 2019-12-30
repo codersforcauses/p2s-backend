@@ -12,7 +12,8 @@ const verifyHooks = require('feathers-authentication-management').hooks;
 const { verifyRegisterToken, hasVerifyToken, hasAuthentication } = require('../../hooks/userhooks');
 const permission = require('../../hooks/permission');
 const accountService = require('../authmanagement/notifier');
-
+const { validateSchema } = require('../../hooks/validation/validatehooks');
+const { regoSchema } = require('../../hooks/validation/schema/user');
 
 module.exports = {
   before: {
@@ -46,8 +47,12 @@ module.exports = {
           'resetExpires',
         ),
         iff(hasAuthentication(),
-          authenticate('jwt'))
-          .else(verifyRegisterToken()),
+          authenticate('jwt'),
+          permission({ roles: ['admin'] }))
+          .else(
+            verifyRegisterToken(),
+            validateSchema(regoSchema),
+          ),
       ),
     ],
     remove: [authenticate('jwt'), permission({ roles: ['admin'] })],
