@@ -40,6 +40,10 @@ module.exports = (app) => {
           required: true,
         },
       },
+      region: {
+        type: ObjectId,
+        ref: 'regions',
+      },
       verified: {
         type: Boolean,
         default: false,
