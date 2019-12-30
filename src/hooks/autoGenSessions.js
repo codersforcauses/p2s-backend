@@ -1,7 +1,6 @@
 const { BadRequest } = require('@feathersjs/errors');
+const dayjs = require('dayjs');
 
-const oneDay = 24 * 60 * 60 * 1000;
-const oneWeek = oneDay * 7;
 const dayNames = [
   'Sunday',
   'Monday',
@@ -13,16 +12,16 @@ const dayNames = [
 ];
 
 // Gets the dates of a given day that falls between start and end date
-const getDatesBetween = (startDate, endDate, day) => {
+const getDatesBetween = (startDate, endDate, weekDay) => {
   const dates = [];
-  let dateIndex = startDate.getTime();
-  while (dateIndex <= endDate.getTime()) {
-    if (new Date(dateIndex).getDay() === dayNames.indexOf(day)) {
-      dates.push(new Date(dateIndex));
-      dateIndex += oneWeek;
-    } else {
-      dateIndex += oneDay;
+  const startDay = dayjs(startDate);
+  const endDay = dayjs(endDate);
+  let dateIndex = startDay.day(dayNames.indexOf(weekDay));
+  while (dateIndex.isBefore(endDay) || dateIndex.isSame(endDay)) {
+    if (dateIndex.isAfter(startDay) || dateIndex.isSame(startDay)) {
+      dates.push(dateIndex.clone());
     }
+    dateIndex = dateIndex.add(7, 'day');
   }
   return dates;
 };
@@ -61,9 +60,9 @@ const getDuration = (startTime, endTime) => {
 // Loops through the provided days and gets the dates and
 // then sets the times and returns the durations for each
 const getDatesAndTimes = (startDate, endDate, daysAndTimes) => daysAndTimes.map((dayAndTimes) => {
-  const dates = getDatesBetween(startDate, endDate, dayAndTimes.day);
+  const rawDates = getDatesBetween(startDate, endDate, dayAndTimes.day);
   const { start, end } = matchTimeRegex(dayAndTimes.start, dayAndTimes.end);
-  dates.forEach(date => date.setHours(start.hour, start.minute));
+  const dates = rawDates.map(date => date.hour(start.hour).minute(start.minute));
   const duration = getDuration(start, end);
   return { dates, duration };
 });
