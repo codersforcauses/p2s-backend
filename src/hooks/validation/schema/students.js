@@ -9,10 +9,11 @@ const studentSchema = Joi.object().keys({
       .string()
       .regex(/^[a-z\xc3\x80-\xe2\x80\xa7'\- .,]+$/i),
   }),
-  DOB: Joi.string().isoDate(),
+  DOB: Joi.date().required(),
   gender: Joi.string().valid('Male', 'Female', 'Other'),
   culture: Joi.string().valid(
-    'African, African British',
+    'African',
+    'African British',
     'American',
     'Arab',
     'Australian - Aboriginal or Torres Strait Islander',
@@ -34,7 +35,7 @@ const studentSchema = Joi.object().keys({
     'Other',
   ),
   birthCountry: Joi.string(),
-  DOA: Joi.string().isoDate().allow(null),
+  DOA: Joi.date().allow(null),
   language: Joi.object().keys({
     englishCompetent: Joi.boolean(),
     nativeLanguage: Joi.string(),

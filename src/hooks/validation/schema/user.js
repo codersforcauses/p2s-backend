@@ -36,7 +36,8 @@ const regoSchema = Joi.object().keys({
   tempAuth: Joi.string().required(),
   DOB: Joi.date().required(),
   culture: Joi.string().valid(
-    'African, African British',
+    'African',
+    'African British',
     'American',
     'Arab',
     'Australian - Aboriginal or Torres Strait Islander',
