@@ -12,22 +12,33 @@ if (process.env.NODE_ENV !== 'production') {
   const schoolSuffixes = [
     'School',
     'High School',
+    'Primary School',
     'College',
+    'Penitentiary',
     'School for Boys',
     'School for Girls',
     'High School for Boys',
     'High School for Girls',
     'College for Boys',
     'College for Girls',
+    'Dog Training School',
     'College for the Gifted',
     'School for the Gifted',
     'High School for the Gifted',
   ];
 
-  const ethnicityList = ['Dog', 'Car', 'Bear', 'Other'];
+  const ethnicityList = ['Other'];
   const genderList = ['Male', 'Female', 'Other'];
 
-  const schoolFormats = ['{{name.lastName}} ', '{{address.county}} ', '{{address.country}} ', '{{address.city}} '];
+  const schoolFormats = [
+    '{{name.lastName}} ',
+    '{{address.county}} ',
+    '{{name.lastName}} {{address.county}} ',
+    '{{address.country}} ',
+    '{{name.lastName}} {{address.country}} ',
+    '{{address.city}} ',
+    '{{name.lastName}} {{address.city}} ',
+  ];
 
   const regionCount = 10;
   const adminCount = 5;
@@ -81,13 +92,15 @@ if (process.env.NODE_ENV !== 'production') {
       },
       DOB: faker.date.past(),
       gender: faker.random.arrayElement(genderList),
-      address: faker.address.streetName(),
       culture: faker.random.arrayElement(ethnicityList),
       birthCountry: faker.address.country(),
       DOA: faker.date.past(),
       schoolYear: faker.random.number({ min: 7, max: 12 }),
       consent: true,
-      'language.englishCompetent': true,
+      language: {
+        englishCompetent: true,
+        nativeLanguage: 'Euclidean',
+      },
       contact: {
         home: {
           name: faker.name.findName(),
@@ -99,7 +112,7 @@ if (process.env.NODE_ENV !== 'production') {
           mobileNumber: faker.phone.phoneNumber(),
         },
       },
-      school: schoolId,
+      school: schoolId.toString(),
     };
   }
 
@@ -125,7 +138,6 @@ if (process.env.NODE_ENV !== 'production') {
     logger.info('Plowing fields');
 
     faker.locale = 'en_AU';
-    faker.seed(1337);
 
     logger.info('Sowing region seeds');
 
