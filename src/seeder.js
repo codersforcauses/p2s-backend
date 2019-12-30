@@ -24,7 +24,7 @@ if (process.env.NODE_ENV !== 'production') {
     'High School for the Gifted',
   ];
 
-  const ethnicityList = ['Dog', 'Car', 'Bear', 'Other'];
+  const ethnicityList = ['Other'];
   const genderList = ['Male', 'Female', 'Other'];
 
   const schoolFormats = ['{{name.lastName}} ', '{{address.county}} ', '{{address.country}} ', '{{address.city}} '];
