@@ -1,3 +1,5 @@
+const dayjs = require('dayjs');
+
 const invalidDates = {
   name: 'Invalid Dates',
   days: [{
@@ -26,7 +28,7 @@ const smallDates = {
   },
 };
 
-const smallRes = [new Date('2019-12-11T00:00:00.000Z'), new Date('2019-12-18T00:00:00.000Z')];
+const smallRes = [dayjs('2019-12-11T00:00:00.000Z'), dayjs('2019-12-18T00:00:00.000Z')];
 
 const smallDatesNTimes = {
   name: 'Small Dates',
@@ -45,8 +47,8 @@ const smallDatesNTimes = {
 const smallDatesNTimesRes = [
   {
     dates: [
-      new Date('2019-12-11T07:00:00.000Z'),
-      new Date('2019-12-18T07:00:00.000Z'),
+      dayjs('2019-12-11T07:00:00.000Z'),
+      dayjs('2019-12-18T07:00:00.000Z'),
     ],
     duration: 2.0,
   }];
@@ -73,14 +75,14 @@ const bigDatesNTimes = {
 const bigDatesNTimesRes = [
   {
     dates: [
-      new Date('2019-12-11T07:00:00.000Z'),
-      new Date('2019-12-18T07:00:00.000Z'),
+      dayjs('2019-12-11T07:00:00.000Z'),
+      dayjs('2019-12-18T07:00:00.000Z'),
     ],
     duration: 2.0,
   },
   {
     dates: [
-      new Date('2019-12-12T23:00:00.000Z'),
+      dayjs('2019-12-12T23:00:00.000Z'),
     ],
     duration: 1.5,
   }];
@@ -98,7 +100,7 @@ const smallOutsideDates = {
   },
 };
 
-const smallOutsideRes = [new Date('2019-12-11T00:00:00.000Z'), new Date('2019-12-18T00:00:00.000Z')];
+const smallOutsideRes = [dayjs('2019-12-11T00:00:00.000Z'), dayjs('2019-12-18T00:00:00.000Z')];
 
 const smallMultiDayDates = {
   name: 'Small Dates',
@@ -123,7 +125,7 @@ const smallMultiDayDates = {
   },
 };
 
-const smallMultiDayRes = [new Date('2019-12-11T00:00:00.000Z'), new Date('2019-12-12T00:00:00.000Z'), new Date('2019-12-16T00:00:00.000Z'), new Date('2019-12-18T00:00:00.000Z')];
+const smallMultiDayRes = [dayjs('2019-12-11T00:00:00.000Z'), dayjs('2019-12-12T00:00:00.000Z'), dayjs('2019-12-16T00:00:00.000Z'), dayjs('2019-12-18T00:00:00.000Z')];
 
 module.exports = {
   invalidDates,

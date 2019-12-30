@@ -1,4 +1,5 @@
 const { BadRequest } = require('@feathersjs/errors');
+const dayjs = require('dayjs');
 
 const {
   invalidDates,
@@ -45,24 +46,24 @@ describe('Test getDuration', () => {
 
 describe('Test getDatesBetween', () => {
   it('shouldn\'t return anything with invalid input', () => {
-    const start = new Date(invalidDates.dates.start);
-    const end = new Date(invalidDates.dates.end);
+    const start = dayjs(invalidDates.dates.start);
+    const end = dayjs(invalidDates.dates.end);
     const [{ day }] = invalidDates.days;
     const dates = getDatesBetween(start, end, day);
     expect(dates).toEqual(invalidRes);
   });
 
   it('returns correct dates for start and finish on specified day', () => {
-    const start = new Date(smallDates.dates.start);
-    const end = new Date(smallDates.dates.end);
+    const start = dayjs(smallDates.dates.start);
+    const end = dayjs(smallDates.dates.end);
     const [{ day }] = smallDates.days;
     const dates = getDatesBetween(start, end, day);
     expect(dates).toEqual(smallRes);
   });
 
   it('returns correct dates for start and finish before and after specified day', () => {
-    const start = new Date(smallOutsideDates.dates.start);
-    const end = new Date(smallOutsideDates.dates.end);
+    const start = dayjs(smallOutsideDates.dates.start);
+    const end = dayjs(smallOutsideDates.dates.end);
     const [{ day }] = smallOutsideDates.days;
     const dates = getDatesBetween(start, end, day);
     expect(dates).toEqual(smallOutsideRes);
@@ -71,16 +72,16 @@ describe('Test getDatesBetween', () => {
 
 describe('Test getDatesAndTimes', () => {
   it('should return the correct dates and durations', () => {
-    const start = new Date(smallDatesNTimes.dates.start);
-    const end = new Date(smallDatesNTimes.dates.end);
+    const start = dayjs(smallDatesNTimes.dates.start);
+    const end = dayjs(smallDatesNTimes.dates.end);
     const { days } = smallDatesNTimes;
     const datesNTimes = getDatesAndTimes(start, end, days);
     expect(datesNTimes).toEqual(smallDatesNTimesRes);
   });
 
   it('should return the correct dates and durations for multiple days', () => {
-    const start = new Date(bigDatesNTimes.dates.start);
-    const end = new Date(bigDatesNTimes.dates.end);
+    const start = dayjs(bigDatesNTimes.dates.start);
+    const end = dayjs(bigDatesNTimes.dates.end);
     const { days } = bigDatesNTimes;
     const datesNTimes = getDatesAndTimes(start, end, days);
     expect(datesNTimes).toEqual(bigDatesNTimesRes);
