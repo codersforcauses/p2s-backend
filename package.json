@@ -58,6 +58,7 @@
   "devDependencies": {
     "eslint": "^5.12.1",
     "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-import": "^2.14.0",
     "faker": "^4.1.0",
     "jest": "^23.6.0",

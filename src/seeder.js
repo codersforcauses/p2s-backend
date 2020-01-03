@@ -59,7 +59,11 @@ if (process.env.NODE_ENV !== 'production') {
 
     return {
       name,
-      email: faker.internet.email(name.first, name.last, role.concat('.fake.net')),
+      email: faker.internet.email(
+        name.first,
+        name.last,
+        role.concat('.fake.net'),
+      ),
       password: testPass,
       region: regionId,
       isVerified: true,
@@ -69,12 +73,13 @@ if (process.env.NODE_ENV !== 'production') {
   }
 
   function createSchoolObject(region) {
+    const prefix = faker.random.alphaNumeric(3);
     const suffix = faker.random.arrayElement(schoolSuffixes);
     const format = faker.random.arrayElement(schoolFormats);
 
     return {
       region: region._id,
-      name: faker.fake(format.concat(suffix)),
+      name: faker.fake(prefix.concat(' ', format, suffix)),
       phoneNumber: faker.phone.phoneNumber(),
       address: {
         street: faker.address.streetName(),
@@ -119,16 +124,17 @@ if (process.env.NODE_ENV !== 'production') {
   function findAndCreate(serviceName, object, params) {
     const service = app.service(serviceName);
 
-    return new Promise((resolve) => {
-      service.find(params)
-        .then((result) => {
+    return new Promise(resolve => {
+      service
+        .find(params)
+        .then(result => {
           if (result.data.length === 0) {
-            service.create(object, params)
-              .then(resolve);
+            service.create(object, params).then(resolve);
           } else {
             resolve(result.data[0]);
           }
-        }).catch(err => logger.error(err));
+        })
+        .catch(err => logger.error(err));
     });
   }
 
@@ -147,7 +153,9 @@ if (process.env.NODE_ENV !== 'production') {
     for (let i = 0; i < regionCount; i += 1) {
       const name = faker.address.city();
       const region = { name };
-      regionPromises.push(findAndCreate('regions', region, { query: { name } }));
+      regionPromises.push(
+        findAndCreate('regions', region, { query: { name } }),
+      );
     }
 
     // Create admins
@@ -155,12 +163,14 @@ if (process.env.NODE_ENV !== 'production') {
 
     for (let i = 0; i < adminCount; i += 1) {
       const admin = createUserObject('admin');
-      adminPromises.push(findAndCreate('admin', admin, {
-        query: {
-          email: admin.email,
-          $select: ['region'],
-        },
-      }));
+      adminPromises.push(
+        findAndCreate('admin', admin, {
+          query: {
+            email: admin.email,
+            $select: ['region'],
+          },
+        }),
+      );
     }
     Promise.all(adminPromises);
 
@@ -168,9 +178,10 @@ if (process.env.NODE_ENV !== 'production') {
     const regions = await Promise.all(regionPromises);
 
     // Create super admin
-    app.service('users') // In case admin tag is changed to false
+    app
+      .service('users') // In case admin tag is changed to false
       .find({ query: { email: 'testadmin@p2srugbyworks.com' } })
-      .then((result) => {
+      .then(result => {
         if (result.data.length === 0) {
           return app.service('admin').create({
             email: 'testadmin@p2srugbyworks.com',
@@ -193,14 +204,15 @@ if (process.env.NODE_ENV !== 'production') {
           'coach.is': true,
           'manager.is': true,
         });
-      }).catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
 
     logger.info('Sowing manager and coach seeds');
 
     const staffPromises = [];
     const schoolPromises = [];
 
-    regions.forEach((region) => {
+    regions.forEach(region => {
       for (let i = 0; i < managersPerRegion; i += 1) {
         const manager = createUserObject('manager', region._id);
 
@@ -229,14 +241,14 @@ if (process.env.NODE_ENV !== 'production') {
 
       for (let i = 0; i < schoolsPerRegion; i += 1) {
         const school = createSchoolObject(region);
-        schoolPromises.push(findAndCreate('schools', school, {
-          query: {
-            name: school.name,
-            $select: [
-              '_id',
-            ],
-          },
-        }));
+        schoolPromises.push(
+          findAndCreate('schools', school, {
+            query: {
+              name: school.name,
+              $select: ['_id'],
+            },
+          }),
+        );
       }
     });
 
@@ -244,28 +256,31 @@ if (process.env.NODE_ENV !== 'production') {
     const allStaffPromises = Promise.all(staffPromises)
       .then(() => {
         logger.info('Staff/Region plants grown');
-      }).catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
 
     logger.info('Growing schools');
     const allSchoolPromises = Promise.all(schoolPromises)
-      .then(async (schools) => {
+      .then(async schools => {
         logger.info('School plants grown');
 
         logger.info('Sowing student seeds');
         const studentPromises = [];
 
-        schools.forEach((school) => {
+        schools.forEach(school => {
           for (let i = 0; i < studentsPerSchool; i += 1) {
             const student = createStudentObject(school._id);
 
-            studentPromises.push(findAndCreate('students', student, {
-              query: {
-                name: student.name,
-                gender: student.gender,
-                school: student.school,
-                $select: ['_id', 'name'],
-              },
-            }));
+            studentPromises.push(
+              findAndCreate('students', student, {
+                query: {
+                  name: student.name,
+                  gender: student.gender,
+                  school: student.school,
+                  $select: ['_id', 'name'],
+                },
+              }),
+            );
           }
         });
 
@@ -274,17 +289,20 @@ if (process.env.NODE_ENV !== 'production') {
       })
       .then(() => {
         logger.info('Student plants grown');
-      }).catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
 
     await Promise.all([allStaffPromises, allSchoolPromises]);
 
     logger.info('Harvest complete!');
     console.timeEnd('Time taken');
   };
-} else { // Production user
-  app.service('users') // Check if user database is empty
+} else {
+  // Production user
+  app
+    .service('users') // Check if user database is empty
     .find()
-    .then((result) => {
+    .then(result => {
       if (result.data.length === 0) {
         logger.info('Production seeding');
         return app.service('admin').create({
@@ -297,5 +315,6 @@ if (process.env.NODE_ENV !== 'production') {
         });
       }
       return null;
-    }).catch(err => console.log(err));
+    })
+    .catch(err => console.log(err));
 }
