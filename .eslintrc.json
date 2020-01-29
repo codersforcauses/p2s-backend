@@ -5,27 +5,15 @@
     "jest": true
   },
   "parserOptions": {
-    "ecmaVersion": 2018
+    "ecmaVersion": 2019
   },
-  "extends": "airbnb-base",
+  "extends": ["airbnb-base", "prettier"],
   "rules": {
-    "indent": [
-      "error",
-      2
-    ],
+    "indent": ["error", 2],
     "no-underscore-dangle": 0,
     "no-param-reassign": 0,
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "error",
-      "single"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ]
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "single"],
+    "semi": ["error", "always"]
   }
 }
