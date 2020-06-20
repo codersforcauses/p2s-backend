@@ -40,11 +40,11 @@ if (process.env.NODE_ENV !== 'production') {
     '{{name.lastName}} {{address.city}} ',
   ];
 
-  const regionCount = 10;
+  const regionCount = 5;
   const adminCount = 5;
   const managersPerRegion = 2;
-  const coachsPerRegion = 10;
-  const schoolsPerRegion = 5;
+  const coachsPerRegion = 4;
+  const schoolsPerRegion = 3;
   const studentsPerSchool = 10;
 
   const testPass = 'a';
@@ -144,6 +144,7 @@ if (process.env.NODE_ENV !== 'production') {
     logger.info('Plowing fields');
 
     faker.locale = 'en_AU';
+    faker.seed(1337);
 
     logger.info('Sowing region seeds');
 
