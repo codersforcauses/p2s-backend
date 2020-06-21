@@ -14,6 +14,9 @@ module.exports = (app) => {
         type: Date,
         required: true,
       },
+      duration: {
+        type: Number,
+      },
       students: [
         {
           type: ObjectId,

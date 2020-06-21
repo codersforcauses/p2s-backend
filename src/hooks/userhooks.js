@@ -40,10 +40,7 @@ module.exports = {
   * Returns true if user is has authorization token
   * @param {Object} context Context object passed from server
   */
-  hasAuthentication: () => async (context) => {
-    const authExist = existsByDot(context, 'params.headers.Authorization') || existsByDot(context, 'params.headers.authorization');
-    return authExist;
-  },
+  hasAuthentication: () => async context => existsByDot(context, 'params.headers.Authorization') || existsByDot(context, 'params.headers.authorization'),
   /**
   * Blocks patch requests with incorrect verify tokens
   * @param {Object} context Context object passed from server
