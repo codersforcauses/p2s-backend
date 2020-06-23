@@ -26,14 +26,14 @@ module.exports = {
     ],
     get: [authenticate('jwt'), permission({ roles: ['admin', 'manager', 'coach'] })],
     create: [
-      hashPassword(),
+      hashPassword('password'),
       disallow('external'),
     ],
-    update: [hashPassword()], // Disabled
+    update: [hashPassword('password')], // Disabled
     patch: [
       iff(
         isProvider('external'),
-        hashPassword(),
+        hashPassword('password'),
         preventChanges(
           true,
           'email',
