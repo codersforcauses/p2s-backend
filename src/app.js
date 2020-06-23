@@ -1,6 +1,4 @@
-const { decrypt } = require('dotenvcrypt');
-
-decrypt(process.env.ENV_KEY);
+require('dotenv').config();
 
 const compress = require('compression');
 const helmet = require('helmet');
