@@ -22,7 +22,7 @@ const populationSchema = {
       service: 'sessions',
       nameAs: 'sessions',
       parentField: '_id',
-      childField: 'coaches',
+      childField: 'coaches', // Doesn't work yet
     },
     {
       service: 'feedback',
