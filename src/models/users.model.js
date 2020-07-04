@@ -109,6 +109,7 @@ module.exports = (app) => {
         type: Boolean,
         default: false,
       },
+      // Populate Sessions
       verifyToken: { type: String },
       verifyExpires: { type: Date },
       verifyChanges: { type: Object },

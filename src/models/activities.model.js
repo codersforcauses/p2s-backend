@@ -1,7 +1,5 @@
-// activities-model.js - A mongoose model
+// Activities are things you can do in a session
 //
-// See http://mongoosejs.com/docs/models.html
-// for more of what you can do here.
 module.exports = (app) => {
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;

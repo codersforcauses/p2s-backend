@@ -9,12 +9,29 @@ const {
   disallow,
 } = require('feathers-hooks-common');
 const verifyHooks = require('feathers-authentication-management').hooks;
+const { populate } = require( 'feathers-hooks-common');
 const { verifyRegisterToken, hasVerifyToken, hasAuthentication } = require('../../hooks/userhooks');
 const permission = require('../../hooks/permission');
 const accountService = require('../authmanagement/notifier');
 const { validateSchema } = require('../../hooks/validation/validatehooks');
 const { regoSchema } = require('../../hooks/validation/schema/user');
-const populateUser = require('../../hooks/population/populate-user');
+
+const populationSchema = {
+  include: [
+    {
+      service: 'sessions',
+      nameAs: 'sessions',
+      parentField: '_id',
+      childField: 'coaches',
+    },
+    {
+      service: 'feedback',
+      nameAs: 'feedback',
+      parentField: '_id',
+      childField: 'user',
+    },
+  ],
+};
 
 module.exports = {
   before: {
@@ -61,7 +78,7 @@ module.exports = {
 
   after: {
     all: [
-      populateUser(),
+      populate({ schema: populationSchema}),
       protect('password'),
     ],
     find: [],
@@ -74,10 +91,6 @@ module.exports = {
         },
         verifyHooks.removeVerification(),
       ),
-      iff(context => context.result.region,
-        context => context.app.service('regions')
-          .patch(context.result.region, { $push: { users: context.result._id } })
-          .then(() => context)),
     ],
     update: [],
     patch: [],

@@ -1,7 +1,5 @@
-// feedback-model.js - A mongoose model
+// Feedback is given by a coach about how a session went
 //
-// See http://mongoosejs.com/docs/models.html
-// for more of what you can do here.
 const mongoose = require('mongoose');
 
 module.exports = (app) => {

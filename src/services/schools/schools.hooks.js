@@ -1,7 +1,27 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { iff, isProvider } = require('feathers-hooks-common');
 const { Unprocessable } = require('@feathersjs/errors');
+const { populate } = require( 'feathers-hooks-common');
+
 const permission = require('../../hooks/permission');
+
+const populationSchema = {
+  include: [
+    {
+      service: 'students',
+      nameAs: 'students',
+      parentField: '_id',
+      childField: 'school',
+    },
+    {
+      service: 'programs',
+      nameAs: 'programs',
+      parentField: '_id',
+      childField: 'school',
+    },
+  ],
+};
+
 
 module.exports = {
   before: {
@@ -38,14 +58,10 @@ module.exports = {
   },
 
   after: {
-    all: [],
+    all: [populate({ schema: populationSchema })],
     find: [],
     get: [],
-    create: [
-      context => context.app.service('regions')
-        .patch(context.data.region, { $push: { schools: context.result._id } })
-        .then(() => context),
-    ],
+    create: [],
     update: [],
     patch: [],
     remove: [],

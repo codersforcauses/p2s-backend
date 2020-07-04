@@ -1,7 +1,5 @@
-// programs-model.js - A mongoose model
+// A program is a planned group of sessions over a time period.
 //
-// See http://mongoosejs.com/docs/models.html
-// for more of what you can do here.
 const mongoose = require('mongoose');
 
 module.exports = (app) => {
@@ -14,13 +12,6 @@ module.exports = (app) => {
         type: String,
         required: true,
       },
-      sessions: [
-        {
-          type: ObjectId,
-          ref: 'sessions',
-          required: true,
-        },
-      ],
       school: {
         type: ObjectId,
         ref: 'schools',
@@ -32,6 +23,7 @@ module.exports = (app) => {
           ref: 'students',
         },
       ],
+      // Populate Sessions
     },
     {
       timestamps: true,

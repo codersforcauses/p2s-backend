@@ -104,10 +104,6 @@ module.exports = {
         },
         verifyHooks.removeVerification(),
       ),
-      iff(context => context.result.region,
-        context => context.app.service('regions')
-          .patch(context.result.region, { $push: { users: context.result._id } })
-          .then(() => context)),
     ],
     update: [],
     patch: [],

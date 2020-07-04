@@ -1,7 +1,5 @@
-// matrix-model.js - A mongoose model
+// A matrix is a ranking of a student in different areas
 //
-// See http://mongoosejs.com/docs/models.html
-// for more of what you can do here.
 module.exports = (app) => {
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;

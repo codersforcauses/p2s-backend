@@ -1,5 +1,24 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
+const { populate } = require( 'feathers-hooks-common');
+
 const permission = require('../../hooks/permission');
+
+const populationSchema = {
+  include: [
+    {
+      service: 'feedback',
+      nameAs: 'feedback',
+      parentField: '_id',
+      childField: 'session',
+    },
+    {
+      service: 'reports',
+      nameAs: 'reports',
+      parentField: '_id',
+      childField: 'session',
+    },
+  ],
+};
 
 module.exports = {
   before: {
@@ -13,7 +32,7 @@ module.exports = {
   },
 
   after: {
-    all: [],
+    all: [populate({ schema: populationSchema })],
     find: [],
     get: [],
     create: [],
