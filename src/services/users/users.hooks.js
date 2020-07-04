@@ -14,6 +14,7 @@ const permission = require('../../hooks/permission');
 const accountService = require('../authmanagement/notifier');
 const { validateSchema } = require('../../hooks/validation/validatehooks');
 const { regoSchema } = require('../../hooks/validation/schema/user');
+const populateUser = require('../../hooks/population/populate-user');
 
 module.exports = {
   before: {
@@ -60,6 +61,7 @@ module.exports = {
 
   after: {
     all: [
+      populateUser(),
       protect('password'),
     ],
     find: [],

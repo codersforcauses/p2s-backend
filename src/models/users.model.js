@@ -92,19 +92,6 @@ module.exports = (app) => {
             },
           },
         },
-        feedback: [
-          {
-            type: ObjectId,
-            ref: 'feedback',
-            default: '',
-          },
-        ],
-        sessions: [
-          {
-            type: ObjectId,
-            ref: 'sessions',
-          },
-        ],
       },
       manager: {
         is: {
