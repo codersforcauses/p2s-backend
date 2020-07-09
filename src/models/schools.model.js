@@ -1,7 +1,5 @@
-// schools-model.js - A mongoose model
+// Schools have a region and students
 //
-// See http://mongoosejs.com/docs/models.html
-// for more of what you can do here.
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
@@ -48,20 +46,8 @@ module.exports = (app) => {
         type: Boolean,
         default: false,
       },
-      students: [
-        {
-          type: ObjectId,
-          ref: 'students',
-          required: true,
-        },
-      ],
-      programs: [
-        {
-          type: ObjectId,
-          ref: 'programs',
-          required: true,
-        },
-      ],
+      // Populate Students
+      // Populate Programs
     },
     {
       timestamps: true,

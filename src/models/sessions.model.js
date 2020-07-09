@@ -1,7 +1,5 @@
-// sessions-model.js - A mongoose model
+// Sessions are when a coach/coaches teach students
 //
-// See http://mongoosejs.com/docs/models.html
-// for more of what you can do here.
 const mongoose = require('mongoose');
 
 module.exports = (app) => {
@@ -14,7 +12,7 @@ module.exports = (app) => {
         type: Date,
         required: true,
       },
-      students: [
+      extraStudents: [
         {
           type: ObjectId,
           ref: 'students',
@@ -26,20 +24,13 @@ module.exports = (app) => {
           ref: 'users',
         },
       ],
-      reports: [
-        {
-          type: ObjectId,
-          ref: 'reports',
-          required: true,
-        },
-      ],
-      feedback: [
-        {
-          type: ObjectId,
-          ref: 'feedback',
-          required: true,
-        },
-      ],
+      // Populate Feedback
+      // Populate Reports
+      program: {
+        type: ObjectId,
+        ref: 'programs',
+        required: true,
+      },
       activities: [
         {
           activity: {

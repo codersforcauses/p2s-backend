@@ -100,12 +100,12 @@ if (process.env.NODE_ENV !== 'production') {
       culture: faker.random.arrayElement(ethnicityList),
       birthCountry: faker.address.country(),
       DOA: faker.date.past(),
-      schoolYear: faker.random.number({ min: 7, max: 12 }),
-      consent: true,
       language: {
         englishCompetent: true,
         nativeLanguage: 'Euclidean',
       },
+      schoolYear: faker.random.number({ min: 7, max: 12 }),
+      consent: true,
       contact: {
         home: {
           name: faker.name.findName(),
@@ -271,7 +271,6 @@ if (process.env.NODE_ENV !== 'production') {
         schools.forEach(school => {
           for (let i = 0; i < studentsPerSchool; i += 1) {
             const student = createStudentObject(school._id);
-
             studentPromises.push(
               findAndCreate('students', student, {
                 query: {

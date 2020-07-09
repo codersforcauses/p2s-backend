@@ -30,7 +30,7 @@ module.exports = {
     find: [permission({ roles: ['manager', 'admin'] })],
     get: [permission({ roles: ['manager', 'admin'] })],
     create: [
-      hashPassword(),
+      hashPassword('password'),
       iff(
         some(isProvider('external'), () => (process.env.NODE_ENV === 'production')),
         validateSchema(createSchema),
@@ -43,7 +43,7 @@ module.exports = {
         rec.manager.is = true;
       }),
     ],
-    update: [hashPassword()], // Disabled
+    update: [hashPassword('password')], // Disabled
     patch: [
       iff(
         isProvider('external'),
@@ -60,7 +60,7 @@ module.exports = {
           'resetExpires',
         ),
       ),
-      hashPassword(),
+      hashPassword('password'),
       permission({ roles: ['admin', 'manager'] }),
       iff(isProvider('external'),
         iff(isOwner(),
@@ -99,10 +99,6 @@ module.exports = {
         },
         verifyHooks.removeVerification(),
       ),
-      iff(context => context.result.region,
-        context => context.app.service('regions')
-          .patch(context.result.region, { $push: { users: context.result._id } })
-          .then(() => context)),
     ],
     update: [],
     patch: [],

@@ -119,15 +119,8 @@ module.exports = (app) => {
       },
       trial: {
         type: Boolean,
-        required: true,
         default: false,
       },
-      reports: [
-        {
-          type: ObjectId,
-          ref: 'reports',
-        },
-      ],
     },
     {
       timestamps: true,

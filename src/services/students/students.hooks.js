@@ -41,14 +41,14 @@ module.exports = {
     all: [],
     find: [],
     get: [],
-    create: [
-      context => context.app.service('schools')
-        .patch(context.data.school, { $push: { students: context.result._id } })
-        .then(() => context),
-    ],
+    create: [],
     update: [],
     patch: [],
-    remove: [],
+    remove: [
+      context => context.app.service('schools')
+        .patch(context.data.school, { $pull: { students: context.result._id } })
+        .then(() => context)
+    ],
   },
 
   error: {

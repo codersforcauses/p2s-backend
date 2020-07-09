@@ -1,17 +1,15 @@
-// Initializes the `matrix` service on path `/matrix`
-const createService = require('feathers-mongoose');
+const { Matrix } = require('./matrix.class');
 const createModel = require('../../models/matrix.model');
 const hooks = require('./matrix.hooks');
 
 module.exports = (app) => {
-  const Model = createModel(app);
-
   const options = {
-    Model,
+    Model: createModel(app),
+    paginate: app.get('paginate')
   };
 
   // Initialize our service with any options it requires
-  app.use('/matrix', createService(options));
+  app.use('/matrix', new Matrix(options, app));
 
   // Get our initialized service so that we can register hooks
   const service = app.service('matrix');

@@ -1,7 +1,25 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { iff, isProvider } = require('feathers-hooks-common');
 const { Forbidden } = require('@feathersjs/errors');
+const { populate } = require( 'feathers-hooks-common');
 const permission = require('../../hooks/permission');
+
+const populationSchema = {
+  include: [
+    {
+      service: 'users',
+      nameAs: 'users',
+      parentField: '_id',
+      childField: 'region',
+    },
+    {
+      service: 'schools',
+      nameAs: 'schools',
+      parentField: '_id',
+      childField: 'region',
+    },
+  ],
+};
 
 module.exports = {
   before: {
@@ -31,7 +49,7 @@ module.exports = {
   },
 
   after: {
-    all: [],
+    all: [populate({ schema: populationSchema })],
     find: [],
     get: [],
     create: [],

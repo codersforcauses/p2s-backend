@@ -32,7 +32,7 @@ module.exports = {
         validateSchema(createSchema),
         verifyHooks.addVerification(),
       ),
-      hashPassword(),
+      hashPassword('password'),
       alterItems((rec) => {
         rec.admin = { is: true };
         if (isProvider('external')) {
@@ -40,7 +40,7 @@ module.exports = {
         }
       }),
     ],
-    update: [hashPassword()], // Disabled
+    update: [hashPassword('password')], // Disabled
     patch: [
       iff(
         isProvider('external'),
@@ -56,7 +56,7 @@ module.exports = {
           'resetShortToken',
           'resetExpires',
         ),
-        hashPassword(),
+        hashPassword('password'),
         authenticate('jwt'),
       ),
     ],
@@ -79,10 +79,6 @@ module.exports = {
         },
         verifyHooks.removeVerification(),
       ),
-      iff(context => context.result.region,
-        context => context.app.service('regions')
-          .patch(context.result.region, { $push: { users: context.result._id } })
-          .then(() => context)),
     ],
     update: [],
     patch: [],

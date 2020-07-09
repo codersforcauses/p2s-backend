@@ -1,28 +1,22 @@
 // activities-model.js - A mongoose model
-//
+// 
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
-module.exports = (app) => {
+module.exports = function (app) {
+  const modelName = 'activities';
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
-  const activities = new Schema(
-    {
-      name: {
-        type: String,
-        required: true,
-      },
-      description: {
-        type: String,
-        required: true,
-      },
-      imageLink: {
-        type: String,
-      },
-    },
-    {
-      timestamps: true,
-    },
-  );
+  const schema = new Schema({
+    text: { type: String, required: true }
+  }, {
+    timestamps: true
+  });
 
-  return mongooseClient.model('activities', activities);
+  // This is necessary to avoid model compilation errors in watch mode
+  // see https://mongoosejs.com/docs/api/connection.html#connection_Connection-deleteModel
+  if (mongooseClient.modelNames().includes(modelName)) {
+    mongooseClient.deleteModel(modelName);
+  }
+  return mongooseClient.model(modelName, schema);
+  
 };

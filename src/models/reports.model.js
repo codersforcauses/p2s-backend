@@ -1,11 +1,11 @@
-// reports-model.js - A mongoose model
+// Reports are per student notes for each session
 //
-// See http://mongoosejs.com/docs/models.html
-// for more of what you can do here.
+const mongoose = require('mongoose');
 
 module.exports = (app) => {
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
+  const { ObjectId } = mongoose.Schema.Types;
   const reports = new Schema(
     {
       attended: {
@@ -28,6 +28,16 @@ module.exports = (app) => {
       ],
       notes: {
         type: String,
+      },
+      student: {
+        type: ObjectId,
+        ref: 'students',
+        required: true,
+      },
+      session: {
+        type: ObjectId,
+        ref: 'sessions',
+        required: true,
       },
     },
     {

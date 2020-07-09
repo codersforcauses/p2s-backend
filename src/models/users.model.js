@@ -92,19 +92,6 @@ module.exports = (app) => {
             },
           },
         },
-        feedback: [
-          {
-            type: ObjectId,
-            ref: 'feedback',
-            default: '',
-          },
-        ],
-        sessions: [
-          {
-            type: ObjectId,
-            ref: 'sessions',
-          },
-        ],
       },
       manager: {
         is: {
@@ -122,6 +109,7 @@ module.exports = (app) => {
         type: Boolean,
         default: false,
       },
+      // Populate Sessions
       verifyToken: { type: String },
       verifyExpires: { type: Date },
       verifyChanges: { type: Object },

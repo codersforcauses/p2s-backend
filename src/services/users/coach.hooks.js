@@ -30,7 +30,7 @@ module.exports = {
     find: [permission({ roles: ['admin', 'manager', 'coach'] })],
     get: [permission({ roles: ['admin', 'manager', 'coach'] })],
     create: [
-      hashPassword(),
+      hashPassword('password'),
       iff(
         some(isProvider('external'), () => (process.env.NODE_ENV === 'production')),
         validateSchema(createSchema),
@@ -53,9 +53,9 @@ module.exports = {
               throw new Forbidden('Manager must have a region');
             }))),
     ],
-    update: [hashPassword()], // Disabled
+    update: [hashPassword('password')], // Disabled
     patch: [
-      hashPassword(),
+      hashPassword('password'),
       permission({ roles: ['admin', 'manager', 'coach'] }),
       iff(isProvider('external'),
         preventChanges(
@@ -104,10 +104,6 @@ module.exports = {
         },
         verifyHooks.removeVerification(),
       ),
-      iff(context => context.result.region,
-        context => context.app.service('regions')
-          .patch(context.result.region, { $push: { users: context.result._id } })
-          .then(() => context)),
     ],
     update: [],
     patch: [],
